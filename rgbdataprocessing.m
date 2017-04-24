@@ -1,6 +1,9 @@
 function [handles] = rgbdataprocessing(datainname, options)
 % greylevelsegmentation segments an image, set of images that were stored
-% on a folder.
+% on a folder. 
+% 
+% USAGE: 
+%           [handles] = rgbdataprocessing(datainname, options)
 %
 
 switch nargin
