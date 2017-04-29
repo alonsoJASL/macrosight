@@ -30,6 +30,7 @@ if testvar == 0
     end
 else 
     % dataLa found!
+    fprintf('%s: dataLa folder found in handles structure.\n')
     newhandles = handles;
     matidx = strfind(handles.dataLa);
     
