@@ -9,7 +9,7 @@ tidy;
 try
     % function not available in package
     whichmacro = 1;
-    [dn,ds] = loadnames('macros', chooseplatform,whichmacro);
+    [dn,ds] = loadnames('macros', chooseplatform, whichmacro);
     
     handlesdir = getMatFolders(fullfile(dn,ds));
 catch e
@@ -49,6 +49,7 @@ elseif isempty(handlesdir.dataRe)
     if ~isdir(handles.dataHa)
         mkdir(handles.dataHa);
     end
+    disp(handles);
     save(fullfile(handles.dataHa,'handles.mat'), 'handles');
     
 elseif isempty(handlesdir.dataLa)
@@ -77,7 +78,9 @@ else
     handles.dataRe = strcat(handlesdir.pathtodir,handlesdir.dataRe);
     handles.dataRe = strcat(handlesdir.pathtodir,handlesdir.dataRe);
     
-    handlesdir.dataHa = strcat(handlesdir.pathtodir,handlesdir.data,'_mat_Ha');
+    handles.dataLa = strcat(handlesdir.pathtodir,handlesdir.dataLa);
+    
+    handlesdir.dataHa = strcat(handlesdir.data,'_mat_Ha');
     handles.dataHa = strcat(handlesdir.pathtodir,handlesdir.data,'_mat_Ha');
     
     if ~isdir(handles.dataHa)
@@ -88,4 +91,42 @@ end
 
 %% DATASET SEPARATION 
 
-newhandles = separateDataset(handles);
+handles = separateDataset(handles);
+
+%% (OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions 
+
+% overlapping dataset
+try
+    disp('Re-naming _mat_Re folder to fit overlapping naming...');
+    movefile(handles.dataRe,strcat(handles.dataOvlp(1:end-2),'Re'));
+    
+    disp('Start analysis on OVERLAPPING nuclei.');
+    h = neutrophilAnalysis(handles.dataOvlp);
+    
+    disp('Re-naming _overlap_mat_Re to original _mat_Re');
+    movefile(h.dataRe, handles.dataRe);
+    h.dataRe = handles.dataRe;
+catch err
+    disp('Error in changing the directory name.') 
+end
+
+
+
+%% (OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions 
+
+% Non-overlapping dataset
+try
+    disp('Re-naming _mat_Re folder to fit overlapping naming...');
+    movefile(handles.dataRe,strcat(handles.dataNovlp(1:end-2),'Re'));
+    
+    disp('Start analysis on OVERLAPPING nuclei.');
+    h = neutrophilAnalysis(handles.dataOvlp);
+    
+    disp('Re-naming _overlap_mat_Re to original _mat_Re');
+    movefile(h.dataRe, handles.dataRe);
+    h.dataRe = handles.dataRe;
+catch err
+    disp('Error in changing the directory name.') 
+end
+
+%%

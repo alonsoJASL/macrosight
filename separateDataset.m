@@ -32,11 +32,11 @@ else
     % dataLa found!
     fprintf('%s: dataLa folder found in handles structure.\n')
     newhandles = handles;
-    matidx = strfind(handles.dataLa);
+    matidx = strfind(handles.dataLa, '_mat');
     
-    overlapdir = strcat(handles.dataLa(1:matidx), 'overlap', ...
+    overlapdir = strcat(handles.dataLa(1:matidx), 'overlap_', ...
         handles.dataLa(matidx+1:end));
-    noverlapdir = strcat(handles.dataLa(1:matidx), 'nonoverlap', ...
+    noverlapdir = strcat(handles.dataLa(1:matidx), 'nonoverlap_', ...
         handles.dataLa(matidx+1:end));
     if ~isdir(overlapdir); mkdir(overlapdir); end
     if ~isdir(noverlapdir); mkdir(noverlapdir); end
@@ -56,16 +56,16 @@ else
         
         dataL = og.dataL.*(clumphandles.overlappingClumps>0);
         dataG = clumphandles.overlappingClumps;
-        statsData = regionprops(overlapL>0);
-        numNeutrop = length(overStats);
+        statsData = regionprops(dataL>0);
+        numNeutrop = length(statsData);
         
         save(fullfile(overlapdir,fnames{ix}), 'dataL','dataG', 'statsData', ...
                         'numNeutrop','clumphandles');
         
         dataL = og.dataL.*(clumphandles.nonOverlappingClumps>0);
-        dataG = clumphandles.overlappingClumps;
-        statsData = regionprops(overlapL>0);
-        numNeutrop = length(noverStats);
+        dataG = clumphandles.nonOverlappingClumps;
+        statsData = regionprops(dataL>0);
+        numNeutrop = length(statsData);
         
         save(fullfile(noverlapdir,fnames{ix}), 'dataL','dataG', 'statsData', ...
                         'numNeutrop','clumphandles');
