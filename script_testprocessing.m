@@ -112,15 +112,15 @@ end
 
 
 
-%% (OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions 
+%% (NON OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions 
 
 % Non-overlapping dataset
 try
-    disp('Re-naming _mat_Re folder to fit overlapping naming...');
+    disp('Re-naming _mat_Re folder to fit Non-overlapping naming...');
     movefile(handles.dataRe,strcat(handles.dataNovlp(1:end-2),'Re'));
     
     disp('Start analysis on OVERLAPPING nuclei.');
-    h = neutrophilAnalysis(handles.dataOvlp);
+    h = neutrophilAnalysis(handles.dataNovlp);
     
     disp('Re-naming _overlap_mat_Re to original _mat_Re');
     movefile(h.dataRe, handles.dataRe);
@@ -130,3 +130,4 @@ catch err
 end
 
 %%
+
