@@ -38,3 +38,5 @@
 *asv
 *.eps
 *.fig
+*.xlsx
+test-nodenet.xls
