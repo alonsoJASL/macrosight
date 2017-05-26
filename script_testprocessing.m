@@ -50,7 +50,7 @@ elseif isempty(handlesdir.dataRe)
         mkdir(handles.dataHa);
     end
     disp(handles);
-    save(fullfile(handles.dataHa,'handles.mat'), 'handles');
+    save(fullfile(handles.dataHa,'handlesdir.mat'), 'handles');
     
 elseif isempty(handlesdir.dataLa)
     % there's a dataRe, is there a dataLa? 
@@ -69,7 +69,7 @@ elseif isempty(handlesdir.dataLa)
     if ~isdir(handles.dataHa)
         mkdir(handles.dataHa);
     end
-    save(fullfile(handles.dataHa,'handles.mat'), 'handles');
+    save(fullfile(handles.dataHa,'handlesdir.mat'), 'handles');
     
 else
     % everything is there, except for the handles folder
@@ -86,7 +86,7 @@ else
     if ~isdir(handles.dataHa)
         mkdir(handles.dataHa);
     end
-    save(fullfile(handles.dataHa,'handles.mat'), 'handles');
+    save(fullfile(handles.dataHa,'handlesdir.mat'), 'handles');
 end
 
 %% DATASET SEPARATION 

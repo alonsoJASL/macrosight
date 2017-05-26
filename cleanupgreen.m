@@ -33,7 +33,7 @@ for ix=1:length(prelabgreen)
     if ~isempty(find(testM>0, 1))
         lab = unique(testM.*dataL);
         lab(1) = [];
-        dataGL = dataGL + (thisG.*lab);
+        dataGL = dataGL + (thisG.*lab(1));
     end
 end
 
