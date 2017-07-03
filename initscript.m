@@ -1,8 +1,4 @@
-% Script file: MACROSIGHT FULL DATASET ANALYISIS
-% This file analyses the data in its entirety. It will:
-%       -
-%
-%
+% Initialisation script for the Analysis of shapes
 %% INITIALISATION
 tidy;
 
@@ -78,77 +74,4 @@ catch e
     save(fullfile(foldernames.dataHa,'clumptrackingtables.mat'), ...
         'clumptracktable', 'clumpidcodes', 'timedfinalnetwork', ...
         'tablenet');
-end
-
-
-%% DEBUG SEGMENTATION
-wrongImages = zeros(handles.numFrames, 1);
-deepErrors = zeros(handles.numFrames, 1);
-%
-%ix = 217;
-
-nodeNet = handles.nodeNetwork;
-finalNet = handles.finalNetwork;
-
-options.savebool = false;
-options.outputpath = '.';
-options.filename = 'fulldataset-nodenet.xlsx';
-tablenet = nodenetwork2xls(nodeNet(:,1:31),options);
-
-for ix=1:handles.numFrames
-whichone = ix;
-fprintf('Loading file: %s\n', filenames{whichone});
-la = load(fullfile(foldernames.dataLa, filenames{whichone}));
-re = load(fullfile(foldernames.dataRe, filenames{whichone}));
-
-try
-    dataL = la.dataL;
-    dataGL = cleanupgreen(dataL, la.dataG);
-    dataR = re.dataR;
-    dataGR = re.dataG;
-    
-    X = cat(3, dataR, dataGR, zeros(size(dataL)));
-    clumphandles = la.clumphandles;
-    clumphandles.nonOverlappingClumps = ...
-        (clumphandles.nonOverlappingClumps>0).*dataGL;
-    clumphandles.overlappingClumps = ...
-        (clumphandles.overlappingClumps>0).*dataGL;
-    
-    % this has to be done PER FRAME
-    [overboundies] = bwboundaries(clumphandles.overlappingClumps>0);
-    [noverboundies] = bwboundaries(clumphandles.nonOverlappingClumps>0);
-    
-    if ~isempty(overboundies)
-        whosin = inpolygon(tablenet.X, tablenet.Y, ...
-            overboundies{1}(:,1), overboundies{1}(:,2));
-    end
-    
-    figure(1)
-    clf
-    plotBoundariesAndPoints(dataGL, [], overboundies, 'm-');
-    colormap pink;
-    title(filenames{whichone});
-    
-    pause(0.02);
-    
-catch err
-    if strcmp(err.identifier,'MATLAB:nonExistentField')
-        disp('The image was not segmented properly. Load the next one!');
-        
-        wrongImages(ix) =1;
-        
-        [dataL, dataG] = simpleClumpsSegmentation(cat(3, re.dataR, re.dataG, ...
-            zeros(size(re.dataR))));
-        [~, clumphandles] = getOverlappingClumpsBoundaries(dataG>0, dataL>0);
-        statsData = regionprops(dataL>0);
-        numNeutrop = length(statsData);
-        save(fullfile(foldernames.dataLa, filenames{whichone}), ...
-            'dataL', 'dataG', 'statsData', 'numNeutrop', 'clumphandles');
-        %pause;
-    else
-        disp('Somethign else went wrong!');
-        disp(err);
-        deepErrors(ix) = 1;
-    end
-end
 end

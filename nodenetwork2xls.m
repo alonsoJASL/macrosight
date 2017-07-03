@@ -18,7 +18,10 @@ varnames = {'X', 'Y', 'Z', 'dist2closest', 'timeframe', 'ID', 'parent',...
     'vol2surf', 'sphericity', 'diffdistbrackets', 'a29', ...
     'dist2disappear', 'dist2appear'};
 nodeNetTable = array2table(nodeNet, 'VariableNames', varnames);
+
+% clean nodeNetwork
 nodeNetTable(isnan(nodeNetTable.X), :) = [];
+nodeNetTable(nodeNetTable.finalLabel==0,:) = [];
 
 
 if savebool == true || nargout == 0 

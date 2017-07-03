@@ -76,6 +76,7 @@ switch nargin
                 if strcmp(foldername, 'La')
                     [~, clumphandles] = getOverlappingClumpsBoundaries(...
                         dataG>0, dataL>0);
+                    
                     statsData = regionprops(dataL>0);
                     numNeutrop = length(statsData);
                     save(fullfile(outdir, matname),...

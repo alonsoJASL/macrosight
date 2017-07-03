@@ -2,6 +2,8 @@ function [dataGL] = cleanupgreen(dataL, dataG)
 % CLEAN UP GREEN CHANNEL. Removes cells on green channel (dataG) that do
 % not have a corresponding cell in the red channel (dataL).
 %
+% Usage: 
+%           [dataGL] = cleanupgreen(dataL, dataG)
 %
 
 if ischar(dataL)
