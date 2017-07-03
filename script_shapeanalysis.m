@@ -28,8 +28,9 @@ title(sprintf('Nuclei that belong to clump %d, moving through time.', wuc));
 %% select one cell from the range
 whichone = clumpnucleirange(1);
 
-[~,laname1] = loadone(handles.dataLa,clumpnucleirange(1));
-[~,laname2] = loadone(handles.dataLa,clumpnucleirange(2));
+laname1 = filenames{clumpnucleirange(1)};
+laname2 = filenames{clumpnucleirange(2)};
+
 [dataL1, dataGL1, clumphandles1, dataR1, dataGR1] = ...
     getdatafromhandles(handles, laname1);
 [dataL2, dataGL2, clumphandles2, dataR2, dataGR2] = ...
