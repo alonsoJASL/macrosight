@@ -13,15 +13,17 @@ load(fullfile(handlesdir.pathtodir, handlesdir.dataHa,'handlesdir.mat'));
 foldernames = handles;
 clear handles;
 
-if strcmp(chooseplatform, 'mac')
-    fprintf('%s: Changing folder names to fix OS...\n',mfilename);
-    foldernames = fixhandlesdir(foldernames);
-end
+%if strcmp(chooseplatform, 'mac')
+fprintf('%s: Changing folder names to fix OS...\n',mfilename);
+foldernames = fixhandlesdir(foldernames);
+%end
 
 %% LOAD HANDLES
 try
     disp('Loading handles structure...');
     load(fullfile(foldernames.dataHa, 'handles.mat'));
+    fprintf('%s: Changing folder names in HANDLES to fix OS...\n',mfilename);
+    handles = fixhandlesdir(handles);
     [~, filenames] = loadone(foldernames.dataLa, 'all');
     
 catch e

@@ -47,6 +47,7 @@ regssingle1 = regionprops(clumphandles1.nonOverlappingClumps==singleidx1);
 regssingle2 = regionprops(clumphandles1.nonOverlappingClumps==singleidx2);
 
 singleboundy = bwboundaries(clumphandles1.nonOverlappingClumps==singleidx2);
+singlebbox = regssingle1.BoundingBox;
 
 figure(21)
 clf;
@@ -54,13 +55,13 @@ subplot(121);
 imagesc(dataGL1);
 title(sprintf('Green channel at frame = %s', laname1));
 rectangle('Position', regsclump.BoundingBox, 'EdgeColor', 'r');
-rectangle('Position', regssingle2.BoundingBox, 'EdgeColor', 'c');
+rectangle('Position', singlebbox, 'EdgeColor', 'c');
 
 subplot(122);
 imagesc(dataGL2);
 title(sprintf('Green channel at frame = %s', laname2));
 rectangle('Position', regsclump.BoundingBox, 'EdgeColor', 'r');
-rectangle('Position', regssingle2.BoundingBox, 'EdgeColor', 'c');
+rectangle('Position', singlebbox, 'EdgeColor', 'c');
 
 tightfig;
 
@@ -69,7 +70,7 @@ clf;
 imshowpair(Xthis,Xnext);
 title(sprintf('Showing frames %s and %s', laname1, laname2));
 rectangle('Position', regsclump.BoundingBox, 'EdgeColor', 'r');
-rectangle('Position', regssingle2.BoundingBox, 'EdgeColor', 'c');
+rectangle('Position', singlebbox, 'EdgeColor', 'c');
 
 %% SURF test 1: detectSURF -> extractFeatures -> matchFeatures
 
