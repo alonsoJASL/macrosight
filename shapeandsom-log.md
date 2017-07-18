@@ -1,4 +1,4 @@
-#Self Organising Maps (SOMs) log file
+# Self Organising Maps (SOMs) log file
 This document describes the script `script_shapeandsom.m` inside this package.
 It derives some of its development from the `script_shapeanalysis.m`
 [script](./shapeanalysis.md).
