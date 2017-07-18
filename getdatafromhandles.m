@@ -1,6 +1,23 @@
 function [dataL, dataGL, clumphandles, dataR, dataGR] = getdatafromhandles(...
     handles, fname)
 
+if nargout == 1
+    % in case the user only wants one single structure with all the
+    % information
+    fprintf('%s: Packaging all information into one single structure.\n',...
+        mfilename);
+    [dataLL, dataGL, clumphandles, dataR, dataGR] = ...
+        getdatafromhandles(handles, fname);
+    sf.dataL = dataLL;
+    sf.dataGL = dataGL;
+    sf.clumphandles = clumphandles;
+    sf.dataR = dataR;
+    sf.dataGR = dataGR;
+    sf.X = cat(3, dataR, dataGR, zeros(size(dataR)));
+    
+    dataL = sf;
+    return;
+end
 fprintf('%s: Loading dataLa files: %s\n', mfilename, fname);
 la = load(fullfile(handles.dataLa, fname));
 
