@@ -8,9 +8,10 @@ script_shapeanalysis;
 netsize = [8 8];
 ognet = selforgmap(netsize);
 ognet.trainParam.showWindow=0;
-ognet.trainParam.epochs = 200;
+ognet.trainParam.epochs = 150;
 
-% Create the corresponding bounding boxes 
+% Create the corresponding bounding boxes
+fprintf('\n%s: Getting initial SOMs by fitting them to sf.\n', mfilename);
 for kx=1:length(clumplab)
     % Get the input data from the binary image
     sf.bintensities{kx} = sf.dataGL==clumplab(kx);
@@ -20,19 +21,8 @@ for kx=1:length(clumplab)
     
     cf.OG{kx} = somBasicNetworks('supergrid', netsize, sf.netpos);
 end
+fprintf('%s: Initialisation of SOM finished.\n', mfilename);
 clear kx uxuy wxy;
-
-% FROM HERE...
-% a good idea would be to evolve both networks simultaneously... 
-
-%% Matlab's SOM implementation
-kx = 1;
-ognet = selforgmap([10 10]);
-ognet.trainParam.showWindow=0;
-
-% Train the Network
-[sf.net{kx},tr] = train(ognet,sf.binput{kx}');
-cf.OG{kx} = somBasicNetworks('supergrid', [10 10], sf.net{kx}.IW{1});
 
 %% Initial network evolution on sf (single frame)
 
