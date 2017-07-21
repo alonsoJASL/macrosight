@@ -48,6 +48,8 @@ for kx=1:length(clumplab)
     [maxval, mxidx] = max(testImage(:));
     [yinit, xinit] = ind2sub(size(sf.dataGR), mxidx);
     sf.xy(kx,:) = [yinit xinit];
+    
+    sf.test{kx} = testImage;
 end
 clear testImage maxval mxidx yinit xinit;
 
@@ -57,6 +59,8 @@ for kx=1:length(clumplab)
     [maxval, mxidx] = max(testImage(:));
     [yinit, xinit] = ind2sub(size(sf.dataGR), mxidx);
     cf.xy(kx,:) = [yinit xinit];
+    
+    cf.test{kx} = testImage;
 end
 clear testImage maxval mxidx yinit xinit;
 
@@ -64,4 +68,6 @@ clear testImage maxval mxidx yinit xinit;
 for kx=1:length(clumplab)
     cf.movedboundy{kx} = sf.boundy{kx} + ...
         repmat(cf.xy(kx,:)-sf.xy(kx,:), size(sf.boundy{kx},1),1);
+    cf.movedbb{kx} = sf.regs(kx).BoundingBox + ...
+        [cf.xy(kx,2:-1:1) 0 0]-[sf.xy(kx,2:-1:1) 0 0];
 end
