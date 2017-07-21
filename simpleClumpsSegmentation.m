@@ -65,3 +65,25 @@ else
     simpleRed = imopen(simpleRed,seR);
     simpleGreen = imopen(simpleGreen,seG);
 end
+end
+
+function [binaryImage, dataL] = binaryFromLevels(X, levels)
+numLevels = length(levels);
+switch numLevels
+    case 1
+        binaryImage = X > levels;
+        dataL = bwlabeln(binaryImage);
+        
+    case 2
+        LowT = bwlabeln(X>levels(1));
+        ToKeep = unique(LowT.*(X>levels(2)));
+        [dataL,~] = bwlabeln(ismember(LowT,ToKeep(2:end)));
+        binaryImage = dataL > 0;
+        
+    otherwise
+        binaryImage = [];
+        dataL = [];
+        help binaryFromLevels;
+        return;
+end
+end

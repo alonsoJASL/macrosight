@@ -8,42 +8,37 @@ script_shapeanalysis;
 netsize = [8 8];
 ognet = selforgmap(netsize);
 ognet.trainParam.showWindow=0;
-ognet.trainParam.epochs = 200;
+ognet.trainParam.epochs = 150;
 
-% Create the corresponding bounding boxes 
+% Create the corresponding bounding boxes
+fprintf('\n%s: Getting initial SOMs by fitting them to sf.\n', mfilename);
 for kx=1:length(clumplab)
     % Get the input data from the binary image
     sf.bintensities{kx} = sf.dataGL==clumplab(kx);
-    [sf.binput{kx}] = somGetInputData(sf.bintensities{kx});
+    %[sf.binput{kx}] = somGetInputData(sf.bintensities{kx});
+    [sf.binput{kx}] = somGetInputData(sf.bintensities{kx}, sf.X);
     [sf.net{kx}] = train(ognet,sf.binput{kx}');
-    sf.netpos = sf.net{kx}.IW{1};
+    sfpos = sf.net{kx}.IW{1}(:,1:2);
+    cf.pos{kx} = sfpos + repmat(cf.xy(kx,2:-1:1)-sf.xy(kx,2:-1:1), size(sfpos,1),1);
     
-    cf.OG{kx} = somBasicNetworks('supergrid', netsize, sf.netpos);
+    cf.OG{kx} = somBasicNetworks('supergrid', netsize, cf.pos{kx});
 end
-clear kx uxuy wxy;
-
-% FROM HERE...
-% a good idea would be to evolve both networks simultaneously... 
-
-%% Matlab's SOM implementation
-kx = 1;
-ognet = selforgmap([10 10]);
-ognet.trainParam.showWindow=0;
-
-% Train the Network
-[sf.net{kx},tr] = train(ognet,sf.binput{kx}');
-cf.OG{kx} = somBasicNetworks('supergrid', [10 10], sf.net{kx}.IW{1});
+fprintf('%s: Initialisation of SOM finished.\n', mfilename);
+clear kx uxuy wxy netpos sfpos;
 
 %% Initial network evolution on sf (single frame)
 
 kx=1;
-sf.options(kx).maxiter = 1000;
-sf.options(kx).alphazero = 0.25;
-sf.options(kx).alphadtype = 'linear';
-sf.options(kx).N0 = 5;
-sf.options(kx).ndtype = 'exp2';
-sf.options(kx).debugvar = false;
+[cf.binput{kx}] = somGetInputData(cf.thisclump, cf.X);
 
-% Note how the output of this SOM is the input for next frame!
-[cf.OG{kx}, sf.nethandles(kx)] = somTraining(sf.binput{kx}, sf.OG{kx}, ...
-    sf.options(kx));
+cf.options.maxiter = 10;
+cf.options.alphazero = 0.125;
+cf.options.alphadtype = 'linear';
+cf.options.N0 = 3;
+cf.options.ndtype = 'exp2';
+cf.options.debugvar = true;
+cf.options.steptype = 'intensity';
+
+% Note how the output of this SOM is the input for next frame!  somTrainingPlus(inputData, initnetwork, options)
+[cf.G{kx}, cf.nethandles(kx)] = somTrainingPlus(cf.binput{kx}, cf.OG{kx}, ...
+    cf.options);
