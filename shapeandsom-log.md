@@ -1,4 +1,4 @@
-#Self Organising Maps (SOMs) log file
+# Self Organising Maps (SOMs) log file
 This document describes the script `script_shapeandsom.m` inside this package.
 It derives some of its development from the `script_shapeanalysis.m`
 [script](./shapeanalysis.md).
@@ -44,10 +44,10 @@ for kx=1:length(clumplab)
 end
 clear kx uxuy wxy;
 ```
-## A better way of evolving the SOMs
-Using matlab's functions, we can guarantee to start at a network evolution from
-the single frame, `sf`, that is perfectly matched to the binary segmentation of
-the independent cells.
+## Evolve the SOM to fit the binary cells in `sf`
+Using matlab's functions, we can guarantee to start at a network
+evolution from the single frame, `sf`, that is perfectly matched to
+the binary segmentation of the independent cells.
 ```Matlab
 netsize = [8 8];
 ognet = selforgmap(netsize);
@@ -55,28 +55,47 @@ ognet.trainParam.showWindow=0;
 ognet.trainParam.epochs = 200;
 
 % Create the corresponding bounding boxes
+fprintf('\n%s: Getting initial SOMs by fitting them to sf.\n', mfilename);
 for kx=1:length(clumplab)
     % Get the input data from the binary image
     sf.bintensities{kx} = sf.dataGL==clumplab(kx);
     [sf.binput{kx}] = somGetInputData(sf.bintensities{kx});
     [sf.net{kx}] = train(ognet,sf.binput{kx}');
-    sf.netpos = sf.net{kx}.IW{1};
+    sfpos = sf.net{kx}.IW{1};
+    cfpos = sfpos + repmat(cf.xy(kx,:)-sf.xy(kx,:), size(sfpos,1),1);
 
-    cf.OG{kx} = somBasicNetworks('supergrid', netsize, sf.netpos);
+    cf.OG{kx} = somBasicNetworks('supergrid', netsize, cfpos);
 end
-clear kx uxuy wxy;
+fprintf('%s: Initialisation of SOM finished.\n', mfilename);
+clear kx uxuy wxy netpos cfpos;
 ```
 + From here, the networks would need to be moved based on the cross correlation
 **movement vectors**.
 + Then, a simultaneous evolution of both SOMs could be fitted to the new data.
   + _An assumption is made here, that the slow movement of the cells would prevent an ambiguity or confusion between the networks._
-  + _Because of the previous statement, there is room for two tests_
++ Because of the previous statement, there is room for two tests.
     1. Change `sf` and `cf` with time, so that `sf` always corresponds to `t`
     and `cf` corresponds to `t+1`.
     2. The other is to fix `sf` to frame `t` and move `cf` to frames `t+t0`
-## Evolve the SOM to fit the binary cells in `sf`
-+ First, create the parameters in the network, this involves
 
-## Move points over to position in frame `frametplusT`
+Now, some plots:
+```Matlab
+plotGraphonImage(cf.dataGL, cf.OG{2})
+plotGraphonImage([], cf.OG{1})
+plotBoundariesAndPoints([],sf.boundy{1}, sf.boundy{2}, 'c-')
+plotBoundariesAndPoints([],[], cf.movedboundy{1}, 'm-')
+plotBoundariesAndPoints([],[], cf.movedboundy{2}, 'g-')
+```
+### Move points over to position in frame `frametplusT`
+This step was performed in the previous section, by taking the auxiliary variables `sfpos` and `cfpos` to get the positions from the MATLAB-trained
+network and traspose them into the new initial position determined by
+the [cross correlation](./shapeanalysis.md).
+### Evolve to new frame
+There are two possibilities for the implementation
 
-## Evolve to new frame
+Two possibilities:
++ Evolve, by using the clump at `cf`.
++ Evolve by using the intensities and the clump, like
+`cf.thisclump.*cf.dataGR`
+  + This involves trying the SOM with intensities when initialising
+  from `sf`.
