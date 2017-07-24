@@ -21,7 +21,7 @@ tableclump = clumptracktable(ismember(tablenet.timeframe, clumpnucleirange),:);
 
 %% For a time t, and it's successor, get sf and cf.
 t = 1;
-t0 = 1;
+t0 = 5;
 framet = clumpnucleirange(t);
 frametplusT = clumpnucleirange(t+t0);
 

@@ -5,10 +5,11 @@
 script_shapeanalysis;
 
 %% SOM initialisation 
-netsize = [8 8];
+netsize = [10 10];
+%ognet.trainFcn = 'trainru';
 ognet = selforgmap(netsize);
 ognet.trainParam.showWindow=0;
-ognet.trainParam.epochs = 150;
+ognet.trainParam.epochs = 200;
 
 % Create the corresponding bounding boxes
 fprintf('\n%s: Getting initial SOMs by fitting them to sf.\n', mfilename);
@@ -25,20 +26,20 @@ for kx=1:length(clumplab)
 end
 fprintf('%s: Initialisation of SOM finished.\n', mfilename);
 clear kx uxuy wxy netpos sfpos;
-
 %% Initial network evolution on sf (single frame)
 
-kx=1;
-[cf.binput{kx}] = somGetInputData(cf.thisclump, cf.X);
-
-cf.options.maxiter = 10;
+cf.options.maxiter = 25;
 cf.options.alphazero = 0.125;
-cf.options.alphadtype = 'linear';
+cf.options.alphadtype = 'none';
 cf.options.N0 = 3;
 cf.options.ndtype = 'exp2';
-cf.options.debugvar = true;
+cf.options.debugvar = false;
 cf.options.steptype = 'intensity';
+cf.options.gifname = [];
 
-% Note how the output of this SOM is the input for next frame!  somTrainingPlus(inputData, initnetwork, options)
-[cf.G{kx}, cf.nethandles(kx)] = somTrainingPlus(cf.binput{kx}, cf.OG{kx}, ...
-    cf.options);
+for kx=1:length(clumplab)
+    [cf.binput{kx}] = somGetInputData(cf.thisclump, cf.X);
+    % Note how the output of this SOM is the input for next frame!  somTrainingPlus(inputData, initnetwork, options)
+    [cf.G{kx}, cf.nethandles(kx)] = somTrainingPlus(cf.binput{kx}, cf.OG{kx}, ...
+        cf.options);
+end
