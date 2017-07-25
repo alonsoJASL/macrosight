@@ -6,7 +6,7 @@ initscript;
 
 %% CHOOSE WHICH (uniquely identifiable) CLUMP to work on
 % w.u.c = which unique clump!
-ix=10; % OR, FOR A RANDOM CODE: randi(length(clumpidcodes));
+ix=23; % OR, FOR A RANDOM CODE: randi(length(clumpidcodes)); 10
 wuc = clumpidcodes(ix);
 
 fprintf('Working on clump with ID=%d.\n', wuc);
@@ -20,10 +20,10 @@ tabletracks = tablenet(ismember(tablenet.timeframe, clumpnucleirange),:);
 tableclump = clumptracktable(ismember(tablenet.timeframe, clumpnucleirange),:);
 
 %% For a time t, and it's successor, get sf and cf.
-t = 1;
+t = 59;
 t0 = 5;
-framet = clumpnucleirange(t);
-frametplusT = clumpnucleirange(t+t0);
+framet = clumpnucleirange(clumpnucleirange==t);
+frametplusT = framet+t0;
 
 fprintf('\n%s: Compare frame: %s and Frame: %s.\n', ...
     mfilename, filenames{framet}, filenames{frametplusT});
@@ -31,6 +31,7 @@ fprintf('\n%s: Compare frame: %s and Frame: %s.\n', ...
 [sf] = getdatafromhandles(handles, filenames{framet});
 [cf] = getdatafromhandles(handles, filenames{frametplusT});
 
+%% 
 cf.thisclump = cf.clumphandles.overlappingClumps==10;
 cf.regs = regionprops(cf.thisclump);
 for jx=1:length(clumplab)
