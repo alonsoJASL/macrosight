@@ -75,7 +75,7 @@ Next, do the frame with a clump, `cf`, structure:
   ```
   Notice that the generation of `sf, cf` only differ in the name of the
   structure variables. Also, do not forget to clear the helper variables
-  used with the `getdatafromhandles.m` function: 
+  used with the `getdatafromhandles.m` function:
   ```Matlab
   clear dataL dataGL clumphandles dataR dataGR
   ```
@@ -154,3 +154,15 @@ hold on
 rectangle('Position', minibb);
 title('Moved boundary');
 ```
+### Ideas on the move...
+Anything I havetried but not finished...
++ Analysis of the moved boundaries with active contours. I changed the
+parameters of `n=25` and the pair name value of `'SmoothFactor'` to `1.5`
+```Matlab
+smoothf = 1.5; % 3 or 1.5 or 1...
+BW1 = activecontour(cf.dataGR, cf.movedmask{1}, 25, 'Chan-Vese', 'SmoothFactor', smoothf);
+BW2 = activecontour(cf.dataGR, cf.movedmask{2}, 25, 'Chan-Vese', 'SmoothFactor', smoothf);
+```
+This approach seems to have potential with the moving objects and
+the shape evolution. The `SmoothFactor` helps with the boundaries not
+deforming so much because of the intensity differences of the edges.

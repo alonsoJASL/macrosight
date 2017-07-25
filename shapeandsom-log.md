@@ -80,8 +80,10 @@ clear kx uxuy wxy netpos cfpos;
 
 Now, some plots:
 ```Matlab
+% plot the images and both 'moved' SOM points.
 plotGraphonImage(cf.dataGL, cf.OG{2})
 plotGraphonImage([], cf.OG{1})
+% plot original and moved boundaries for all cells.
 plotBoundariesAndPoints([],sf.boundy{1}, sf.boundy{2}, 'c-')
 plotBoundariesAndPoints([],[], cf.movedboundy{1}, 'm-')
 plotBoundariesAndPoints([],[], cf.movedboundy{2}, 'g-')
