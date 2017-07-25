@@ -42,11 +42,42 @@ testImage = imfilter(thisf.dataGR, ...
 thisf.xy = [yinit xinit];
 
 thisf.test = testImage;
-clear testImage maxval mxidx yinit xinit;
+clear testImage mxidx yinit xinit;
 
 %% ONTO the following frames
 t0 = 5;
+frametplusT = framet + t0;
 [jumpf] = getdatafromhandles(handles, filenames{frametplusT});
 
 fprintf('\n%s: Compare frame: %s and Frame: %s.\n', ...
     mfilename, filenames{framet}, filenames{frametplusT});
+
+%% 
+
+t0 = (ix+1):size(trackinfo,1);
+incr = 1;
+
+%jx=1;
+for jx=1:incr:length(t0)
+    frametplusT = trackinfo.timeframe(t0(jx));
+    [auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
+    
+    testImage = imfilter(auxstruct.dataGR, ...
+        imcrop(thisf.dataGR, thisf.regs.BoundingBox));
+    
+    [trackMaxCorr(jx), mxidx] = max(testImage(:));
+    [yinit, xinit] = ind2sub(size(thisf.dataGR), mxidx);
+    
+    auxstruct.xy = [yinit xinit];
+    auxstruct.test = testImage; 
+    
+    jumpf(jx) = auxstruct;
+end
+clear testImage mxidx yinit xinit;
+
+figure(1)
+plot(trackinfo.timeframe, trackMaxCorr);
+title('xcorr ');
+
+figure(2)
+plotBoundariesAndPoints(thisf.X, thisf.boundy, vertcat(jumpf.xy), 'm*');
