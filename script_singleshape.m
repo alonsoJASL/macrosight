@@ -99,31 +99,33 @@ for jx=1:incr:length(t0)
 end
 clear testImage mxidx yinit xinit auxstruct;
 
-dist2known = distset2vect(vertcat(ukfr.xy),knownfr.xy,true);
-figure(1)
-clf
-plot(trackinfo.timeframe, trackMaxCorr, ...
-    trackinfo.timeframe, dist2known);
-hold on;
-plotHorzLine(trackinfo.timeframe, multithresh(dist2known,1));
-title('Cross correlation maximum value per unknown frame');
-xlabel(sprintf('Time frames: known (%s), unknown (%d and beyond)', ...
-    filenames{framet}, trackinfo.timeframe(t0(1))));
-legend('Cross correlation maximum value', ...
-    'Distance from the original position', ...
-    'Otsu of distances');
-grid on;
-xlim([trackinfo.timeframe(1) trackinfo.timeframe(end)]);
-
-figure(2)
-plotBoundariesAndPoints(knownfr.X, knownfr.boundy, vertcat(ukfr.xy), 'm*');
-legend('Boundary of the known frame',...
-    'starting point of boundary',...
-    'Positions estimated from the unknown frames')
+if debugvar == true
+    dist2known = distset2vect(vertcat(ukfr.xy),knownfr.xy,true);
+    figure(1)
+    clf
+    plot(trackinfo.timeframe, trackMaxCorr, ...
+        trackinfo.timeframe, dist2known);
+    hold on;
+    plotHorzLine(trackinfo.timeframe, multithresh(dist2known,1));
+    title('Cross correlation maximum value per unknown frame');
+    xlabel(sprintf('Time frames: known (%s), unknown (%d and beyond)', ...
+        filenames{framet}, trackinfo.timeframe(t0(1))));
+    legend('Cross correlation maximum value', ...
+        'Distance from the original position', ...
+        'Otsu of distances');
+    grid on;
+    xlim([trackinfo.timeframe(1) trackinfo.timeframe(end)]);
+    
+    figure(2)
+    plotBoundariesAndPoints(knownfr.X, knownfr.boundy, vertcat(ukfr.xy), 'm*');
+    legend('Boundary of the known frame',...
+        'starting point of boundary',...
+        'Positions estimated from the unknown frames')
+end
 %% PICK A SINGLE UNKNOWN FRAME
-% 
+%
 
-% This section in the script is to check one particular case. 
+% This section in the script is to check one particular case.
 % If it needs to be used, then change the value of debugvar to true.
 debugvar=false;
 
