@@ -1,8 +1,19 @@
-# Shape analysis: continued ...
-In this log file, the analysis will be made onto one single cell. Inside
-the `MACROS` dataset, track `2` has been identified as a cell that evolves
-from frame `t=1` until frame `t=498`. This track goes through multiple
-clumps, as seen when displaying all the clumps that have track `2` in them:
+# Shape analysis of a single moving cell
+In this log file, the analysis will be made onto one single cell. The
+work in this log file refers to the script file
+[`script_singleshape.m`](./script_singleshape.m). It loads the main
+bulk of information from [`initscript`](./initscript.m), and from there
+the analysis is made.
+
+This should serve as a previous step to evaluate the notion of moving a
+cell in frame `t` to the position dictated by the maximum correlation
+in frame `t+t0`, and use said position as an initialisation of a shape
+evolution algorithm.
+## Selection of subset and tracks to be analysed
+Inside the `MACROS` dataset, track `2` has been identified as a cell
+that evolves from frame `t=1` until frame `t=498`.
+This track goes through multiple clumps, as seen when displaying all
+the clumps that have track `2` in them:
 ```Matlab
 > clumpidcodes(clumpidcodes-fix(clumpidcodes./1000)*1000 ==2)
 
@@ -45,7 +56,7 @@ the figure below. The selected track is highlighted.
 
 Inspection of the previous image shows that track `8` would also be
 suitable for trying in this analysis. The following development will be
-done with track `2`, however track `8` could be done as well.
+done with track `2`, however track `8` could be used as well.
 ## Isolation of track `2` within the frames of interest
 The track number needs to be matched with the label shown on the
 segmentation. Because of how the labels are made within @phagosight,
@@ -94,8 +105,40 @@ In this simple example, it suffices to delete the entries of
 ```Matlab
  trackinfo(1:417,:)=[];
 ```
-In order to isolate the segmentations of the green channels at the frame
+The code that computes this is shown below. We noticed that clump `8002`
+is located at the position `ix=8` of the `clumpidcodes` variable loaded
+from `initscript`.
+```Matlab
+% w.u.c = which unique clump!
+ix=8;
+wuc = clumpidcodes(ix);
+clumplab = getlabelsfromcode(wuc);
+thistrack = clumplab(1);
+trackinfo = tablenet(tablenet.track==2,[5 11 13 14]);
+trackinfo(1:417,:)=[];
+trackMaxCorr = zeros(size(trackinfo,1),1);
+```
+## Workflow of the single shape analysis
+It is important to notice that
+in order to isolate the segmentations of the green channels at the frame
 of interest, every column in `trackinfo` corresponds to a parallel array
 which can be accessed at the entry `t` when loading a frame.
 Such frame `trackinfo.timeframe(ix)` will then have the correct
 segmentation label in `trackinfo.seglabel(ix)`.
+
+From the range `418:498`, this code will load one frame, normally `418`,
+that will be referred to as the __known frame__, it will be stored in
+structure `knownfr`. The rest of the frames will be loaded as the first
+one, but it will be assumed that the segmentation for these cells does not
+exist, thus they will be called the __unknown frames__ (`ukfr`). Because
+of the unknown frames, the __movement+evolution__ analysis proposed here
+will be tested.
+### Loading the 'known' frame
+
+### Reading one of the unknown frames
+
+### Reading all the unknown frames
+
+##### Detecting frames where the position of `ukfr` was not estimated correctly
+
+##### Some useful plots
