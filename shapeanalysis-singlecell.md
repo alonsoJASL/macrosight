@@ -223,8 +223,74 @@ made for the remaining frames in `t0 = (ix+1):size(trackinfo,1)`. All
  ![ukfr-first-positions](./figs/cl8002-tr2-ukfr-positions1.png)
 
 Some of the positions shown are completely off, however, it can be noted
-that many do follow the apparent tracks of the 
+that many do follow the apparent tracks of the selected cell. In order to
+be sure that there was no programming error, the following images were
+created to see the cases when there is a successful movement of the known
+boundary `knownfr.boundy`...
 
+![ukfr-verify-xcorr-success](./figs/cl8002-tr2-ukfr-movedboundy.png)
+
+or a fail...
+
+![ukfr-verify-xcorr-fail](./figs/cl8002-tr2-ukfr-movedboundy-fail.png)
+
+These images give confidence that the method is performing correctly,
+thus the mistakes in the estimation of the position are probably caused
+by a reasonable confusion which caused the maximum correlation to be
+acquired at a noticeably far position from the original frame.
 ##### Detecting frames where `ukfr` was not estimated correctly
-Displaying the
+Having calculated all the positions, the distances were calculated with
+function [`distset2vect.m`](./distset2vect.m), which returns all the
+distances stored for all `ukfr.xy` to the original position
+`knownfr.xy`. Plotting both the distances and the maximum correlations,
+show the frames when some mistake happened.
+
+![corr-vs-dist](./figs/cl8002-tr2-ukfr-corr-vs-dist2original.png)
+
+A simple Otsu threshold on the distances from the estimated positions
+in `ukfr.xy` to the original shows in which frames the cross-
+correlation analysis did not produce a proper segmentation.
+
+_This seems to show that there is a short number of frames where the
+original reference `knownfr` would be a good enough initialisation for
+the evolution of the shape, which is the next part of the analysis._
+
 ##### Some useful plots
+```Matlab
+dist2known = distset2vect(vertcat(ukfr.xy),knownfr.xy,true);
+
+plot(trackinfo.timeframe, trackMaxCorr, ...
+    trackinfo.timeframe, dist2known);
+hold on;
+plotHorzLine(trackinfo.timeframe, multithresh(dist2known,1));
+title('Cross correlation maximum value per unknown frame');
+xlabel(sprintf('Time frames: known (%s), unknown (%d and beyond)', ...
+    filenames{framet}, trackinfo.timeframe(t0(1))));
+legend('Cross correlation maximum value', ...
+    'Distance from the original position', ...
+    'Otsu of distances');
+grid on;
+xlim([trackinfo.timeframe(1) trackinfo.timeframe(end)]);
+```
+```Matlab
+figure(111)
+set(gcf, 'Position', get(0,'ScreenSize'));
+clf;
+subplot(2,3,[1 2 4 5])
+plotBoundariesAndPoints(ukfr(jx).dataGL, knownfr.boundy, ...
+    ukfr(jx).movedboundy, 'm-');
+title(sprintf('Frame %s: original boundary vs moved boundary',...
+    filenames{frametplusT} ));
+subplot(233)
+plotBoundariesAndPoints(ukfr(jx).dataGL==ukfr(jx).seglabel,...
+    knownfr.boundy);
+title('(not that it matters right now, but) check labels on jumpf');
+subplot(236)
+plotBoundariesAndPoints(ukfr(jx).test,...
+    knownfr.boundy, ukfr(jx).movedboundy, 'm-');
+colormap parula;
+```
+```Matlab
+figure(2)
+plotBoundariesAndPoints(knownfr.X, knownfr.boundy, vertcat(ukfr.xy), 'm*');
+```
