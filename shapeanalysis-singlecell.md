@@ -134,11 +134,97 @@ exist, thus they will be called the __unknown frames__ (`ukfr`). Because
 of the unknown frames, the __movement+evolution__ analysis proposed here
 will be tested.
 ### Loading the 'known' frame
+Select a frame within the 81 available on `trackinfo`. It will contain
+the `dataR, dataGR` and `dataL, dataGL` pairs of images, as well as the
+`clumphandles` structure that contains the information on the clumps.
+```Matlab
+ix = 1;
+framet = trackinfo.timeframe(ix);
 
+[knownfr] = getdatafromhandles(handles, filenames{framet});
+```
+Then, add important information to `knownfr`, based on the track that
+will be analysed. This information involves the boundary of the cell
+that is being studied, as well as its region properties.
+```Matlab
+thisseglabel = trackinfo.seglabel(ix);
+auxbinmat = knownfr.clumphandles.nonOverlappingClumps==thisseglabel;
+knownfr.regs = regionprops(auxbinmat, 'BoundingBox', 'Centroid', ...
+    'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength');
+knownfr.boundy = bwboundaries(auxbinmat);
+clear auxbinmat
+```
+Finally, perform a cross-correlation of the image patch containing the
+cell at time `framet`, to get the initial position of the cell.
+```Matlab
+testImage = imfilter(knownfr.dataGR,imcrop(knownfr.dataGR,...
+    knownfr.regs.BoundingBox));
+[trackMaxCorr(ix), mxidx] = max(testImage(:));
+[yinit, xinit] = ind2sub(size(knownfr.dataGR), mxidx);
+knownfr.xy = [yinit xinit];
+```
 ### Reading one of the unknown frames
+First, identify the range within `trackinfo.timeframe` with the cells
+that will be analysed. If in the previous section `ix=1` was chosen,
+then for the analysis, the range would be
+`t0 = (ix+1):size(trackinfo,1);` which goes from
+`jx=1:size(trackinfo,1)-ix`. The process is really similar to that
+described in the previous section.
 
+After loading the basic information, the segmentation label is stored in `.seglabel`.
+```Matlab
+frametplusT = trackinfo.timeframe(t0(jx));
+[auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
+auxstruct.seglabel = trackinfo.seglabel(t0(jx));
+```
+The next step involves the cross correlation with the chopped patch
+from the known image `knownfr`. The positions are stored.
+```Matlab
+testImage = imfilter(auxstruct.dataGR, ...
+    imcrop(knownfr.dataGR, knownfr.regs.BoundingBox));
+
+[trackMaxCorr(jx), mxidx] = max(testImage(:));
+[yinit, xinit] = ind2sub(size(knownfr.dataGR), mxidx);
+
+auxstruct.xy = [yinit xinit];
+auxstruct.test = testImage;
+```
+Now, the boundary from the known frame, i.e. `knownfr.boundy` is moved
+based on the movement of the positions.
+```Matlab
+auxstruct.movedboundy = knownfr.boundy{1} + ...
+    repmat(auxstruct.xy-knownfr.xy, size(knownfr.boundy{1},1),1);
+auxstruct.movedbb = knownfr.regs.BoundingBox + ...
+    [auxstruct.xy(2:-1:1) 0 0]-[knownfr.xy(2:-1:1) 0 0];
+```
+Finally, a structure array `ukfr` is updated:
+```Matlab
+% ukfr = u.k.fr = UnKnown FRame
+ukfr(jx) = auxstruct;
+```
+The movement of the boundary
+has been explained in detail in the file
+[`script_shapeanalysis.m`](./script_shapeanalysis.m).
 ### Reading all the unknown frames
+For this, a reproduction of the previous section in a `for` loop is
+enough to populate all the frames.
 
-##### Detecting frames where the position of `ukfr` was not estimated correctly
+An experiment was run where all the calculations described here were
+made for the remaining frames in `t0 = (ix+1):size(trackinfo,1)`. All
+ the positions in `ukfr.xy` were plotted on top of the known frame
+ `knownfr.X`, showing many positions in which `ukfr.xy` was estimated
+ completely out of the area of interest.
 
+ _It is safe to assume that this would not happen when disambiguating a
+ clump, since the cross correlation would only be done comparing
+ the known frame with the intensities in `ukfr.dataGR` that are contained
+ in the clump_
+
+ ![ukfr-first-positions](./figs/cl8002-tr2-ukfr-positions1.png)
+
+Some of the positions shown are completely off, however, it can be noted
+that many do follow the apparent tracks of the 
+
+##### Detecting frames where `ukfr` was not estimated correctly
+Displaying the
 ##### Some useful plots
