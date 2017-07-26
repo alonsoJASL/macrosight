@@ -1,7 +1,7 @@
 # Self Organising Maps (SOMs) log file
 This document describes the script `script_shapeandsom.m` inside this package.
-It derives some of its development from the `script_shapeanalysis.m`
-[script](./shapeanalysis.md).
+It derives some of its development from the file 
+[`script_shapeanalysis.m`](./shapeanalysis-log.md).
 ## Initialising the SOM network
 + Use `somGetInputData` to get some input data.
 ```Matlab
@@ -91,7 +91,7 @@ plotBoundariesAndPoints([],[], cf.movedboundy{2}, 'g-')
 ### Move points over to position in frame `frametplusT`
 This step was performed in the previous section, by taking the auxiliary variables `sfpos` and `cfpos` to get the positions from the MATLAB-trained
 network and traspose them into the new initial position determined by
-the [cross correlation](./shapeanalysis.md).
+the [cross correlation](./shapeanalysis-log.md).
 ### Evolve to new frame
 There are two possibilities for the implementation
 

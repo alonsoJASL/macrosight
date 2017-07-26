@@ -1,8 +1,8 @@
 # Shape analysis of a single moving cell
 In this log file, the analysis will be made onto one single cell. The
 work in this log file refers to the script file
-[`script_singleshape.m`](./script_singleshape.m). It loads the main
-bulk of information from [`initscript`](./initscript.m), and from there
+[`script_singleshape.m`](../script_singleshape.m). It loads the main
+bulk of information from [`initscript`](../initscript.m), and from there
 the analysis is made.
 
 This should serve as a previous step to evaluate the notion of moving a
@@ -48,11 +48,11 @@ plotTracks(handles, 2, [2 8]);
 
 The figure displays the two tracks (i.e `2` and `8`) that form clump
 `8002`. It can be seen that
-![tracks-8-and-2](./figs/clump8002-track2.png)
+![tracks-8-and-2](../figs/clump8002-track2.png)
 
 The analysis will be made from frames `t=418:495`, which can be seen in
 the figure below. The selected track is highlighted.
-![tracks-8-and-2](./figs/cl8002-tr2-analysiswindow.png)
+![tracks-8-and-2](../figs/cl8002-tr2-analysiswindow.png)
 
 Inspection of the previous image shows that track `8` would also be
 suitable for trying in this analysis. The following development will be
@@ -204,7 +204,7 @@ ukfr(jx) = auxstruct;
 ```
 The movement of the boundary
 has been explained in detail in the file
-[`script_shapeanalysis.m`](./script_shapeanalysis.m).
+[`script_shapeanalysis.m`](../script_shapeanalysis.m).
 ### Reading all the unknown frames
 For this, a reproduction of the previous section in a `for` loop is
 enough to populate all the frames.
@@ -220,7 +220,7 @@ made for the remaining frames in `t0 = (ix+1):size(trackinfo,1)`. All
  the known frame with the intensities in `ukfr.dataGR` that are contained
  in the clump_
 
- ![ukfr-first-positions](./figs/cl8002-tr2-ukfr-positions1.png)
+ ![ukfr-first-positions](../figs/cl8002-tr2-ukfr-positions1.png)
 
 Some of the positions shown are completely off, however, it can be noted
 that many do follow the apparent tracks of the selected cell. In order to
@@ -228,11 +228,11 @@ be sure that there was no programming error, the following images were
 created to see the cases when there is a successful movement of the known
 boundary `knownfr.boundy`...
 
-![ukfr-verify-xcorr-success](./figs/cl8002-tr2-ukfr-movedboundy.png)
+![ukfr-verify-xcorr-success](../figs/cl8002-tr2-ukfr-movedboundy.png)
 
 or a fail...
 
-![ukfr-verify-xcorr-fail](./figs/cl8002-tr2-ukfr-movedboundy-fail.png)
+![ukfr-verify-xcorr-fail](../figs/cl8002-tr2-ukfr-movedboundy-fail.png)
 
 These images give confidence that the method is performing correctly,
 thus the mistakes in the estimation of the position are probably caused
@@ -240,12 +240,12 @@ by a reasonable confusion which caused the maximum correlation to be
 acquired at a noticeably far position from the original frame.
 ##### Detecting frames where `ukfr` was not estimated correctly
 Having calculated all the positions, the distances were calculated with
-function [`distset2vect.m`](./distset2vect.m), which returns all the
+function [`distset2vect.m`](../distset2vect.m), which returns all the
 distances stored for all `ukfr.xy` to the original position
 `knownfr.xy`. Plotting both the distances and the maximum correlations,
 show the frames when some mistake happened.
 
-![corr-vs-dist](./figs/cl8002-tr2-ukfr-corr-vs-dist2original.png)
+![corr-vs-dist](../figs/cl8002-tr2-ukfr-corr-vs-dist2original.png)
 
 A simple Otsu threshold on the distances from the estimated positions
 in `ukfr.xy` to the original shows in which frames the cross-

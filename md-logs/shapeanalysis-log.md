@@ -139,7 +139,8 @@ for kx=1:length(clumplab)
 end
 ```
 + The moved boundaries in `cf.movedboundy` will be used as initialised points
-for the **SOM** or **ASM**. This can be accessed [here](./shapeandsom.md).
+for the **SOM** or **ASM**. This can be accessed
+[here](./shapeandsom-log.md).
 ## Some plots
 ```Matlab
 figure(1)
