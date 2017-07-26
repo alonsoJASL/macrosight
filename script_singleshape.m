@@ -18,7 +18,7 @@ trackinfo = tablenet(tablenet.track==2,[5 11 13 14]);
 % delete frames from the analysis.
 trackinfo(1:417,:)=[];
 trackMaxCorr = zeros(size(trackinfo,1),1);
-%% LOADING THE FIRST FRAME
+%% LOADING THE FIRST (KNOWN) FRAME
 ix = 1;
 framet = trackinfo.timeframe(ix);
 
@@ -117,42 +117,49 @@ xlim([trackinfo.timeframe(1) trackinfo.timeframe(end)]);
 
 figure(2)
 plotBoundariesAndPoints(knownfr.X, knownfr.boundy, vertcat(ukfr.xy), 'm*');
-
+legend('Boundary of the known frame',...
+    'starting point of boundary',...
+    'Positions estimated from the unknown frames')
 %% PICK A SINGLE UNKNOWN FRAME
+% 
 
-t0 = (ix+1):size(trackinfo,1);
-jx=10;
-
-% set to false if you do not want images to be shown.
-debugvar = true;
+% This section in the script is to check one particular case. 
+% If it needs to be used, then change the value of debugvar to true.
+debugvar=false;
 
 if debugvar==true
+    t0 = (ix+1):size(trackinfo,1);
+    jx=10;
+    
+    frametplusT = trackinfo.timeframe(t0(jx));
+    [auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
+    auxstruct.seglabel = trackinfo.seglabel(t0(jx));
+    
+    testImage = imfilter(auxstruct.dataGR, ...
+        imcrop(knownfr.dataGR, knownfr.regs.BoundingBox));
+    
+    [trackMaxCorr(jx), mxidx] = max(testImage(:));
+    [yinit, xinit] = ind2sub(size(knownfr.dataGR), mxidx);
+    
+    auxstruct.xy = [yinit xinit];
+    auxstruct.test = testImage;
+    
+    auxstruct.movedboundy = knownfr.boundy{1} + ...
+        repmat(auxstruct.xy-knownfr.xy, size(knownfr.boundy{1},1),1);
+    auxstruct.movedbb = knownfr.regs.BoundingBox + ...
+        [auxstruct.xy(2:-1:1) 0 0]-[knownfr.xy(2:-1:1) 0 0];
+    
+    % ukfr = u.k.fr = UnKnown FRame
+    ukfr(jx) = auxstruct;
+    
+    clear testImage mxidx yinit xinit auxstruct;
+    
+    figure(1)
+    plot(trackinfo.timeframe, trackMaxCorr);
+    title('Maximum correlations ');
+    
     figure(111)
     set(gcf, 'Position', get(0,'ScreenSize'));
-end
-
-frametplusT = trackinfo.timeframe(t0(jx));
-[auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
-auxstruct.seglabel = trackinfo.seglabel(t0(jx));
-
-testImage = imfilter(auxstruct.dataGR, ...
-    imcrop(knownfr.dataGR, knownfr.regs.BoundingBox));
-
-[trackMaxCorr(jx), mxidx] = max(testImage(:));
-[yinit, xinit] = ind2sub(size(knownfr.dataGR), mxidx);
-
-auxstruct.xy = [yinit xinit];
-auxstruct.test = testImage;
-
-auxstruct.movedboundy = knownfr.boundy{1} + ...
-    repmat(auxstruct.xy-knownfr.xy, size(knownfr.boundy{1},1),1);
-auxstruct.movedbb = knownfr.regs.BoundingBox + ...
-    [auxstruct.xy(2:-1:1) 0 0]-[knownfr.xy(2:-1:1) 0 0];
-
-% ukfr = u.k.fr = UnKnown FRame
-ukfr(jx) = auxstruct;
-
-if debugvar == true
     clf;
     subplot(2,3,[1 2 4 5])
     plotBoundariesAndPoints(ukfr(jx).dataGL, knownfr.boundy, ...
@@ -167,13 +174,7 @@ if debugvar == true
     plotBoundariesAndPoints(ukfr(jx).test,...
         knownfr.boundy, ukfr(jx).movedboundy, 'm-');
     colormap parula;
+    
+    figure(2)
+    plotBoundariesAndPoints(knownfr.X, knownfr.boundy, vertcat(ukfr.xy), 'm*');
 end
-
-clear testImage mxidx yinit xinit auxstruct;
-
-figure(1)
-plot(trackinfo.timeframe, trackMaxCorr);
-title('Maximum correlations ');
-
-figure(2)
-plotBoundariesAndPoints(knownfr.X, knownfr.boundy, vertcat(ukfr.xy), 'm*');
