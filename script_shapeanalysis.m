@@ -43,6 +43,7 @@ end
 clear auxbinmat jx;
 
 %% Follow independent cells on framet with a xcorr!
+
 % First get the information from framet (i.e sf)
 for kx=1:length(clumplab)
     testImage = imfilter(sf.dataGR, imcrop(sf.dataGR, sf.regs(kx).BoundingBox));
