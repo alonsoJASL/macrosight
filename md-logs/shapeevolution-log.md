@@ -101,6 +101,38 @@ somopt.gifname = [];
 
 ```
 #### Outputs
++ Experiment 1
+
+|maxiter|alphazero|alphadtype|N0|ndtype|steptype|incr|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|100.00|0.13|none|5.00|exp2|intensity|1.00|
+![somcirc-ex1](../figs/cl8002-tr2-ukfr1-som-circ1.png)
++ Experiment 2
+
+|maxiter|alphazero|alphadtype|N0|ndtype|steptype|incr|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|100.00|0.25|none|5.00|exp2|intensity|1.00|
+![somcirc-ex1](../figs/cl8002-tr2-ukfr1-som-circ2.png)
++ Experiment 3
+
+|maxiter|alphazero|alphadtype|N0|ndtype|steptype|incr|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|1000.00|0.13|none|8.00|exp2|intensity|10.00|
+![somcirc-ex1](../figs/cl8002-tr2-ukfr1-som-circ3.png)
++ Experiment 4
+
+|maxiter|alphazero|alphadtype|N0|ndtype|steptype|incr|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|500.00|0.25|none|5.00|exp2|intensity|8.00|
+![somcirc-ex1](../figs/cl8002-tr2-ukfr1-som-circ4.png)
++ Experiment 5
+
+|maxiter|alphazero|alphadtype|N0|ndtype|steptype|incr|
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|500.00|0.13|none|5.00|exp2|intensity|20.00|
+![somcirc-ex1](../figs/cl8002-tr2-ukfr1-som-circ5.png)
+
+
 ### Problems found (discussion)
 + Grid is hard to initialise to take advantage of the known frame shape.
 + Circle is hard to control.

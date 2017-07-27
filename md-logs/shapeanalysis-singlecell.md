@@ -47,10 +47,10 @@ plotTracks(handles, 2, [2 8]);
 ```
 
 The figure displays the two tracks (i.e `2` and `8`) that form clump
-`8002`. It can be seen that these two cells present a good case study 
+`8002`. It can be seen that these two cells present a good case study
 because of their evolution throughout the dataset, and the different
-scenarios they are presented: separated and clumped together on their 
-own and with other cells. 
+scenarios they are presented: separated and clumped together on their
+own and with other cells.
 ![tracks-8-and-2](../figs/clump8002-track2.png)
 
 The analysis will be made from frames `t=418:495`, which can be seen in
