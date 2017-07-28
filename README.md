@@ -10,7 +10,9 @@ problem with it, just ask me! The log files can be read in the following order:
 + [Shape analysis log](./md-logs/shapeanalysis-log.md)
 + [Single cell following log](./md-logs/shapeanalysis-singlecell.md), a
 previous step from   __shape evolution__.
-+ [Shape evolution](./md-logs/shapeevolution-log.md) **CURRENTLY under development**
++ [Shape evolution](./md-logs/shapeevolution-log.md) **CURRENTLY under development**. 
+Some of the images present can be hard to see, but the MATLAB fig or EPS files are 
+present in the [`figs` folder](./figs).
 + (Original development, then switched approach to **shape evolution**)
 [SOM shape evolution log](./md-logs/shapeandsom-log.md). This is not finalised.
 
