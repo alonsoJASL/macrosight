@@ -51,7 +51,7 @@ axis([362.0484  436.3710   95.2872  249.0364])
 %% ACTIVE CONTOURs
 
 ix =1; % this value comes from script_singleshape
-jx = 17;
+jx = 1;
 oneuk = ukfr(jx);
 
 oneuk.movedmask = poly2mask(...
@@ -68,15 +68,18 @@ BW1 = activecontour(oneuk.dataGR, oneuk.movedmask, acopt.iter, ...
     acopt.method, 'ContractionBias',acopt.contractionbias,...
     'SmoothFactor', acopt.smoothf);
 
-disp(struc2markdown(acopt));
-subplot(2,4,(jx-16))
-plotBoundariesAndPoints(oneuk.X, oneuk.movedboundy, ...
-    bwboundaries(BW1), 'm-');
-axis image
-%axis([314.2098  507.0632  101.2963  248.2321]); % for jx=8
-%axis([297.0161  546.3065  108.7216  308.7449]); % for all frames jx=1:8
-axis([367.5890  527.0729   83.3455  234.1093]); % for all frames jx=17:24
-title(sprintf('Known frame: %d / Unknown frame: %d (t+t0=%d+%d)',...
-    ix,jx,ix,jx));
-legend('Initialisation', 'boundary starting point', ...
-    'After active contours');
+if false
+    % switch to true to show images
+    disp(struc2markdown(acopt));
+    subplot(2,4,(jx-16))
+    plotBoundariesAndPoints(oneuk.X, oneuk.movedboundy, ...
+        bwboundaries(BW1), 'm-');
+    axis image
+    %axis([314.2098  507.0632  101.2963  248.2321]); % for jx=8
+    %axis([297.0161  546.3065  108.7216  308.7449]); % for all frames jx=1:8
+    axis([367.5890  527.0729   83.3455  234.1093]); % for all frames jx=17:24
+    title(sprintf('Known frame: %d / Unknown frame: %d (t+t0=%d+%d)',...
+        ix,jx,ix,jx));
+    legend('Initialisation', 'boundary starting point', ...
+        'After active contours');
+end
