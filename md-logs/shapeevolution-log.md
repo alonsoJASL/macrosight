@@ -52,11 +52,9 @@ This code uses the developments in the
 Clone or download it and add it to the Matlab `PATH`.
 #### Input data
 This will be the variable `oneindata`, which is a `MX4` that contains:
-
 | Position      | Intensity values of the image at position `[X Y]` |
 |:-------------:|:--------:|
 | `[X Y]`       | `[R G]`  |
-
 The code to obtain it from the image, and a binary mask appears below:
 ```Matlab
 mask = bb2mask(oneuk.movedbb, handles.rows, handles.cols);
@@ -143,9 +141,9 @@ do not get taken into consideration.
 ## Active Contours (attempts and results)
 ### Initialisation
 #### Input data
-#### Network topologies
-### Active contours parameters.
-#### Random experiments
+### Active contours parameters
+## Experimentation
+### Random experiments
 + Experiment 1
 
 |framesAhead|method|iter|smoothf|contractionbias|
@@ -164,4 +162,44 @@ do not get taken into consideration.
 |:---:|:---:|:---:|:---:|:---:|
 |8.00|Chan-Vese|100.00|2.00|0.00|
 ![ac-ex3](../figs/cl8002-tr2-ukfr1-ac3.png)
-+ Experiment 4
+
+### Manual experiments on eight unknown frames
+The experiments presented are done by manually selecting the parameters of the
+`activecontour` function in MATLAB, and then selecting eight unknown frames
+after the known frame `418`.
+
+|framesAhead|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|:---:|
+|1.00|Chan-Vese|25.00|2.00|0.00|
+|2.00|Chan-Vese|25.00|2.00|0.00|
+|3.00|Chan-Vese|25.00|2.00|0.00|
+|4.00|Chan-Vese|25.00|2.00|0.00|
+|5.00|Chan-Vese|100.00|2.00|0.00|
+|6.00|Chan-Vese|100.00|2.00|0.00|
+|7.00|Chan-Vese|100.00|3.00|0.00|
+|8.00|Chan-Vese|100.00|3.00|0.00|
+
+![ac-1to8-exp](../figs/cl8002-tr2-ukfr_j1-j8_ac.png)
+
+### Manual experiments using a single set of parameters.
+
+|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|
+|Chan-Vese|100.00|2.00|0.00|
+
+![ac-1to8-smaeparams-exp](../figs/cl8002-tr2-ukfr_j1-j8_same-ac.png)
+
+### Experiments on further frames detected correctly
+Remember the graph presented before:
+![corr-vs-dist](../figs/cl8002-tr2-ukfr-corr-vs-d2og-otherframes.png)
+Now the experiment will be run on the frames `435:442` with the same
+parameters as before:
+
+|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|
+|Chan-Vese|100.00|2.00|0.00|
+
+The results are:
+![ac-17to24-sameparams-exp](../figs/cl8002-tr2-ukfr_j17-j24_same-ac.png)
+
+## Comments on the results...
