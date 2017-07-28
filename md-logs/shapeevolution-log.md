@@ -52,9 +52,11 @@ This code uses the developments in the
 Clone or download it and add it to the Matlab `PATH`.
 #### Input data
 This will be the variable `oneindata`, which is a `MX4` that contains:
+
 | Position      | Intensity values of the image at position `[X Y]` |
 |:-------------:|:--------:|
 | `[X Y]`       | `[R G]`  |
+
 The code to obtain it from the image, and a binary mask appears below:
 ```Matlab
 mask = bb2mask(oneuk.movedbb, handles.rows, handles.cols);
