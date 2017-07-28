@@ -19,3 +19,4 @@ for qx=range
         ss = strcat(ss,'Empty|');
     end
 end
+ss = sprintf('%s\n',ss);
