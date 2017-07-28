@@ -11,5 +11,11 @@ problem with it, just ask me! The log files can be read in the following order:
 + [Single cell following log](./md-logs/shapeanalysis-singlecell.md), a
 previous step from   __shape evolution__.
 + [Shape evolution](./md-logs/shapeevolution-log.md) **CURRENTLY under development**
-+ (Original and not finished)
-[SOM shape evolution log](./md-logs/shapeandsom-log.md).
++ (Original development, then switched approach to **shape evolution**)
+[SOM shape evolution log](./md-logs/shapeandsom-log.md). This is not finalised.
+
+Also, please notice that this research is ongoing, so bugs are likely to appear. 
+Some of the functions might not be present, because they are part of another package. 
+If you are thinking of using our code, please feel free to submit any issues to the 
+[issues page](https://github.com/alonsoJASL/macrosight/issues), so that small bugs are 
+dealt with. 
