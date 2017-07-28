@@ -15,7 +15,8 @@ previous step from   __shape evolution__.
 [SOM shape evolution log](./md-logs/shapeandsom-log.md). This is not finalised.
 
 Also, please notice that this research is ongoing, so bugs are likely to appear. 
-Some of the functions might not be present, because they are part of another package. 
+Some of the functions might not be present, because they are part of another package
+that has not been uploaded. 
 If you are thinking of using our code, please feel free to submit any issues to the 
 [issues page](https://github.com/alonsoJASL/macrosight/issues), so that small bugs are 
 dealt with. 
