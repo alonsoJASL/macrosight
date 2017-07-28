@@ -143,4 +143,23 @@ do not get taken into consideration.
 #### Input data
 #### Network topologies
 ### Active contours parameters.
-#### Outputs
+#### Random experiments
++ Experiment 1
+
+|framesAhead|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|:---:|
+|2.00|Chan-Vese|25.00|1.00|0.00|
+![ac-ex1](../figs/cl8002-tr2-ukfr1-ac1.png)
++Experiment 2
+
+|framesAhead|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|:---:|
+|8.00|Chan-Vese|25.00|1.00|0.00|
+![ac-ex2](../figs/cl8002-tr2-ukfr1-ac2.png)
++ Experiment 3
+
+|framesAhead|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|:---:|
+|8.00|Chan-Vese|100.00|2.00|0.00|
+![ac-ex3](../figs/cl8002-tr2-ukfr1-ac3.png)
++ Experiment 4
