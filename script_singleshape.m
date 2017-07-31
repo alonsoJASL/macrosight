@@ -20,7 +20,7 @@ if ~isdir(outdir)
     mkdir(outdir);
 end
 
-trackinfo = tablenet(tablenet.track==2,[5 11 13 14]);
+trackinfo = tablenet(tablenet.track==thistrack,[5 11 13 14]);
 
 % delete frames from the analysis.
 trackinfo(1:417,:)=[];
