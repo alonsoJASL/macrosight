@@ -5,21 +5,13 @@ initscript;
 
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-ix=8; % OR, FOR A RANDOM CODE: randi(length(clumpidcodes)); 10
-wuc = clumpidcodes(ix);
+wuc = 8002;
 fprintf('Working on clump with ID=%d.\n', wuc);
 
 % get labels from the clump
 clumplab = getlabelsfromcode(wuc);
 %% CHOOSE ONE TRACK AND ISOLATE THE GREEN CHANNEL SEGMENTATION FOR IT.
 thistrack = clumplab(1);
-
-outdir = fullfile(handlesdir.pathtodir, [handlesdir.data '_mat_XCORR']);
-outname = sprintf('clump%d-tr%d.mat',wuc,thistrack);
-if ~isdir(outdir)
-    mkdir(outdir);
-end
-
 trackinfo = tablenet(tablenet.track==thistrack,[5 11 13 14]);
 
 % delete frames from the analysis.
@@ -27,6 +19,13 @@ trackinfo(1:417,:)=[];
 trackMaxCorr = zeros(size(trackinfo,1),1);
 
 %% LOADING THE FIRST (KNOWN) FRAME
+outdir = fullfile(handlesdir.pathtodir, [handlesdir.data '_mat_XCORR']);
+outname = sprintf('clump%d-tr%d.mat',wuc,thistrack);
+
+if ~isdir(outdir)
+    mkdir(outdir);
+end
+
 try
     % Known AND UnKnown
     kanduk = load(fullfile(outdir, outname));
