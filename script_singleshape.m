@@ -5,16 +5,18 @@ initscript;
 
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 8002;
-fprintf('Working on clump with ID=%d.\n', wuc);
+wuc = 11010;
+fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
 clumplab = getlabelsfromcode(wuc);
-%% CHOOSE ONE TRACK AND ISOLATE THE GREEN CHANNEL SEGMENTATION FOR IT.
+% CHOOSE ONE TRACK AND ISOLATE THE GREEN CHANNEL SEGMENTATION FOR IT.
 thistrack = clumplab(1);
-trackinfo = tablenet(tablenet.track==thistrack,[5 11 13 14]);
+fprintf('%s:\t...on track with finalLabel=%d.\n', mfilename, thistrack);
+trackinfo = [tablenet(tablenet.track==thistrack,[5 11 13 14]) ...
+    clumptracktable(tablenet.track==thistrack,1)];
 
-% delete frames from the analysis.
+%% delete frames from the analysis.
 trackinfo(1:417,:)=[];
 trackMaxCorr = zeros(size(trackinfo,1),1);
 
@@ -58,7 +60,7 @@ catch e
     knownfr.test = testImage;
     clear testImage mxidx yinit xinit;
     
-    %% ALL THE REMAINING UNKNOWN FRAMES
+    % ALL THE REMAINING UNKNOWN FRAMES
     
     t0 = (ix+1):size(trackinfo,1);
     incr = 1;
