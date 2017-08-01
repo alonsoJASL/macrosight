@@ -25,3 +25,7 @@ the frame, which the user can click on (the function uses `ginput`).
 
 In this example, the output would be `clumpcode=uint64(8002)` and
 `nucleionclump=[7;8]`.
+
+
+This information can then be used to analyse chunks of data to see interesting
+intervals for analysing the frames.
