@@ -134,6 +134,7 @@ somopt.gifname = [];
 
 
 ### Problems found (discussion)
+A number of problems were detected on the
 + Grid is hard to initialise to take advantage of the known frame shape.
 + Circle is hard to control.
 + Circle needs less points, but it still does not move as well, and some points
