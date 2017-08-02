@@ -2,58 +2,72 @@
 %
 %% INITIALISATION
 initscript;
-
+load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 11010;
+wuc = 11010; % 8002, 11010, 60010, 60010002
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
 clumplab = getlabelsfromcode(wuc);
-% CHOOSE ONE TRACK AND ISOLATE THE GREEN CHANNEL SEGMENTATION FOR IT.
-thistrack = clumplab(1);
-fprintf('%s:\t...on track with finalLabel=%d.\n', mfilename, thistrack);
 
-trackinfo = [tablenet(tablenet.track==thistrack,[5 11 13 14]) ...
-    clumptracktable(tablenet.track==thistrack,1)];
+trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 11 13 14]) ...
+    clumptracktable(ismember(tablenet.track, clumplab),:)];
+
+% remove holes from analysis
+trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
 
 %% Extract frames wheree the clump exists
 
 % for clump 8002
-trackinfo(1:417,:)=[];
-%
+% trackinfo(trackinfo.timeframe<417,:) = [];
 % for clump 11010
-trackinfo(144:end,:)=[];
-trackinfo([75 119],:)=[];
+% trackinfo(trackinfo.timeframe>=144,:)=[];
+
+% Select range for clump automatically feature will be added later.
+
+aa = table2struct(trackinfo(1:2:end,:));
+jx=1:2:size(trackinfo,1);
+for ix=1:length(jx)
+    aa(ix).seglabel = [trackinfo(jx(ix),:).seglabel trackinfo(jx(ix)+1,:).seglabel];
+    aa(ix).track = [trackinfo(jx(ix),:).track trackinfo(jx(ix)+1,:).track];
+    aa(ix).finalLabel = [trackinfo(jx(ix),:).finalLabel trackinfo(jx(ix)+1,:).finalLabel];
+    aa(ix).clumpseglabel = aa(ix).seglabel(1);
+end
+trackinfo = struct2table(aa);
+clear ix jx;
 
 % to track maximium correlations
-trackMaxCorr = zeros(size(trackinfo,1),1);
+trackMaxCorr = zeros(size(trackinfo,1),length(clumplab));
+
 %% LOADING THE FIRST (KNOWN) FRAME
-outname = sprintf('clump%d-tr%d.mat',wuc,thistrack);
+whichtrack = 1;
+outname = sprintf('clump%d-tr%d.mat',wuc,clumplab(whichtrack));
 fprintf('\n%sGenerating data for %s.\n', mfilename, upper(outname));
 
 ix = 1;
 framet = trackinfo.timeframe(ix);
-thisseglabel = trackinfo.seglabel(ix);
+thisseglabel = trackinfo.seglabel(ix, whichtrack);
 
 fprintf('\n%s: Loading original (known) frame: %s.\n', ...
     mfilename, filenames{framet});
 
-[knownfr] = getdatafromhandles(handles, filenames{framet});
+[auxknown] = getdatafromhandles(handles, filenames{framet});
 
-auxbinmat = knownfr.clumphandles.nonOverlappingClumps==thisseglabel;
-knownfr.regs = regionprops(auxbinmat, 'BoundingBox', 'Centroid', ...
+auxbinmat = auxknown.clumphandles.nonOverlappingClumps==thisseglabel;
+auxknown.regs = regionprops(auxbinmat, 'BoundingBox', 'Centroid', ...
     'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength');
-knownfr.boundy = bwboundaries(auxbinmat);
+auxknown.boundy = bwboundaries(auxbinmat);
 clear auxbinmat
 
-testImage = imfilter(knownfr.dataGR,imcrop(knownfr.dataGR,...
-    knownfr.regs.BoundingBox));
-[trackMaxCorr(ix), mxidx] = max(testImage(:));
-[yinit, xinit] = ind2sub(size(knownfr.dataGR), mxidx);
-knownfr.xy = [yinit xinit];
+testImage = imfilter(auxknown.dataGR,imcrop(auxknown.dataGR,...
+    auxknown.regs.BoundingBox));
+[trackMaxCorr(ix, whichtrack), mxidx] = max(testImage(:));
+[yinit, xinit] = ind2sub(size(auxknown.dataGR), mxidx);
+auxknown.xy = [yinit xinit];
 
-knownfr.test = testImage;
+auxknown.test = testImage;
+knownfr(whichtrack) = auxknown;
 clear testImage mxidx yinit xinit;
 
 %% PICK A SINGLE UNKNOWN FRAME
@@ -62,54 +76,61 @@ clear testImage mxidx yinit xinit;
 % This section in the script is to check one particular case.
 % If it needs to be used, then change the value of debugvar to true.
 t0 = (ix+1):size(trackinfo,1);
-jx=15;
+jx=10;
 
 frametplusT = trackinfo.timeframe(t0(jx));
 [auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
-auxstruct.seglabel = trackinfo.seglabel(t0(jx)); 
 
-if trackinfo.clumpcode(jx) == wuc
+if trackinfo.clumpcode(t0(jx)) == wuc
     % Dealing with a clump
-    testImage = imfilter((auxstruct.dataGL==auxstruct.seglabel).*auxstruct.dataGR, ...
-        imcrop(knownfr.dataGR, knownfr.regs.BoundingBox));
+    testImage = imfilter(auxstruct.dataGR.*...
+        (auxstruct.dataGL==trackinfo.clumpseglabel(t0(jx))), ...
+        imcrop(knownfr(whichtrack).dataGR, knownfr(whichtrack).regs.BoundingBox));
 else
     % Dealing with a normal cell
     testImage = imfilter(auxstruct.dataGR, ...
-        imcrop(knownfr.dataGR, knownfr.regs.BoundingBox));
+        imcrop(knownfr(whichtrack).dataGR, knownfr(whichtrack).regs.BoundingBox));
 end
 
-[trackMaxCorr(jx), mxidx] = max(testImage(:));
-[yinit, xinit] = ind2sub(size(knownfr.dataGR), mxidx);
+[trackMaxCorr(jx, whichtrack), mxidx] = max(testImage(:));
+[yinit, xinit] = ind2sub(size(knownfr(whichtrack).dataGR), mxidx);
 
 auxstruct.xy = [yinit xinit];
 auxstruct.test = testImage;
 
-auxstruct.movedboundy = knownfr.boundy{1} + ...
-    repmat(auxstruct.xy-knownfr.xy, size(knownfr.boundy{1},1),1);
-auxstruct.movedbb = knownfr.regs.BoundingBox + ...
-    [auxstruct.xy(2:-1:1) 0 0]-[knownfr.xy(2:-1:1) 0 0];
+auxstruct.movedboundy = knownfr(whichtrack).boundy{1} + ...
+    repmat(auxstruct.xy-knownfr(whichtrack).xy, size(knownfr(whichtrack).boundy{1},1),1);
+auxstruct.movedbb = knownfr(whichtrack).regs.BoundingBox + ...
+    [auxstruct.xy(2:-1:1) 0 0]-[knownfr(whichtrack).xy(2:-1:1) 0 0];
 
 % ukfr = u.k.fr = UnKnown FRame
-ukfr(jx) = auxstruct;
+ukfr(jx,whichtrack) = auxstruct;
 
 clear testImage mxidx yinit xinit auxstruct;
 
-% Now, evolve the shape from: knownfr.movedboundy to ukfr(jx).dataGR
-oneuk = ukfr(jx);
+% Now, evolve the shape from: knownfr(whichtrack).movedboundy to ukfr(jx).dataGR
+oneuk = ukfr(jx, whichtrack);
 
-oneuk.movedmask = poly2mask(...
+oneuk.movedmask = imerode(poly2mask(...
     oneuk.movedboundy(:,2), oneuk.movedboundy(:,1),...
-    handles.rows, handles.cols);
+    handles.rows, handles.cols), ...
+    ones(7));
 
 acopt.framesAhead = jx;
 acopt.method = 'Chan-Vese';
 acopt.iter = 100;
 acopt.smoothf = 2;
-acopt.contractionbias = -0.01;
+acopt.contractionbias = -0.1;
 
 BW1 = activecontour(oneuk.dataGR, oneuk.movedmask, acopt.iter, ...
     acopt.method, 'ContractionBias',acopt.contractionbias,...
     'SmoothFactor', acopt.smoothf);
+
+%% 
+figure(1)
+plot(trackinfo.timeframe, trackMaxCorr);
+title('Maximum correlations ');
+legend(sprintf('TRACK-%d',clumplab(1)), sprintf('TRACK-%d',clumplab(2)))
 
 figure(2)
 subplot(121)
@@ -120,26 +141,22 @@ subplot(122)
 plotBoundariesAndPoints(oneuk.dataGL, oneuk.movedboundy, bwboundaries(BW1), 'm-')
 legend('Known frame moved bound', '... starting point', 'Evolved shape')
 axis([274.4489  537.1758  220.9766  377.7428])
-tightfig
+%tightfig
 
-%% 
-figure(1)
-plot(trackinfo.timeframe, trackMaxCorr);
-title('Maximum correlations ');
-
+%%
 figure(111)
 set(gcf, 'Position', get(0,'ScreenSize'));
 clf;
 subplot(2,3,[1 2 4 5])
-plotBoundariesAndPoints(ukfr(jx).dataGL, knownfr.boundy, ...
+plotBoundariesAndPoints(ukfr(jx).dataGL, knownfr(whichtrack).boundy, ...
     ukfr(jx).movedboundy, 'm-');
 title(sprintf('Frame %s: original boundary vs moved boundary',...
     filenames{frametplusT} ));
 subplot(233)
-plotBoundariesAndPoints(ukfr(jx).dataGL==ukfr(jx).seglabel,...
-    knownfr.boundy);
+plotBoundariesAndPoints(ukfr(jx).dataGL==trackinfo.clumpseglabel(t0(jx)),...
+    knownfr(whichtrack).boundy);
 title('(not that it matters right now, but) check labels on jumpf');
 subplot(236)
 plotBoundariesAndPoints(ukfr(jx).test,...
-    knownfr.boundy, ukfr(jx).movedboundy, 'm-');
+    knownfr(whichtrack).boundy, ukfr(jx).movedboundy, 'm-');
 colormap parula;
