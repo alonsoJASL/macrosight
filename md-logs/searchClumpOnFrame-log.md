@@ -29,3 +29,6 @@ In this example, the output would be `clumpcode=uint64(8002)` and
 
 This information can then be used to analyse chunks of data to see interesting
 intervals for analysing the frames.
+```Matlab
+plotTracks(handles,2,nucleionclump)
+```
