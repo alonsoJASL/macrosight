@@ -54,4 +54,7 @@ zfin = min(zfin);
 ## Deformation of shape based on Active Contours
 + Parameters
 + Initial point
+### Preliminary Results
+![both-cells-preliminary](../figs/cl11010-trALL-jx10.png)
+
 ## Steps to follow two cells within a clump.
