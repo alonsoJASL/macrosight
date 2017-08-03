@@ -89,38 +89,33 @@ t0 = (ix+1):size(trackinfo,1);
 jx=1;
 
 frametplusT = trackinfo.timeframe(t0(jx));
-[auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
+[oneuk] = getdatafromhandles(handles, filenames{frametplusT});
 
 if trackinfo.clumpcode(t0(jx)) == wuc
     % Dealing with a clump
-    testImage = imfilter(auxstruct.dataGR.*...
-        (auxstruct.dataGL==trackinfo.clumpseglabel(t0(jx))), ...
+    testImage = imfilter(oneuk.dataGR.*...
+        (oneuk.dataGL==trackinfo.clumpseglabel(t0(jx))), ...
         imcrop(knownfr(wtr).dataGR, knownfr(wtr).regs.BoundingBox));
 else
     % Dealing with a normal cell
-    testImage = imfilter(auxstruct.dataGR, ...
+    testImage = imfilter(oneuk.dataGR, ...
         imcrop(knownfr(wtr).dataGR, knownfr(wtr).regs.BoundingBox));
 end
 
 [trackMaxCorr(jx, wtr), mxidx] = max(testImage(:));
 [yinit, xinit] = ind2sub(size(knownfr(wtr).dataGR), mxidx);
 
-auxstruct.xy = [yinit xinit];
-auxstruct.test = testImage;
+oneuk.xy = [yinit xinit];
+oneuk.test = testImage;
 
-auxstruct.movedboundy = knownfr(wtr).boundy{1} + ...
-    repmat(auxstruct.xy-knownfr(wtr).xy, size(knownfr(wtr).boundy{1},1),1);
-auxstruct.movedbb = knownfr(wtr).regs.BoundingBox + ...
-    [auxstruct.xy(2:-1:1) 0 0]-[knownfr(wtr).xy(2:-1:1) 0 0];
-
-% ukfr = u.k.fr = UnKnown FRame
-ukfr(jx,wtr) = auxstruct;
+oneuk.movedboundy = knownfr(wtr).boundy{1} + ...
+    repmat(oneuk.xy-knownfr(wtr).xy, size(knownfr(wtr).boundy{1},1),1);
+oneuk.movedbb = knownfr(wtr).regs.BoundingBox + ...
+    [oneuk.xy(2:-1:1) 0 0]-[knownfr(wtr).xy(2:-1:1) 0 0];
 
 clear testImage mxidx yinit xinit auxstruct;
 
 % Now, evolve the shape from: knownfr(whichtrack).movedboundy to ukfr(jx).dataGR
-oneuk = ukfr(jx, wtr);
-
 oneuk.movedmask = imerode(poly2mask(...
     oneuk.movedboundy(:,2), oneuk.movedboundy(:,1),...
     handles.rows, handles.cols), ...
@@ -136,6 +131,11 @@ BW1 = activecontour(oneuk.dataGR, ...
     oneuk.movedmask, acopt.iter, ...
     acopt.method, 'ContractionBias',acopt.contractionbias,...
     'SmoothFactor', acopt.smoothf);
+
+oneuk.unclumped = BW1;
+
+% ukfr = u.k.fr = UnKnown FRame
+ukfr(jx,wtr) = oneuk;
 
 %
 figure(1)
