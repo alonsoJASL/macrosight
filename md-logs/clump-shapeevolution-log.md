@@ -55,6 +55,15 @@ zfin = min(zfin);
 + Parameters
 + Initial point
 ### Preliminary Results
+In this example, the known frame `knownfr` and the unknown frame `ukfr`
+are `10` frames apart. The shapes in the known frames (dark blue) look
+different, especially in the cell that is below. Therefore, the output
+by the active contours is much worse in that cell (MAGENTA).
 ![both-cells-preliminary](../figs/cl11010-trALL-jx10.png)
+The parameters of this experiment for both cell shapes are displayed in the
+table below. Experimentation and tweaking of the method is ongoing.
 
+|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|
+|Chan-Vese|100.00|2.00|-0.1|
 ## Steps to follow two cells within a clump.
