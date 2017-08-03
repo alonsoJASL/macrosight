@@ -66,4 +66,7 @@ table below. Experimentation and tweaking of the method is ongoing.
 |method|iter|smoothf|contractionbias|
 |:---:|:---:|:---:|:---:|
 |Chan-Vese|100.00|2.00|-0.1|
+
+An example of an **easy clump**
+![easy-af-clump](../figs/cl8007005-ALL-easyclumps.png)
 ## Steps to follow two cells within a clump.
