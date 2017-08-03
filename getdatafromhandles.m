@@ -9,7 +9,7 @@ if nargout == 1
     [dataLL, dataGL, clumphandles, dataR, dataGR] = ...
         getdatafromhandles(handles, fname);
     sf.dataL = dataLL;
-    sf.dataGL = dataGL;
+    sf.dataGL = imerode(dataGL>0, ones(1)).*dataGL;
     sf.clumphandles = clumphandles;
     sf.dataR = dataR;
     sf.dataGR = dataGR;
