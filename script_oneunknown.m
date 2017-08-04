@@ -5,7 +5,7 @@ initscript;
 load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 8007005; % 8002, 8007, 11010, 8007005, 60010, 60010002
+wuc = 15014013; % 8002, 8007, 11010, 8007005, 60010, 60010002, 15014013
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
