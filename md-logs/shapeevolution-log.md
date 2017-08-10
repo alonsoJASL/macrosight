@@ -203,4 +203,4 @@ parameters as before:
 The results are:
 ![ac-17to24-sameparams-exp](../figs/cl8002-tr2-ukfr_j17-j24_same-ac.png)
 
-## Comments on the results...
+![gif-of-single-cell](../figs/singlecellfollowing-activecontours-test.gif)
