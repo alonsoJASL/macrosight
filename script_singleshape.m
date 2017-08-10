@@ -5,7 +5,7 @@ initscript;
 
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 11010;
+wuc = 8002;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -24,6 +24,9 @@ trackMaxCorr = zeros(size(trackinfo,1),1);
 outdir = fullfile(handlesdir.pathtodir, [handlesdir.data '_mat_XCORR']);
 outname = sprintf('clump%d-tr%d.mat',wuc,thistrack);
 
+outknown = sprintf('clump%d-tr%d-KNOWN.mat',wuc,thistrack);
+outuk = sprintf('clump%d-tr%d--UKFR',wuc,thistrack);
+
 if ~isdir(outdir)
     mkdir(outdir);
 end
@@ -33,6 +36,10 @@ try
     kanduk = load(fullfile(outdir, outname));
     fprintf('\n%s: Previous results found for %s, loading... \n', ...
         mfilename, upper(outname));
+    
+    knownfr = kanduk.knownfr;
+    trackinfo = kanduk.trackinfo;
+    ukfr = kanduk.ukfr;
 catch e
     fprintf('\n%sGenerating data for %s.\n', mfilename, upper(outname));
     ix = 1;
@@ -73,6 +80,8 @@ catch e
         figure(111)
         set(gcf, 'Position', get(0,'ScreenSize'));
     end
+    %save(fullfile(outdir, outknown), 'trackinfo', 'knownfr');
+
     for jx=1:incr:length(t0)
         frametplusT = trackinfo.timeframe(t0(jx));
         [auxstruct] = getdatafromhandles(handles, filenames{frametplusT});
@@ -95,6 +104,7 @@ catch e
         % ukfr = u.k.fr = UnKnown FRame
         ukfr(jx) = auxstruct;
         
+        
         if debugvar == true
             clf;
             subplot(2,3,[1 2 4 5])
@@ -112,6 +122,8 @@ catch e
             colormap parula;
             pause;
         end
+%         save(fullfile(outdir, strcat(outuk,num2str(t0(jx)),'.mat')),...
+%             'auxstruct');
     end
     clear testImage mxidx yinit xinit auxstruct;
     

@@ -3,15 +3,22 @@
 %% INITIALISATION
 script_singleshape;
 
-knownfr = kanduk.knownfr;
-ukfr = kanduk.ukfr;
-trackinfo = kanduk.trackinfo;
-
 clear kanduk;
+
+%%
+figure(1)
+plotBoundariesAndPoints(knownfr.X, knownfr.boundy);
+axis([297.0161  546.3065  108.7216  308.7449]); % for all frames jx=1:8
+title('First frame: KNOWN boundary');
+
+f = getframe(gcf);
+[im,map] = rgb2ind(f.cdata,256,'nodither');
+numImages = 17;
+im(1,1,1,numImages) = 0;
 %% ACTIVE CONTOURs
 
 ix =1; % this value comes from script_singleshape
-jx = 2;
+jx = 24;
 oneuk = ukfr(jx);
 
 oneuk.movedmask = poly2mask(...
@@ -32,18 +39,28 @@ BW1 = activecontour(oneuk.dataGR, oneuk.movedmask, acopt.iter, ...
 if true
     % switch to true to show images
     disp(struc2markdown(acopt));
-    subplot(2,4,(jx))
-    plotBoundariesAndPoints(oneuk.X, oneuk.movedboundy, ...
-        bwboundaries(BW1), 'm-');
+    %subplot(2,4,(jx))
+%     plotBoundariesAndPoints(oneuk.X, oneuk.movedboundy, ...
+%         bwboundaries(BW1), 'm-');
+    figure(1)
+    clf
+    plotBoundariesAndPoints(oneuk.X, knownfr.boundy);
+    plotBoundariesAndPoints([], [], oneuk.movedboundy, 'c-');
+    plotBoundariesAndPoints([], [], bwboundaries(BW1), 'm-');
     axis image
     %axis([314.2098  507.0632  101.2963  248.2321]); % for jx=8
-    %axis([297.0161  546.3065  108.7216  308.7449]); % for all frames jx=1:8
+    axis([297.0161  546.3065  108.7216  308.7449]); % for all frames jx=1:8
     % axis([367.5890  527.0729   83.3455  234.1093]); % for all frames jx=17:24
-    axis([244.3710  393.0161  268.4417  365.4679]); % track 8, jx=1:8
+    %axis([244.3710  393.0161  268.4417  365.4679]); % track 8, jx=1:8
     title(sprintf('Known frame: %d / Unknown frame: %d (t+t0=%d+%d)',...
         ix,jx,ix,jx));
-    legend('Initialisation', 'boundary starting point', ...
+    legend('Boundary in known frame position',...
+        'Initialisation', 'boundary starting point', ...
         'After active contours');
+    
+    f = getframe(gcf);
+    im(:,:,1,jx-8+1) = rgb2ind(f.cdata,map,'nodither');
+    
 end
 
 %% SOM
