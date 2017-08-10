@@ -25,10 +25,8 @@
 # Image files #
 ###############
 *.tif
-*.png
 *.jpg
 *.jpeg
-*.gif
 *.pdf
 
 # matlab files #
@@ -36,7 +34,5 @@
 *.mat
 *~
 *asv
-*.eps
-*.fig
 *.xlsx
 test-nodenet.xls
