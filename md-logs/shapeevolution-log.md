@@ -140,11 +140,32 @@ A number of problems were detected on the
 + Circle needs less points, but it still does not move as well, and some points
 do not get taken into consideration.
 ## Active Contours (attempts and results)
-### Initialisation
-#### Input data
+In this section, the active contour shape evolution will be followed. In
+Matlab, the function `activecontour` will be used, which comes from the
+following references:
+
+1.  T. F. Chan, L. A. Vese, Active contours without edges. IEEE Transactions
+on Image Processing, Volume 10, Issue 2, pp. 266-277, 2001
+2. V. Caselles, R. Kimmel, G. Sapiro, Geodesic active contours.
+International Journal of Computer Vision, Volume 22, Issue 1, pp. 61-79, 1997.
+3. R. T. Whitaker, A level-set approach to 3d reconstruction from range data.
+ International Journal of Computer Vision, Volume 29, Issue 3, pp.203-231, 1998.
+
+with the Sparse-Field level set method, similar to **3.** is the one used. At
+its core, the function requires an image `A` and a binary mask `bw` which
+refers to the initial point of the evolution. The number of iterations used
+is also a parameter that can be set.
 ### Active contours parameters
+The function can be tweaked by using some Name-Value parameters that alter the
+evolution of the `bw`. The parameters tested for this development are;
++ `method` with the options `'Chan-Vese'` or `'edge'`.
++ `'ContractionBias'`: when positive, the contour is biased to contract while
+when negative it expands.
++ `'SmoothFactor'` is a parameter that gives a degree of smoothness of the
+boundaries of segmented regions.
 ## Experimentation
 ### Random experiments
+The method and its parameters were tested on a single cell.
 + Experiment 1
 
 |framesAhead|method|iter|smoothf|contractionbias|
@@ -203,4 +224,21 @@ parameters as before:
 The results are:
 ![ac-17to24-sameparams-exp](../figs/cl8002-tr2-ukfr_j17-j24_same-ac.png)
 
+One can see in the larger frame leaps `jx>17` that the segmentation is
+ qualitatively worse. Originally, the focus of this approach is to update
+ the shape of the unknown frame at each point and take that information onto
+ the next frame.
+
 ![gif-of-single-cell](../figs/singlecellfollowing-activecontours-test.gif)
+
+This initial test show promise, however, in this case, the known, `knownfr` and
+unknown `ukfr` were chosen based on leaps `tj = t0+jx`. A test trying to
+construct the frames at each time frame is necessary, in a way that only
+the information from the previous frame is carried out to the next one,
+this means: `tj = t(j-1) + 1, t(j-1)=t(j-2)+1, ..., t2 = t1+1, t1=t0+1`;
+where the **ONLY** completely known frame will be `t0`, and the rest will
+be constructed along the way.
+
+This new development is referred to in the log file
+[`shapeevolution-iterative.md`](./shapeevolution-iterative.md). This new log
+file refers to the code [`script_iterevolution.m`](../script_iterevolution.m).
