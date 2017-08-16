@@ -218,4 +218,15 @@ This is a very easy clump, as it does not involve overlapping, however it shows
 the ability of the method to switch from analysing a frame with or without
 clump.
 
+### Clump `11010` on frames `1:35`
+This is one of the hardest clumps, because the shapes overlap completely and
+the previous information is not enough to do anything.
+#### Treat it as the previous cases:
+
+#### Small preprocessing on the image
+
 ### Three cells into clump: `wuc=8007005` on frames `15:18`
+
+Not only disambiguate, but also setting the path for updating the `.mat` files
+that contain the segmentations. Solving this clump will lead into solving
+clump `8007`.
