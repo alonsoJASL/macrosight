@@ -236,7 +236,7 @@ Not only disambiguate, but also setting the path for updating the `.mat` files
 that contain the segmentations. Solving this clump will lead into solving
 clump `8007`.
 
-![cl8007005-15to18-easyclump](../figs/clump8007005-frames15to18-iterfollowing)
+![cl8007005-15to18-easyclump](../figs/clump8007005-frames15to18-iterfollowing.gif)
 
 The following step from this is to **update** the information on `dataGL`
-to rid the clump. 
+to rid the clump.
