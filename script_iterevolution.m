@@ -83,6 +83,7 @@ frametplusT = trackinfo.timeframe(tkp1);
     filenames{frametplusT}, frametplusT);
 
 % 3.2 Evolve
+acopt.method = 'Chan-Vese';
 acopt.iter = 50;
 acopt.smoothf = 2;
 acopt.contractionbias = -0.1;
