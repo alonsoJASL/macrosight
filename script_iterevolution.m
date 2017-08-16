@@ -19,7 +19,7 @@ trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
 %% Extract frames where the clump exists
 
 % for clump 8002
-trackinfo(trackinfo.timeframe<418,:) = [];
+% trackinfo(trackinfo.timeframe<418,:) = [];
 % for clump 11010
 % trackinfo(trackinfo.timeframe>=144,:)=[];
 % for clump 8007005
@@ -75,6 +75,20 @@ for wtr=1:length(clumplab)
 
     clear thisseglabel thiscell regs boundy xin yin
 end
+
+figure(1)
+clf;
+plotBoundariesAndPoints(knownfr.X, kftr.boundy);
+title(sprintf('Frame %d', framet));
+auxstr1 = sprintf('Original boundary t=%d',framet);
+auxstr2 = sprintf('Original boundary t=%d',framet);
+legend(auxstr1,'',auxstr2,'', 'Location','northwest');
+axis([209  502 115 383]);
+
+f = getframe(gcf);
+[im, map] = rgb2ind(f.cdata, 256, 'nodither');
+im(1,1,1,size(trackinfo,1)-1) = 0;
+
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
 tkp1 = tk+1;
@@ -98,8 +112,20 @@ auxstr1 = sprintf('Original boundary t=%d',framet);
 auxstr2 = sprintf('Original boundary t=%d',framet);
 auxstr3 = sprintf('Evolved boundary t+1=%d',frametplusT);
 auxstr4 = sprintf('Evolved boundary t+1=%d',frametplusT);
-legend(auxstr1,'', auxstr2, '', auxstr3, auxstr4, 'Location','northwest');
+if ukfr.hasclump == true
+    plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
+    legend(auxstr1,'', auxstr2, '', auxstr3, auxstr4, 'clump detected', ...
+        'Location','northwest');    
+else
+    legend(auxstr1,'', auxstr2, '', auxstr3, auxstr4, 'Location','northwest');
+end
 axis([209  502 115 383]);
+
+if tk<=size(trackinfo,1)
+    disp('yeees')
+    f = getframe(gcf);
+    im(:,:,1,tk) = rgb2ind(f.cdata, map, 'nodither');
+end
 
 % 3.4 Update
 % 3.4.1 Update knownfr
@@ -130,7 +156,6 @@ kftr = auxfr;
 clear auxfr acopt;
  
 tk = tk+1;
-
 %% LOADING THE FIRST FRAME and FRAME t0+1 (unknown)
 
 tk=1;
