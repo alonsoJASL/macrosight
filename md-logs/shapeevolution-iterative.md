@@ -153,6 +153,8 @@ title(sprintf('Frame %d', frametplusT));
 knownfr = ukfr;
 if knownfr.hasclump == true
     knwonfr.hasclump = false;
+    knownfr.clumpseglabel = [];
+    knownfr.thisclump = [];
 end
 ```
 ###### 3.4.2 Update `kftr`
@@ -175,3 +177,30 @@ kftr = auxfr;
 
 clear auxfr;
 ```
+## Experiments (and results)
+### Clump `wuc=8002` on frames `418:468`
+As mentioned before, clump `wuc=8002` was analysed from frame `418` till frame
+`468` because it is a range where the cells involved do not overlap, an can be
+followed on their own, testing the method's basic premise.
+
+The parameters of the `activecontour` function were defined, for each
+frame, as:
+
+|method|iter|smoothf|contractionbias|
+|:---:|:---:|:---:|:---:|
+|Chan-Vese|50.00|2.00|-0.10|
+
+![iterative-following-single-cell](../figs/singlecell-iterative-follow.gif)
+
+It can be seen how the cells are followed successfully, which does not impress
+anyone, because of the initial positions of the cells.
+
+### Clump `wuc=8002` on frames `412:420`
+This experiment takes place in the frames leading up to `417`, where the
+clump `wuc=8002` is formed. It is a good initial example to try and lead up the
+following of a pair of cells that eventually clash into a clump, but then
+separate immediately on the next frame.
+
+![wuc8002-412to420-experiment](../figs/clump8002-frames412to420.gif)
+
+### Three cells into clump: `wuc=8007005` on frames `15:18`
