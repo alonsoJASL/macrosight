@@ -22,13 +22,13 @@ function [newfr] = nextframeevolution(unknownfr, knowntracks, trackinfo,...
 %
 
 if nargin < 5
-    framesAhead = 1;
     method = 'Chan-Vese';
     iter = 50;
     smoothf = 2;
     contractionbias = -0.1;
+    erodenum = 1;
 else
-    [framesAhead, method, iter, smoothf, contractionbias] = getoptions(acopt);
+    [method, iter, smoothf, contractionbias, erodenum] = getoptions(acopt);
 end
 
 
@@ -59,8 +59,8 @@ for wtr=1:length(clumplab)
     newfr.movedbb(wtr,:) = bb;
     newfr.xy(wtr,:) = [xin yin];
     
-    movedmask = imerode(poly2mask(boundy(:,2), boundy(:,1), ...
-        rows, cols), ones(1));
+    movedmask = imopen(poly2mask(boundy(:,2), boundy(:,1), ...
+        rows, cols), ones(erodenum));
     
     evomask = activecontour(unknownfr.dataGR, movedmask, iter, ...
         method, 'ContractionBias',contractionbias,...
@@ -74,9 +74,9 @@ for wtr=1:length(clumplab)
 end
 end
 
-function [framesAhead, method, iter, smoothf, contractionbias] = getoptions(s)
+function [method, iter, smoothf, contractionbias, erodenum] = getoptions(s)
 % get active contour options 
-framesAhead = 1;
+erodenum = 1;
 method = 'Chan-Vese';
 iter = 50;     
 smoothf = 2;
@@ -86,8 +86,8 @@ fnames = fieldnames(s);
 for ix=1:length(fnames)
     name = fnames{ix};
     switch name
-        case 'framesAhead' 
-            framesAhead = s.(name);
+        case 'erodenum' 
+            erodenum = s.(name);
         case 'method' 
             method = s.(name);
         case 'iter'
