@@ -211,10 +211,11 @@ frame, as:
 |Chan-Vese|50.00|2.00|-0.10|
 
 And the results:
+
 ![wuc8002-412to420-results](../figs/clump8002-frames412to420-iterfollowing.gif)
 
 This is a very easy clump, as it does not involve overlapping, however it shows
 the ability of the method to switch from analysing a frame with or without
-clump. 
+clump.
 
 ### Three cells into clump: `wuc=8007005` on frames `15:18`
