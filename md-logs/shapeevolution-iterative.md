@@ -80,6 +80,11 @@ framet = trackinfo.timeframe(tk);
 knownfr.t=framet;
 knownfr.hasclump = false;
 ```
+or (easier)...
+```Matlab
+[knownfr] = getCommonVariablesPerFrame(handles, trackinfo, wuc, ...
+        filenames{framet}, framet);
+```
 
 ##### 2. Compute the tracks' variables in the known frame `kftr`
 ```Matlab
@@ -122,6 +127,11 @@ if trackinfo.clumpcode(tkp1) == wuc
 else
     ukfr.hasclump = false;
 end
+```
+or much easier...
+```Matlab
+[ukfr] = getCommonVariablesPerFrame(handles, trackinfo, wuc, ...
+        filenames{frametplusT}, frametplusT);
 ```
 
 ###### 3.2. Perform the evolution into `newfr`
