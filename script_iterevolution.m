@@ -43,6 +43,93 @@ end
 
 trackinfo = struct2table(aa);
 clear ix jx;
+
+%% FULL WORKFLOW (as in log)
+
+% 1. Load known frame
+tk=1;
+framet = trackinfo.timeframe(tk);
+[knownfr] = getCommonVariablesPerFrame(handles, trackinfo, wuc, ...
+    filenames{framet}, framet);
+
+% 2. Compute the tracks' variables in the known frame
+kftr.regs = regionprops(zeros(size(knownfr.dataGR)), ...
+    'BoundingBox', 'Centroid', 'EquivDiameter', 'MajorAxisLength', ...
+    'MinorAxisLength');
+kftr.boundy = cell(length(clumplab),1);
+kftr.xy = zeros(length(clumplab),2);
+
+for wtr=1:length(clumplab)
+    % K.F.Tf = Known Frames' TRacks
+    thisseglabel = trackinfo.seglabel(tk, wtr);
+    thiscell = knownfr.clumphandles.nonOverlappingClumps==thisseglabel;
+    regs = regionprops(thiscell, 'BoundingBox', 'Centroid', ...
+        'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength');
+    boundy = bwboundaries(thiscell);
+    xin = trackinfo(trackinfo.timeframe==framet,:).X(wtr);
+    yin = trackinfo(trackinfo.timeframe==framet,:).Y(wtr);
+
+    kftr.regs(wtr) = regs;
+    kftr.boundy{wtr} = boundy{1};
+    kftr.xy(wtr,:) = [xin yin];
+
+    clear thisseglabel thiscell regs boundy xin yin
+end
+%% 3. start 'loop'
+% 3.1 Load the unknown frame
+tkp1 = tk+1;
+frametplusT = trackinfo.timeframe(tkp1);
+[ukfr] = getCommonVariablesPerFrame(handles, trackinfo, wuc, ...
+    filenames{frametplusT}, frametplusT);
+
+% 3.2 Evolve
+acopt.iter = 50;
+acopt.smoothf = 2;
+acopt.contractionbias = -0.1;
+[newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
+
+% 3.3 Preliminary result showing: 
+figure(1)
+clf;
+plotBoundariesAndPoints(ukfr.X, newfr.movedboundy, newfr.evoshape, 'm-');
+title(sprintf('Frame %d', frametplusT));
+auxstr1 = sprintf('Original boundary t=%d',framet);
+auxstr2 = sprintf('Original boundary t=%d',framet);
+auxstr3 = sprintf('Evolved boundary t+1=%d',frametplusT);
+auxstr4 = sprintf('Evolved boundary t+1=%d',frametplusT);
+legend(auxstr1,'', auxstr2, '', auxstr3, auxstr4, 'Location','northwest');
+axis([209  502 115 383]);
+
+% 3.4 Update
+% 3.4.1 Update knownfr
+knownfr = ukfr;
+if knownfr.hasclump == true
+    knwonfr.hasclump = false;
+    knownfr.clumpseglabel = [];
+    knownfr.thisclump = [];
+end
+framet = frametplusT;
+
+% 3.4.2 Update kftr
+auxfr.regs = regionprops(zeros(size(knownfr.dataGR)), ...
+    'BoundingBox', 'Centroid', 'EquivDiameter', 'MajorAxisLength', ...
+    'MinorAxisLength');
+auxfr.boundy = newfr.evoshape;
+auxfr.xy = newfr.xy;
+
+for wtr=1:length(clumplab)
+    thiscell = newfr.evomask(:,:,wtr)>0;
+    regs = regionprops(thiscell, 'BoundingBox', 'Centroid', ...
+        'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength');
+
+    auxfr.regs(wtr) = regs;
+end
+
+kftr = auxfr;
+clear auxfr acopt;
+ 
+tk = tk+1;
+
 %% LOADING THE FIRST FRAME and FRAME t0+1 (unknown)
 
 tk=1;
@@ -57,6 +144,8 @@ fprintf('\n%s: Loading original (known) frame: %s and unknown frame: %s.\n', ...
 [knownfr] = getdatafromhandles(handles, filenames{framet});
 knownfr.t=framet;
 knownfr.hasclump = false;
+knownfr.clumpseglabel = [];
+knownfr.thisclump = [];
 
 [ukfr] = getdatafromhandles(handles, filenames{frametplusT});
 
@@ -64,9 +153,11 @@ ukfr.t=frametplusT;
 if trackinfo.clumpcode(tkp1) == wuc
     ukfr.hasclump = true;
     ukfr.clumpseglabel = trackinfo.clumpseglabel(tkp1);
-    ukfr.thisclump = (oneuk.dataGL==ukfr.clumpseglabel);
+    ukfr.thisclump = (ukfr.dataGL==ukfr.clumpseglabel);
 else
     ukfr.hasclump = false;
+    ukfr.clumpseglabel = [];
+    ukfr.thisclump = [];
 end
 
 %% KNOWN FRAME: track dependent variables:
