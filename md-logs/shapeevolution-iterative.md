@@ -221,12 +221,22 @@ clump.
 ### Clump `11010` on frames `1:35`
 This is one of the hardest clumps, because the shapes overlap completely and
 the previous information is not enough to do anything.
-#### Treat it as the previous cases:
 
-#### Small preprocessing on the image
+![cl11010-1to35-failed](../figs/clump11010-frames1to35-iterfollowing-imopen.gif)
+
+This shows that the method should probably have some way of detecting these
+types of transitions. We could very easily detect when the wrong cell becomes
+a clump again. While I can imagine some post processing helping, I do believe
+this approach lacks the **information** of the shape to stop the contour to
+take up difficult shapes.
 
 ### Three cells into clump: `wuc=8007005` on frames `15:18`
 
 Not only disambiguate, but also setting the path for updating the `.mat` files
 that contain the segmentations. Solving this clump will lead into solving
 clump `8007`.
+
+![cl8007005-15to18-easyclump](../figs/clump8007005-frames15to18-iterfollowing)
+
+The following step from this is to **update** the information on `dataGL`
+to rid the clump. 
