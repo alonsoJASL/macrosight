@@ -230,6 +230,8 @@ a clump again. While I can imagine some post processing helping, I do believe
 this approach lacks the **information** of the shape to stop the contour to
 take up difficult shapes.
 
+## Update frame ans save segmentation after disambiguation
+First, let's look at an example:
 ### Three cells into clump: `wuc=8007005` on frames `15:18`
 
 Not only disambiguate, but also setting the path for updating the `.mat` files
@@ -240,3 +242,15 @@ clump `8007`.
 
 The following step from this is to **update** the information on `dataGL`
 to rid the clump.
+
+### Updating easy clumps.
+We define an **easy clump** as one which does not contain actual overlapping
+of the cells, but that the detection through thresholding, or the morphology
+steps when segmenting the green channel caused a clump where there was none.
+Separating this type of clump could be easily done by updating the variables
+present in `ukfr.dataGL` and then generate the necessary variables to be saved
+in the corresponding `filename{someframe}` that exists in `handles.dataLa`.
+Thus, the next time this frame is loaded, it will contain the appropriate
+information about the clump.
+
+The information on the clumps should also be addressed. 
