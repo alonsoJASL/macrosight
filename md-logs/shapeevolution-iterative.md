@@ -149,6 +149,8 @@ title(sprintf('Frame %d', frametplusT));
 ###### 3.4. Update
 
 ###### 3.4.1 Update `knownfr`
+It is in this part of the code where the variables will be disambiguated and
+saved back to the **hard drive**. Because this is
 ```Matlab
 knownfr = ukfr;
 if knownfr.hasclump == true
@@ -253,4 +255,14 @@ in the corresponding `filename{someframe}` that exists in `handles.dataLa`.
 Thus, the next time this frame is loaded, it will contain the appropriate
 information about the clump.
 
-The information on the clumps should also be addressed. 
+The information on the clumps should also be addressed.
+
+Such an update should occur in part
+[4.1](../md-logs/shapeevolution-iterative.md#341-update-knownfr) of
+the algorithm. In here, the variable `.hasclump` is tested and with a
+positive result, the variables are then changed.
+
+**Straightforward changes: `dataGL, clumphandles`**
+
+An assumption is made for the cells not overlapping yet (after all, this is
+the case of an easy clump).
