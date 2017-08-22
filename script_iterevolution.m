@@ -68,11 +68,11 @@ for wtr=1:length(clumplab)
     boundy = bwboundaries(thiscell);
     xin = trackinfo(trackinfo.timeframe==framet,:).X(wtr);
     yin = trackinfo(trackinfo.timeframe==framet,:).Y(wtr);
-
+    
     kftr.regs(wtr) = regs;
     kftr.boundy{wtr} = boundy{1};
     kftr.xy(wtr,:) = [xin yin];
-
+    
     clear thisseglabel thiscell regs boundy xin yin
 end
 
@@ -83,9 +83,6 @@ title(sprintf('Frame %d', framet));
 auxstr1 = sprintf('Original boundary t=%d',framet);
 auxstr2 = sprintf('Original boundary t=%d',framet);
 legend(auxstr1,'',auxstr2,'', 'Location','northeast');
-%axis([209  502 115 383]); % wuc=8002
-%axis([300 567 183 391]); % wuc=11010
-axis([105 398 50 258]); % wuc=8007005
 
 
 %% 3. start 'loop'
@@ -103,7 +100,7 @@ acopt.contractionbias = -0.1;
 acopt.erodenum = 5;
 [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
 
-% 3.3 Preliminary result showing: 
+% 3.3 Preliminary result showing:
 figure(1)
 clf;
 plotBoundariesAndPoints(ukfr.X, newfr.movedboundy, newfr.evoshape, 'm-');
@@ -111,9 +108,6 @@ title(sprintf('Frame %d', frametplusT));
 if ukfr.hasclump == true
     plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
 end
-%axis([209  502 115 383]); % wuc=8002
-%axis([300 567 183 391]); % wuc=11010
-axis([105 398 50 258]); % wuc=8007005
 
 % 3.4 Update
 % 3.4.1 Update knownfr
@@ -130,18 +124,48 @@ if knownfr.hasclump == true
     idx = find(dataG==ukfr.clumpseglabel);
     dataG(idx) = 0;
     clumphandles.overlappingClumps(idx)=0;
-
+    
     for kx=1:length(clumplab)
         dataG = dataG + newfr.evomask(:,:,kx);
         clumphandles.nonOverlappingClumps = ...
             clumphandles.nonOverlappingClumps + newfr.evomask(:,:,kx);
     end
-    save(filenames{knownfr.t}, 'dataG','dataL','clumphandles','statsData',...
-        'numNeutrop');
-    fprintf('%s: variables DATAGL and CLUMPHANDLES have been updated.\n',...
-        mfilename);
+    
+    % update clumptracktable
+    test1 = clumptracktable(tablenet.timeframe==knownfr.t,:);
+    test2 = find(tablenet.timeframe==knownfr.t);
+    indx = test2(test1.clumpcode==wuc);
+    
+    clumptracktable(indx,:).Variables = ...
+        zeros(size(clumptracktable(indx,:).Variables));
+    
+    if isempty(find(clumptracktable.clumpcode==wuc, 1))
+        % removing the clump code if the clump is completely removed
+        fprintf('%s: Clump removed from dataset.\n', mfilename);
+        clumpidcodes(clumpidcodes==wuc) = [];
+    end
     
     
+    ButtonName = questdlg('Do you want to save the updated variables?', ...
+        'Update variables to HDD?', ...
+        'Yes', 'No');
+    switch ButtonName
+        case 'Yes'
+            % save(fullfile(handles.dataLa, filenames{knownfr.t}), ...
+            save(fullfile(filenames{knownfr.t}), ...
+                'dataG','dataL','clumphandles','statsData','numNeutrop');
+            %save(fullfile(foldernames.dataHa, 'clumptrackingtables.mat'), ...
+            save(fullfile('clumptrackingtables.mat'), ...
+                'clumptracktable', 'clumpidcodes', 'timedfinalnetwork', ...
+                'tablenet');
+            
+            fprintf('%s: variables have been updated to HDD.\n',...
+                mfilename);
+        case 'No'
+            fprintf('%s: Nothing got saved to the hard drive.\n',...
+                mfilename);
+    end
+    clear ButtonName;
     
     knownfr.hasclump = false;
     knownfr.clumpseglabel = [];
@@ -160,11 +184,11 @@ for wtr=1:length(clumplab)
     thiscell = newfr.evomask(:,:,wtr)>0;
     regs = regionprops(thiscell, 'BoundingBox', 'Centroid', ...
         'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength');
-
+    
     auxfr.regs(wtr) = regs;
 end
 
 kftr = auxfr;
 clear auxfr acopt;
- 
+
 tk = tk+1;

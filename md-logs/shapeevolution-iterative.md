@@ -149,8 +149,8 @@ title(sprintf('Frame %d', frametplusT));
 ###### 3.4. Update
 
 ###### 3.4.1 Update `knownfr`
-It is in this part of the code where the variables will be disambiguated and
-saved back to the **hard drive**. Because this is
+The complete version of this is in section
+[Updating Easy Clumps](./shapeevolution-iterative.md#updating-easy-clumps).
 ```Matlab
 knownfr = ukfr;
 if knownfr.hasclump == true
@@ -232,7 +232,7 @@ a clump again. While I can imagine some post processing helping, I do believe
 this approach lacks the **information** of the shape to stop the contour to
 take up difficult shapes.
 
-## Update frame ans save segmentation after disambiguation
+## Update frame and save segmentation after disambiguation
 First, let's look at an example:
 ### Three cells into clump: `wuc=8007005` on frames `15:18`
 
@@ -255,14 +255,66 @@ in the corresponding `filename{someframe}` that exists in `handles.dataLa`.
 Thus, the next time this frame is loaded, it will contain the appropriate
 information about the clump.
 
-The information on the clumps should also be addressed.
+```Matlab
+% 3.4.1 Update knownfr
+knownfr = ukfr;
+if knownfr.hasclump == true
+    % 3.4.1.1 Change variables and save them back to the HDD
+    fprintf('%s: a clump has been disambiguated!\n', mfilename);
+    load(fullfile(handles.dataLa, filenames{knownfr.t}));
 
-Such an update should occur in part
-[4.1](../md-logs/shapeevolution-iterative.md#341-update-knownfr) of
-the algorithm. In here, the variable `.hasclump` is tested and with a
-positive result, the variables are then changed.
+    dataL = knownfr.dataL;
+    dataG = knownfr.dataGL;
+    clumphandles = knownfr.clumphandles;
 
-**Straightforward changes: `dataGL, clumphandles`**
+    idx = find(dataG==ukfr.clumpseglabel);
+    dataG(idx) = 0;
+    clumphandles.overlappingClumps(idx)=0;
 
-An assumption is made for the cells not overlapping yet (after all, this is
-the case of an easy clump).
+    for kx=1:length(clumplab)
+        dataG = dataG + newfr.evomask(:,:,kx);
+        clumphandles.nonOverlappingClumps = ...
+            clumphandles.nonOverlappingClumps + newfr.evomask(:,:,kx);
+    end
+
+    % update clumptracktable
+    test1 = clumptracktable(tablenet.timeframe==knownfr.t,:);
+    test2 = find(tablenet.timeframe==knownfr.t);
+    indx = test2(test1.clumpcode==wuc);
+
+    clumptracktable(indx,:).Variables = ...
+        zeros(size(clumptracktable(indx,:).Variables));
+
+    if isempty(find(clumptracktable.clumpcode==wuc, 1))
+        % removing the clump code if the clump is completely removed
+        fprintf('%s: Clump removed from dataset.\n', mfilename);
+        clumpidcodes(clumpidcodes==wuc) = [];
+    end
+
+
+    ButtonName = questdlg('Do you want to save the updated variables?', ...
+        'Update variables to HDD?', ...
+        'Yes', 'No');
+    switch ButtonName
+        case 'Yes'
+            % save(fullfile(handles.dataLa, filenames{knownfr.t}), ...
+            save(fullfile(filenames{knownfr.t}), ...
+                'dataG','dataL','clumphandles','statsData','numNeutrop');
+            %save(fullfile(foldernames.dataHa, 'clumptrackingtables.mat'), ...
+            save(fullfile('clumptrackingtables.mat'), ...
+                'clumptracktable', 'clumpidcodes', 'timedfinalnetwork', ...
+                'tablenet');
+
+            fprintf('%s: variables have been updated to HDD.\n',...
+                mfilename);
+        case 'No'
+            fprintf('%s: Nothing got saved to the hard drive.\n',...
+                mfilename);
+    end
+    clear ButtonName;
+
+    knownfr.hasclump = false;
+    knownfr.clumpseglabel = [];
+    knownfr.thisclump = [];
+end
+```
