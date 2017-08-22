@@ -87,9 +87,6 @@ legend(auxstr1,'',auxstr2,'', 'Location','northeast');
 %axis([300 567 183 391]); % wuc=11010
 axis([105 398 50 258]); % wuc=8007005
 
-f = getframe(gcf);
-[im, map] = rgb2ind(f.cdata, 256, 'nodither');
-im(1,1,1,size(trackinfo,1)-1) = 0;
 
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
@@ -111,32 +108,42 @@ figure(1)
 clf;
 plotBoundariesAndPoints(ukfr.X, newfr.movedboundy, newfr.evoshape, 'm-');
 title(sprintf('Frame %d', frametplusT));
-auxstr1 = sprintf('Original boundary t=%d',framet);
-auxstr2 = sprintf('Original boundary t=%d',framet);
-auxstr3 = sprintf('Evolved boundary t+1=%d',frametplusT);
-auxstr4 = sprintf('Evolved boundary t+1=%d',frametplusT);
 if ukfr.hasclump == true
     plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
-    legend(auxstr1,'', auxstr2, '', auxstr3, auxstr4, 'clump detected', ...
-        'Location','northeast');    
-else
-    legend(auxstr1,'', auxstr2, '', auxstr3, auxstr4, 'Location','northwest');
 end
 %axis([209  502 115 383]); % wuc=8002
 %axis([300 567 183 391]); % wuc=11010
 axis([105 398 50 258]); % wuc=8007005
 
-if tk<=size(trackinfo,1)
-    disp('yeees')
-    f = getframe(gcf);
-    im(:,:,1,tk) = rgb2ind(f.cdata, map, 'nodither');
-end
-
 % 3.4 Update
 % 3.4.1 Update knownfr
 knownfr = ukfr;
 if knownfr.hasclump == true
-    knwonfr.hasclump = false;
+    % 3.4.1.1 Change variables and save them back to the HDD
+    fprintf('%s: a clump has been disambiguated!\n', mfilename);
+    load(fullfile(handles.dataLa, filenames{knownfr.t}));
+    
+    dataL = knownfr.dataL;
+    dataG = knownfr.dataGL;
+    clumphandles = knownfr.clumphandles;
+    
+    idx = find(dataG==ukfr.clumpseglabel);
+    dataG(idx) = 0;
+    clumphandles.overlappingClumps(idx)=0;
+
+    for kx=1:length(clumplab)
+        dataG = dataG + newfr.evomask(:,:,kx);
+        clumphandles.nonOverlappingClumps = ...
+            clumphandles.nonOverlappingClumps + newfr.evomask(:,:,kx);
+    end
+    save(filenames{knownfr.t}, 'dataG','dataL','clumphandles','statsData',...
+        'numNeutrop');
+    fprintf('%s: variables DATAGL and CLUMPHANDLES have been updated.\n',...
+        mfilename);
+    
+    
+    
+    knownfr.hasclump = false;
     knownfr.clumpseglabel = [];
     knownfr.thisclump = [];
 end
@@ -161,4 +168,3 @@ kftr = auxfr;
 clear auxfr acopt;
  
 tk = tk+1;
-
