@@ -5,7 +5,7 @@ initscript;
 load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 8007005; % 8002, 8007, 11010, 8007005, 60010, 60010002, 15014013
+wuc = 8007; % 8002, 8007, 11010, 8007005, 60010, 60010002, 15014013
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -108,6 +108,8 @@ title(sprintf('Frame %d', frametplusT));
 if ukfr.hasclump == true
     plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
 end
+axis([202.56 357.4 122.16 268.44])
+
 
 % 3.4 Update
 % 3.4.1 Update knownfr
@@ -148,14 +150,14 @@ if knownfr.hasclump == true
     
     ButtonName = questdlg('Do you want to save the updated variables?', ...
         'Update variables to HDD?', ...
-        'Yes', 'No');
+        'Yes', 'No','No');
     switch ButtonName
         case 'Yes'
-            % save(fullfile(handles.dataLa, filenames{knownfr.t}), ...
-            save(fullfile(filenames{knownfr.t}), ...
+            %save(fullfile(filenames{knownfr.t}), ...
+            save(fullfile(handles.dataLa, filenames{knownfr.t}), ...
                 'dataG','dataL','clumphandles','statsData','numNeutrop');
-            %save(fullfile(foldernames.dataHa, 'clumptrackingtables.mat'), ...
-            save(fullfile('clumptrackingtables.mat'), ...
+            %save(fullfile('clumptrackingtables.mat'), ...
+            save(fullfile(foldernames.dataHa, 'clumptrackingtables.mat'), ...
                 'clumptracktable', 'clumpidcodes', 'timedfinalnetwork', ...
                 'tablenet');
             
