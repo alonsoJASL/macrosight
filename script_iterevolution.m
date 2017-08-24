@@ -5,7 +5,7 @@ initscript;
 load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 8007; % 8002, 8007, 11010, 8007005, 60010, 60010002, 15014013
+wuc = 11010; % 8002, 8007, 11010, 8007005, 60010, 60010002, 15014013
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -108,7 +108,7 @@ title(sprintf('Frame %d', frametplusT));
 if ukfr.hasclump == true
     plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
 end
-axis([202.56 357.4 122.16 268.44])
+%axis([202.56 357.4 122.16 268.44])
 
 
 % 3.4 Update
