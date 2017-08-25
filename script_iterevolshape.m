@@ -18,16 +18,8 @@ trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
 
 %% Extract frames where the clump exists
 
-% for clump 8002
-% trackinfo(trackinfo.timeframe<418,:) = [];
-% for clump 11010
-% trackinfo(trackinfo.timeframe>=144,:)=[];
-% for clump 8007005
-% trackinfo(~ismember(trackinfo.timeframe, 15:18),:)=[];
 trackinfo(~ismember(trackinfo.timeframe, 418:495),:)=[];
-% Select range for clump automatically feature will be added later.
-
-trackinfo = tablecompression(trackinfo);
+trackinfo = tablecompression(trackinfo, clumplab);
 %% FULL WORKFLOW (as in log)
 
 % 1. Load known frame
@@ -37,44 +29,9 @@ framet = trackinfo.timeframe(tk);
     filenames{framet}, framet);
 
 % 2. Compute the tracks' variables in the known frame
-kftr.regs = regionprops(zeros(size(knownfr.dataGR)), ...
-    'BoundingBox', 'Perimeter',  'Area',...
-    'EquivDiameter', 'MajorAxisLength', ...
-    'MinorAxisLength');
-kftr.boundy = cell(length(clumplab),1);
-kftr.xy = zeros(length(clumplab),2);
-
-% cellsRegs := ['Area' 'minorAxis/majorAxis' 'EquivDiameter' 'Perim/Area']
-cellsRegs = zeros(size(trackinfo,1), 4, length(clumplab));
-
-for wtr=1:length(clumplab)
-    % K.F.Tf = Known Frames' TRacks
-    thisseglabel = trackinfo.seglabel(tk, wtr);
-    thiscell = knownfr.clumphandles.nonOverlappingClumps==thisseglabel;
-    regs = regionprops(thiscell, 'BoundingBox', 'Perimeter', 'Area',...
-        'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength');
-    boundy = bwboundaries(thiscell);
-    xin = trackinfo(trackinfo.timeframe==framet,:).X(wtr);
-    yin = trackinfo(trackinfo.timeframe==framet,:).Y(wtr);
-    
-    kftr.regs(wtr) = regs;
-    kftr.boundy{wtr} = boundy{1};
-    kftr.xy(wtr,:) = [xin yin];
-    
-    cellsRegs(tk,:,wtr) = [regs.Area regs.MinorAxisLength/regs.MajorAxisLength ...
-        regs.EquivDiameter regs.Perimeter/regs.Area];
-    
-    clear thisseglabel thiscell regs boundy xin yin
-end
-
-figure(1)
-clf;
-plotBoundariesAndPoints(knownfr.X, kftr.boundy);
-title(sprintf('Frame %d', framet));
-auxstr1 = sprintf('Original boundary t=%d',framet);
-auxstr2 = sprintf('Original boundary t=%d',framet);
-legend(auxstr1,'',auxstr2,'', 'Location','northeast');
-
+[kftr] = getKnownTracksVariables(knownfr, trackinfo, clumplab, tk);
+% 2.1 Initialise a table with regionprops
+ttab = struct2table(kftr.regs(1));
 
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
@@ -91,15 +48,8 @@ acopt.contractionbias = -0.1;
 acopt.erodenum = 5;
 [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
 
-% 3.3 Preliminary result showing:
-figure(1)
-clf;
-plotBoundariesAndPoints(ukfr.X, newfr.movedboundy, newfr.evoshape, 'm-');
-title(sprintf('Frame %d', frametplusT));
-if ukfr.hasclump == true
-    plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
-end
-%axis([202.56 357.4 122.16 268.44])
+% 3.3 Show preliminary results
+% LOOK AT LOGS
 
 % 3.4 Update
 % 3.4.1 Update knownfr
@@ -178,11 +128,13 @@ for wtr=1:length(clumplab)
     midx = find([regs.Area]==max([regs.Area]));
     auxfr.regs(wtr) = regs(midx);
     
-    cellsRegs(tk,:,wtr) = [regs(midx).Area ...
+    cellregs(tk,:,wtr) = [regs(midx).Area ...
         regs(midx).MinorAxisLength/regs(midx).MajorAxisLength ...
         regs(midx).EquivDiameter ...
         regs(midx).Perimeter/regs(midx).Area];
 end
 
 kftr = auxfr;
+ttab = struct2table(kftr.regs(1));
+
 clear auxfr acopt midx;
