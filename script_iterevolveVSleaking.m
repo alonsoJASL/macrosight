@@ -5,7 +5,7 @@ initscript;
 load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 8002; % 8002, 8007, 11010, 8007005, 60010, 60010002, 15014013
+wuc = 8007; % 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -17,7 +17,8 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 11 13 14]) ...
 trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
 
 %% Extract frames where the clump exists
-trackinfo(~ismember(trackinfo.timeframe, 418:478),:)=[];
+%trackinfo(~ismember(trackinfo.timeframe, 418:478),:)=[];
+trackinfo(~ismember(trackinfo.timeframe, 386:416),:)=[];
 trackinfo = tablecompression(trackinfo, clumplab);
 %% FULL WORKFLOW (as in log)
 % 1. Load known frame
@@ -52,7 +53,7 @@ end
 
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
-debugvar = false;
+debugvar = true;
 
 for tk=1:(length(trackinfo.timeframe)-1)
     tkp1 = tk+1;
@@ -147,7 +148,7 @@ if debugvar == true
     clear gifname;
 end
 %% Shape measurements
-whichlab = 1;
+whichlab = 2;
 propt = ttab{whichlab};
 agtab = hag(whichlab);
 
