@@ -25,7 +25,8 @@ variables to the workspace. Then, a clump is chosen. The function
 a clump to load. The usual clumps tested are, the ones where the frames that
 span the life of the clump are specified:
 + `wuc=8002` useful tracks: `trackinfo(trackinfo.timeframe<418,:) = [];`
-+ `wuc=8007`
++ `wuc=8007` useful tracks:
+`trackinfo(~ismember(trackinfo.timeframe, 15:50),:)=[];`
 + `wuc=8007005` useful tracks:
 `trackinfo(~ismember(trackinfo.timeframe, 15:18),:)=[];`
 + `wuc=11010`
