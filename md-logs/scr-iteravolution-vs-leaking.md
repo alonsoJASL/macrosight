@@ -96,9 +96,11 @@ case are as follows:
 ![non-overlapping-wuc8002-moving](../figs/clump8002-frames418to478.gif)
 
 #### Results
-Below a gif with the cells moving in the range of frames is presented.
-
 The _anglegrams_ of both cells are also shown following that same evolution
 of frames.
 
+![anglegrams-wuc8002](../figs/anglegrams-clump8002-frames418to478.gif)
+
 Finally, the measurements with the `diff()` are shown below.
+
+![anglegrams-wuc8002](../figs/measurements-clump8002-frames418to478.png)

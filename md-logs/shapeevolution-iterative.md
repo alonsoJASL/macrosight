@@ -28,7 +28,10 @@ span the life of the clump are specified:
 + `wuc=8007`
 + `wuc=8007005` useful tracks:
 `trackinfo(~ismember(trackinfo.timeframe, 15:18),:)=[];`
-+ `wuc=11010` useful tracks: `trackinfo(trackinfo.timeframe>=144,:)=[];`
++ `wuc=11010`
+  useful tracks: `trackinfo(trackinfo.timeframe>=144,:)=[];`
++ `wuc=14013`,
+  useful tracks `trackinfo(~ismember(trackinfo.timeframe, 376:386),:)=[];`
 + `wuc=60010`
 + `wuc=60010002`
 + `wuc=15014013`
