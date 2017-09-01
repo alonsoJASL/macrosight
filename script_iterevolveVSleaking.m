@@ -5,7 +5,7 @@ initscript;
 load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 8007; % 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013
+wuc = 11010; % 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -18,7 +18,7 @@ trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
 
 %% Extract frames where the clump exists
 %trackinfo(~ismember(trackinfo.timeframe, 418:478),:)=[];
-trackinfo(~ismember(trackinfo.timeframe, 386:416),:)=[];
+trackinfo(~ismember(trackinfo.timeframe, 1:70),:)=[];
 trackinfo = tablecompression(trackinfo, clumplab);
 %% FULL WORKFLOW (as in log)
 % 1. Load known frame
