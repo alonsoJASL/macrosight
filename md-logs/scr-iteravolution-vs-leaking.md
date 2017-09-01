@@ -182,3 +182,6 @@ respective clumps have what seems to be a better segmentation.
   segmentation.
 + Since one of the segmentations seems to work... remove **that** from the frame
   and try to re-do the bad segmentation...
++ _Track_ each point in the boundary as it moves from frame to frame.. many
+  problems, but might work.. have like a _keyhole algorithm_ but for the shape,
+  then weird movements would probably be detected.
