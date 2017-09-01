@@ -16,7 +16,7 @@ The code so far can handle easy clumps, but in some cases, the segmentation
 leaks and takes another cell. In this log (and `.m`) file(s) the priority
 falls into detecting
 
-## The code in its normal form
+## The code in its most essential form
 The code developed in [`script_iterevolve.m`](../script_iterevolve.m)
 is displayed, in a condensed form. All of the functions used are part of the
 @macrosight package.
@@ -88,6 +88,7 @@ positions where the segmentation can be ignored, because it does not follow a
 Both tests will start by testing a couple of cases where there is no overlap
 and the cells involved are just moving in time. Then, the tests will move on
 to clumps `wuc=8007` and `wuc=11010`, which do overlap.
+## NON OVERLAPPING
 ### NON OVERLAPING EXAMPLE: `wuc=8002` in frames `418:468`
 In this case, two non-overlapping cells were followed from `wuc=8002` to
 assess the different measurements described before. The cells assessed in this
@@ -104,3 +105,80 @@ of frames.
 Finally, the measurements with the `diff()` are shown below.
 
 ![anglegrams-wuc8002](../figs/measurements-clump8002-frames418to478.png)
+
+### NON OVERLAPING EXAMPLE: `wuc=8002` in frames `386:416`
+In this case, two non-overlapping cells were followed from `wuc=8002` to
+assess the different measurements described before. The cells assessed in this
+case are as follows:
+
+![non-overlapping-wuc8002-moving](../figs/clump8002-frames386to416.gif)
+
+#### Results
+The _anglegrams_ of both cells are also shown following that same evolution
+of frames.
+
+![anglegrams-wuc8002](../figs/anglegrams-clump8002-frames386to416.gif)
+
+Finally, the measurements with the `diff()` are shown below.
+
+[**Cell 2**](../figs/measurements-clump8002-318to416frames-2.eps)
+![anglegrams-wuc8002-2](../figs/measurements-clump8002-318to416frames-2.png)
+
+[**Cell 8**](../figs/measurements-clump8002-318to416frames-8.eps)
+![anglegrams-wuc8002-8](../figs/measurements-clump8002-318to416frames-8.png)
+
+## OVERLAPPING
+### OVERLAPPING EXAMPLE: `wuc=8007` in frames `15:50`
+Two overlapping cells were followed from `wuc=8007` to
+assess the different measurements described before.
+**Overlapping begins in frame `19`.**
+The cells assessed in this case appear as follows:
+
+![overlapping-wuc8007-moving](../figs/clump8007-frames15to50.gif)
+
+#### Results
+The _anglegrams_ of both cells are also shown following that same evolution
+of frames.
+
+![anglegrams-wuc8007](../figs/anglegrams-clump8007-frames15to50.gif)
+
+Finally, the measurements with the `diff()` are shown below.
+
+[**Cell 7**](../figs/measurements-clump8007-15to50frames-7.eps)
+![anglegrams-wuc8007-7](../figs/measurements-clump8007-15to50frames-7.png)
+
+[**Cell 8**](../figs/measurements-clump8007-15to50frames-8.eps)
+![anglegrams-wuc8007-8](../figs/measurements-clump8007-15to50frames-8.png)
+
+### OVERLAPPING EXAMPLE: `wuc=11010` in frames `1:70`
+Two overlapping cells were followed from `wuc=11010` to
+assess the different measurements described before.
+**Overlapping begins in frame `2`.**
+The cells assessed in this case appear as follows:
+
+![overlapping-wuc11010-moving](../figs/clump11010-frames1to70.gif)
+
+#### Results
+The _anglegrams_ of both cells are also shown following that same evolution
+of frames.
+
+![anglegrams-wuc8007](../figs/anglegrams-clump11010-frames1to70.gif)
+
+Finally, the measurements with the `diff()` are shown below.
+
+[**Cell 10**](../figs/measurements-clump11010-1to70frames-10.eps)
+![anglegrams-wuc11010-10](../figs/measurements-clump11010-1to70frames-10.png)
+
+[**Cell 11**](../figs/measurements-clump11010-1to70frames-11.eps)
+![anglegrams-wuc11010-11](../figs/measurements-clump11010-1to70frames-11.png)
+
+### A brief discussion
+It can be seen that the cells that appear _below_, that is cell `8` from
+clump `wuc=8007` and cell `11` of clump `wuc=11010` are the ones where the
+segmentation is leaking; whereas the cells that appear _above_ in their
+respective clumps have what seems to be a better segmentation.
+### A couple of ideas:
++ (Original idea) use the measurements described here to catch a bad
+  segmentation.
++ Since one of the segmentations seems to work... remove **that** from the frame
+  and try to re-do the bad segmentation...
