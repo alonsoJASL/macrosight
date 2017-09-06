@@ -2,10 +2,14 @@
 %
 %% INITIALISATION
 initscript;
+
 load DATASETHOLES
+clumptracktable(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
+tablenet(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 11010; % 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013
+% 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013, 21005003002
+wuc = 21005003002; 
 
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
@@ -13,12 +17,8 @@ fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 clumplab = getlabelsfromcode(wuc);
 trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 11 13 14]) ...
     clumptracktable(ismember(tablenet.track, clumplab),:)];
-
-% remove holes from analysis
-trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
-
 %% Extract frames where the clump exists
-trackinfo(~ismember(trackinfo.timeframe, 1:20),:)=[];
+trackinfo(~ismember(trackinfo.timeframe, 28:300),:)=[];
 trackinfo = tablecompression(trackinfo, clumplab);
 %% FULL WORKFLOW (as in log)
 % 1. Load known frame
@@ -34,8 +34,10 @@ framet = trackinfo.timeframe(tk);
 acopt.method = 'Chan-Vese';
 acopt.iter = 25;
 acopt.smoothf = 1.5;
-acopt.contractionbias = -0.1;
+acopt.contractionbias = 0;
 acopt.erodenum = 5;
+%acopt.whichfn = 'inversegrad';
+
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
 debugvar = true;
@@ -47,7 +49,6 @@ frametplusT = trackinfo.timeframe(tkp1);
     filenames{frametplusT}, frametplusT);
 
 % 3.2 Evolve
-acopt.whichfn = 'inversegrad';
 [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
 
 %  3.4 Update
