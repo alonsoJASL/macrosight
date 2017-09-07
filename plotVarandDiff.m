@@ -12,8 +12,8 @@ gcf;
 plot(x, y, '-', x(2:end), diff(y));
 if diffstats == true
     plotHorzLine(x, (mean(diff(y)) + [0 std(diff(y)) -std(diff(y))]));
-    legend(varname, strcat('diff(', varname,')'),...
-        strcat('mean(', varname,')'));
+%     legend(varname, strcat('diff(', varname,')'),...
+%         strcat('mean(', varname,')'));
 else
-    legend(varname, strcat('diff(', varname,')'));
+%    legend(varname, strcat('diff(', varname,')'));
 end

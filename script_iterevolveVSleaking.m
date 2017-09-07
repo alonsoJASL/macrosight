@@ -5,7 +5,7 @@ initscript;
 load DATASETHOLES
 %% CHOOSE TRACKS
 % w.u.c = which unique clump!
-wuc = 11010; % 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013
+wuc = 8007; % 8002, 8007, 11010, 14013, 8007005, 60010, 60010002, 15014013
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -18,7 +18,7 @@ trackinfo(ismember(trackinfo.timeframe,DATASETHOLES),:) = [];
 
 %% Extract frames where the clump exists
 %trackinfo(~ismember(trackinfo.timeframe, 418:478),:)=[];
-trackinfo(~ismember(trackinfo.timeframe, 1:70),:)=[];
+trackinfo(~ismember(trackinfo.timeframe, 15:50),:)=[];
 trackinfo = tablecompression(trackinfo, clumplab);
 %% FULL WORKFLOW (as in log)
 % 1. Load known frame
@@ -50,7 +50,12 @@ for ix=1:length(clumplab)
     hag(ix).rankRatio = (rank(ag)/size(ag,2));
 end
 
-
+% initialise some parameters
+acopt.method = 'Chan-Vese';
+acopt.iter = 25;
+acopt.smoothf = 1.5;
+acopt.contractionbias = 0;
+acopt.erodenum = 5;
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
 debugvar = true;
@@ -62,11 +67,6 @@ for tk=1:(length(trackinfo.timeframe)-1)
         filenames{frametplusT}, frametplusT);
     
     % 3.2 Evolve
-    acopt.method = 'Chan-Vese';
-    acopt.iter = 50;
-    acopt.smoothf = 1.5;
-    acopt.contractionbias = -0.1;
-    acopt.erodenum = 5;
     [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
     
     % 3.4 Update
@@ -148,7 +148,7 @@ if debugvar == true
     clear gifname;
 end
 %% Shape measurements
-whichlab = 2;
+whichlab = 1;
 propt = ttab{whichlab};
 agtab = hag(whichlab);
 
@@ -169,12 +169,14 @@ for ix=1:length(ffns)
     subplot(4,3,ix)
     whichY = propertiesTable.(ffns{ix});
     plotVarandDiff(trackinfo.timeframe, whichY, ffns{ix});
+    plot(202:300, qq.propertiesTable.(ffns{ix}), 'r.');
     title(ffns{ix});
     grid on
     
     subplot(4,3,6+ix)
     whichY = agramTable.(ffns2{ix});
     plotVarandDiff(trackinfo.timeframe, whichY, ffns2{ix});
+    plot(202:300, qq.agramTable.(ffns2{ix}), 'r.');
     title(ffns2{ix});
     grid on
 end

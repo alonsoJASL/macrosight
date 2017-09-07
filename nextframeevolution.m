@@ -27,10 +27,10 @@ if nargin < 5
     smoothf = 2;
     contractionbias = -0.1;
     erodenum = 1;
+    whichfn = 'identity';
 else
-    [method, iter, smoothf, contractionbias, erodenum] = getoptions(acopt);
+    [method, iter, smoothf, contractionbias, erodenum, whichfn] = getoptions(acopt);
 end
-
 
 tkp1 = find(trackinfo.timeframe==unknownfr.t);
 fprintf('%s: Evolving shape to frame t%d = t%d+1.\n', ...
@@ -62,9 +62,9 @@ for wtr=1:length(clumplab)
     movedmask = imopen(poly2mask(boundy(:,2), boundy(:,1), ...
         rows, cols), ones(erodenum));
     
-    evomask = activecontour(unknownfr.dataGR, movedmask, iter, ...
-        method, 'ContractionBias',contractionbias,...
-        'SmoothFactor', smoothf);
+    g = imagefunction(unknownfr.dataGR, whichfn);
+    evomask = activecontour(g, movedmask, iter, method, ...
+        'ContractionBias',contractionbias,'SmoothFactor', smoothf);
     evoshape = bwboundaries(evomask);
     
     newfr.evomask(:,:,wtr) = evomask.*trackinfo.seglabel(tkp1, wtr);
@@ -74,13 +74,14 @@ for wtr=1:length(clumplab)
 end
 end
 
-function [method, iter, smoothf, contractionbias, erodenum] = getoptions(s)
+function [method, iter, smoothf, contractionbias, erodenum, whichfn] = getoptions(s)
 % get active contour options 
 erodenum = 1;
 method = 'Chan-Vese';
 iter = 50;     
 smoothf = 2;
 contractionbias = -0.1;
+whichfn = 'identity';
 
 fnames = fieldnames(s);
 for ix=1:length(fnames)
@@ -96,9 +97,27 @@ for ix=1:length(fnames)
             smoothf = s.(name);
         case 'contractionbias'
             contractionbias = s.(name);
+        case 'whichfn'
+            whichfn = s.(name);
         otherwise
             fprintf('%s: ERROR. Incorrect option [%s] is NOT defined.\n',...
                 mfilename, upper(name));
     end
+end
+end
+
+function [g] = imagefunction(I, whichfn) 
+% image function used in active contours
+switch lower(whichfn)
+    case {'eye', 'nothing', 'identity'}
+        g = I;
+    case {'gradmag', 'gradients'}
+        g = abs(imgradient(imfilter(I, fspecial('gaussian'))));
+    case {'inversegrad', 'ig', 'inversegradient'}
+        g = 1./(1+abs(imgradient(imfilter(I, fspecial('gaussian')))).^2); 
+    otherwise 
+        fprintf('%s: ERROR. wrong image function %s. Using identity.\n',...
+            mfilename, upper(whichfn));
+        g = I;
 end
 end
