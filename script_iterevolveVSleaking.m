@@ -52,9 +52,9 @@ end
 
 % initialise some parameters
 acopt.method = 'Chan-Vese';
-acopt.iter = 50;
-acopt.smoothf = 1;
-acopt.contractionbias = -0.1;
+acopt.iter = 25;
+acopt.smoothf = 1.5;
+acopt.contractionbias = 0;
 acopt.erodenum = 5;
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
@@ -148,7 +148,7 @@ if debugvar == true
     clear gifname;
 end
 %% Shape measurements
-whichlab = 2;
+whichlab = 1;
 propt = ttab{whichlab};
 agtab = hag(whichlab);
 
@@ -169,12 +169,14 @@ for ix=1:length(ffns)
     subplot(4,3,ix)
     whichY = propertiesTable.(ffns{ix});
     plotVarandDiff(trackinfo.timeframe, whichY, ffns{ix});
+    plot(202:300, qq.propertiesTable.(ffns{ix}), 'r.');
     title(ffns{ix});
     grid on
     
     subplot(4,3,6+ix)
     whichY = agramTable.(ffns2{ix});
     plotVarandDiff(trackinfo.timeframe, whichY, ffns2{ix});
+    plot(202:300, qq.agramTable.(ffns2{ix}), 'r.');
     title(ffns2{ix});
     grid on
 end
