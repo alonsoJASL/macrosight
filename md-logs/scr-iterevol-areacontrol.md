@@ -19,4 +19,47 @@ or regular_. Typical values used in this application are
 
 This function does not allow a finer control over the parameters, the
 evolution or the finer details (restricting size, volume or area of the
-contours). 
+contours).
+
+## Area control
+For this section of the log,
+
+```Matlab
+I = imread('toyobjects.png');
+figure(1)
+imagesc(I);
+
+mask = roipoly;
+
+figure(2)
+imagesc(mask);
+title('Initial MASK');
+```
+Now the parameters, and the actual function:
+```Matlab
+acopt.method = 'Chan-Vese';
+acopt.iter = 200;
+acopt.smoothf = 1.5;
+acopt.contractionbias = 0;
+acopt.erodenum = 5;
+
+evomask = activecontour(I, mask, acopt.iter, acopt.method, ...
+'ContractionBias',acopt.contractionbias,'SmoothFactor', acopt.smoothf);
+figure(3)
+plotBoundariesAndPoints(I, bwboundaries(mask), bwboundaries(evomask), 'm-');
+```
+## Some useful
++ Run `initscript`
++ good images: `43, 96`
+
+The 
+
+**Growing**
+|method|iter|smoothf|contractionbias|erodenum|
+|:---:|:---:|:---:|:---:|:---:|
+|Chan-Vese|200.00|1.00|-0.25|5.00|
+
+**Shrinking**
+|method|iter|smoothf|contractionbias|erodenum|
+|:---:|:---:|:---:|:---:|:---:|
+|Chan-Vese|100.00|1.25|0.10|5.00|
