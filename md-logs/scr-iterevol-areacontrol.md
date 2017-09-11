@@ -129,10 +129,12 @@ were done in order to get a sense
 |method|iter|smoothf|contractionbias|erodenum|
 |:---:|:---:|:---:|:---:|:---:|
 |Chan-Vese|200.00|1.00|-0.25|5.00|
+![shrinking-init](../figs/clump2-fr43-growing-init.png) ![shrinking-res](../figs/clump2-fr43-growing-fin.png)
 
 **Shrinking**
 |method|iter|smoothf|contractionbias|erodenum|
 |:---:|:---:|:---:|:---:|:---:|
 |Chan-Vese|100.00|1.25|0.10|5.00|
+![shrinking-init](../figs/clump2-fr43-shrinking-init.png) ![shrinking-res](../figs/clump2-fr43-shrinking-fin.png)
 
 These parameters may need to be changed when addressing clumps.
