@@ -41,17 +41,12 @@ else
 end
 
 % 3.4.2 Update kftr
-auxfr.regs = regionprops(zeros(size(knownfr.dataGR)), ...
-    'BoundingBox', 'Perimeter', 'Area','EquivDiameter', 'MajorAxisLength', ...
-    'MinorAxisLength', 'Solidity');
+auxfr.regs = macregionprops(zeros(size(knownfr.dataGR)));
 auxfr.boundy = newfr.evoshape;
 auxfr.xy = newfr.xy;
 
 for wtr=1:length(clumplab)
-    thiscell = newfr.evomask(:,:,wtr)>0;
-    regs = regionprops(thiscell, 'BoundingBox', 'Perimeter', 'Area', ...
-        'EquivDiameter', 'MajorAxisLength', 'MinorAxisLength', 'Solidity');
-    
+    [regs] = macregionprops(newfr.evomask(:,:,wtr));
     midx = [regs.Area]==max([regs.Area]);
     auxfr.regs(wtr) = regs(midx);
 end
