@@ -126,12 +126,14 @@ area for frame `t(k-1)`. Then, various tests with the function `activecontour`
 were done in order to get a sense
 
 **Growing**
+
 |method|iter|smoothf|contractionbias|erodenum|
 |:---:|:---:|:---:|:---:|:---:|
 |Chan-Vese|200.00|1.00|-0.25|5.00|
 ![shrinking-init](../figs/clump2-fr43-growing-init.png) ![shrinking-res](../figs/clump2-fr43-growing-fin.png)
 
 **Shrinking**
+
 |method|iter|smoothf|contractionbias|erodenum|
 |:---:|:---:|:---:|:---:|:---:|
 |Chan-Vese|100.00|1.25|0.10|5.00|

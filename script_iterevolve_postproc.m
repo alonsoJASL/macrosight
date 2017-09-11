@@ -32,11 +32,13 @@ framet = trackinfo.timeframe(tk);
 
 % initialisation of parameters
 acopt.method = 'Chan-Vese';
-acopt.iter = 25;
-acopt.smoothf = 1.5;
-acopt.contractionbias = 0;
-acopt.erodenum = 5;
+acopt.iter = 200;
+acopt.smoothf = 1;
+acopt.contractionbias = -0.25;
+acopt.erodenum = 3;
 %acopt.whichfn = 'inversegrad';
+
+cc = [];
 
 %% 3. start 'loop'
 % 3.1 Load the unknown frame
@@ -49,7 +51,8 @@ frametplusT = trackinfo.timeframe(tkp1);
     filenames{frametplusT}, frametplusT);
 
 % 3.2 Evolve
-[newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
+%[newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
+miniscript;
 
 %  3.4 Update
 % 3.4.1 Update knownfr
@@ -67,6 +70,9 @@ if debugvar == true
     title(sprintf('Frame %d', frametplusT));
     if ukfr.hasclump == true
         plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
+    end
+    if badbool == true
+        plotBoundariesAndPoints([],[],badnewfr.evoshape, ':y');
     end
 end
 
