@@ -4,24 +4,27 @@
 [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
 newrgs = macregionprops(newfr.evomask);
 
-a = 0.07;
-b = 0.07;
-uppbound = kftr.regs.Area*(1+a);
-lowbound = kftr.regs.Area*(1-b);
+a = 0.05;
+b = 0.05;
+whichfield = 'Area';
+
+uppbound = kftr.regs.(whichfield)*(1+a);
+lowbound = kftr.regs.(whichfield)*(1-b);
 badbool = false;
 
-if newrgs.Area >= uppbound
-    fprintf('\n\t %s: New area too large, OVER %d%% of previous Area.\n',...
-        mfilename, a*100);
-    acopt = acoptions('shrink'); 
+ognewfr = newfr(1);
+if newrgs(1).(whichfield) >= uppbound
+    acopt = acoptions('shrink');
+    fprintf('\n\t %s: New %s too large, OVER %d%% of previous measurement.\n',...
+            mfilename, upper(whichfield), a*100);
     badnewfr = newfr;
     [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
     newrgs = macregionprops(newfr.evomask);
     badbool = true;
-elseif newrgs.Area <= lowbound
-    fprintf('\n\t %s: New area too small, UNDER %d%% of previous Area.\n',...
-        mfilename,b*100);
-    acopt = acoptions('grow'); 
+elseif newrgs(1).(whichfield) <= lowbound
+    fprintf('\n\t %s: New %s too small, UNDER %d%% of previous measurement.\n',...
+        mfilename, upper(whichfield), b*100);
+    acopt = acoptions('grow');
     badnewfr = newfr;
     [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
     newrgs = macregionprops(newfr.evomask);
@@ -29,11 +32,12 @@ elseif newrgs.Area <= lowbound
 else
     fprintf('\n\t %s: ALL GOOD MAN!.\n',...
         mfilename);
-    acopt = acoptions('nothing'); 
+    acopt = acoptions('nothing');
     badbool = false;
     [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
     newrgs = macregionprops(newfr.evomask);
 end
+
 
 function [opt] = acoptions(actype)
 %
@@ -43,18 +47,18 @@ switch actype
         opt.iter = 100;
         opt.smoothf = 1.25;
         opt.contractionbias = 0.1;
-        opt.erodenum = 5;
+        opt.erodenum = 7;
     case 'grow'
         opt.method = 'Chan-Vese';
         opt.iter = 200;
         opt.smoothf = 1;
         opt.contractionbias = -0.25;
-        opt.erodenum = 5;
+        opt.erodenum = 3;
     case 'nothing'
         opt.method = 'Chan-Vese';
         opt.iter = 50;
         opt.smoothf = 1.5;
         opt.contractionbias = -0.1;
-        opt.erodenum = 3;
+        opt.erodenum = 5;
 end
 end
