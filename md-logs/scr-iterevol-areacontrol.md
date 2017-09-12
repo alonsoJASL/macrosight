@@ -162,4 +162,4 @@ large change results in the adjustment of the
 ![eg5-completeloss](../figs/cl2-frames28to140-areactrl-eg5.png)
 
 ###### Some area measurements
-![area-measurements](../figs/cl2-frames28to140-areactrl-measurements)
+![area-measurements](../figs/cl2-frames28to140-areactrl-measurements.png)
