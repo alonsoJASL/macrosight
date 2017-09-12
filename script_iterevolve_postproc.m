@@ -38,9 +38,11 @@ acopt.contractionbias = -0.25;
 acopt.erodenum = 3;
 %acopt.whichfn = 'inversegrad';
 
-cc = [];
-
-%% 3. start 'loop'
+ogar = zeros(size(trackinfo,1),1);
+ar = ogar;
+ogcirc = ogar;
+circ = ogar;
+%% 3. start 'loop',
 % 3.1 Load the unknown frame
 debugvar = true;
 
@@ -64,17 +66,7 @@ framet = frametplusT;
 
 % 3.3 Show preliminary results
 % LOOK AT LOGS
-if debugvar == true
-    f11=figure(11);
-    plotBoundariesAndPoints(ukfr.X, newfr.movedboundy, newfr.evoshape, 'm-');
-    title(sprintf('Frame %d', frametplusT));
-    if ukfr.hasclump == true
-        plotBoundariesAndPoints([],[],bwboundaries(ukfr.thisclump), ':y');
-    end
-    if badbool == true
-        plotBoundariesAndPoints([],[],badnewfr.evoshape, ':y');
-    end
-end
+miniplotscript;
 
 %end
 tk = tk+1;
