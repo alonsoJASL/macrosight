@@ -146,8 +146,19 @@ The approach described before was implemented in a crude way. At each step,
 the size (Area) of the new frame is compared with the previous size. A
 large change results in the adjustment of the
 
+**An example of size correction.**
 ![eg1-correction](../figs/cl2-frames28to140-areactrl-eg1.png)
+
+**Right before a clump.**
 ![eg2-prevclump](../figs/cl2-frames28to140-areactrl-eg2.png)
+
+**A clump confusion.**
 ![eg3-postclump](../figs/cl2-frames28to140-areactrl-eg3.png)
+
+**A bigger confusion.**
 ![eg4-greatconfusion](../figs/cl2-frames28to140-areactrl-eg4.png)
+
+**A loss of the original cell because of the confusion.**
 ![eg5-completeloss](../figs/cl2-frames28to140-areactrl-eg5.png)
+
+###### Some area measurements
