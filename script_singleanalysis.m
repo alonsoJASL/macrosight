@@ -30,20 +30,29 @@ flabfreq(idxshorttrax) = [];
 cllength(idxshorttrax) = [];
 alltracks(idxshorttrax) = [];
 %% CHOOSE ONE TRACK AND SEPARATE INTO MANY SINGLE PATHS (TRACK >> PATH)
-ix=1;
+clc;
+
+ix=33;
 wuc=flabs(ix);
 trackinfo=alltracks{ix};
 
+fprintf('Getting all paths for clump %d.\n', wuc);
 jumpsix=find(diff(trackinfo.clumpcode>0));
+if trackinfo.clumpcode(1)==0
+    jumpsix = [1;jumpsix];
+end
+if trackinfo.clumpcode(end)==0
+    jumpsix = [jumpsix;size(trackinfo,1)];
+end
 if mod(length(jumpsix),2)~=0
     jumpsix(end)=[];
 end
 wendys = reshape(jumpsix,2, length(jumpsix)/2)';
 wendys(:,1) = wendys(:,1)+1;
 
-thesepaths = cell(size(wendys,1),1);
+allpaths = cell(size(wendys,1),1);
 for jx=1:size(wendys,1)
-    thesepaths{jx} = trackinfo(wendys(jx,1):wendys(jx,2),:);
+    allpaths{jx} = trackinfo(wendys(jx,1):wendys(jx,2),:);
 end
 
 % from here, just choose a path and check the evolutions
