@@ -19,13 +19,13 @@ if ~isdir(acoutdir)
     mkdir(acoutdir); 
 end
 
-for ix = 1:3
+for ix = 1:length(acnames)
 disp(acnames{ix});
 
 b = dir(fullfile(handlesdir.pathtodir, acnames{ix},'*.mat'));
 b = {b.name};
 
-for jx = 1:3
+for jx = 1:length(b)
     fprintf('\t%s\n', b{jx});
 c = load(fullfile(rootdir, acnames{ix}, b{jx}));
 
@@ -37,7 +37,7 @@ if exist(fullfile(acoutdir, c.meta.fname), 'file')
     fullfr.newSegm = bitor(fullfr.newSegm, ...
         poly2mask(c.frameinfo.outboundy{1}(:,2), ...
         c.frameinfo.outboundy{1}(:,1), handles.rows, handles.cols));
-    fullfr.anglegram(:,:,end+1) = computeMultiAnglegram(fullfr.outboundy);
+    fullfr.anglegram{end+1} = computeMultiAnglegram(c.frameinfo.outboundy);
 else 
     fullfr.X = c.frameinfo.X;
     fullfr.dataL = c.frameinfo.dataL;
@@ -46,7 +46,7 @@ else
     fullfr.outboundy = c.frameinfo.outboundy;
     fullfr.newSegm = poly2mask(c.frameinfo.outboundy{1}(:,2), ...
         c.frameinfo.outboundy{1}(:,1), handles.rows, handles.cols);
-    fullfr.anglegram = computeMultiAnglegram(fullfr.outboundy);
+    fullfr.anglegram{1} = computeMultiAnglegram(fullfr.outboundy);
 end
 meta = c.meta;
 
