@@ -1,26 +1,9 @@
 
 ERRORS FOR NO OPTIONS (NOTHING)
-
-
-ERRORS FOR AC OPTIONS
-
-
-Ya valió barriga, Sr. V...:
-err:Index exceeds matrix dimensions.
-flab8, path7, tk+1=332
-
-Ya valió barriga, Sr. V...:
-err:Index exceeds matrix dimensions.
-flab11, path4, tk+1=172
-
-Ya valió barriga, Sr. V...:
-err:Index exceeds matrix dimensions.
-flab13, path7, tk+1=480
-
-Ya valió barriga, Sr. V...:
-err:Index exceeds matrix dimensions.
-flab16, path1, tk+1=17
-
-Ya valió barriga, Sr. V...:
-err:Index exceeds matrix dimensions.
-flab89, path1, tk+1=506
+ERRORS FOR NO OPTIONS (NOTHING)
+ERRORS FOR NO OPTIONS (NOTHING)
+ERRORS FOR NO OPTIONS (NOTHING)
+ERRORS FOR NO OPTIONS (NOTHING)
+ERRORS FOR NO OPTIONS (NOTHING)
+ERRORS FOR NO OPTIONS (NOTHING)
+ERRORS FOR NO OPTIONS (NOTHING)

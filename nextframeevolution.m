@@ -65,6 +65,7 @@ for wtr=1:length(clumplab)
     g = imagefunction(unknownfr.dataGR, whichfn);
     evomask = activecontour(g, movedmask, iter, method, ...
         'ContractionBias',contractionbias,'SmoothFactor', smoothf);
+    [evomask] = checkmask(evomask, unknownfr.dataL, trackinfo(tkp1,:).seglabel(wtr));
     evoshape = bwboundaries(evomask);
     
     newfr.evomask(:,:,wtr) = evomask.*trackinfo.seglabel(tkp1, wtr);
@@ -75,10 +76,10 @@ end
 end
 
 function [method, iter, smoothf, contractionbias, erodenum, whichfn] = getoptions(s)
-% get active contour options 
+% get active contour options
 erodenum = 1;
 method = 'Chan-Vese';
-iter = 50;     
+iter = 50;
 smoothf = 2;
 contractionbias = -0.1;
 whichfn = 'identity';
@@ -87,13 +88,13 @@ fnames = fieldnames(s);
 for ix=1:length(fnames)
     name = fnames{ix};
     switch name
-        case 'erodenum' 
+        case 'erodenum'
             erodenum = s.(name);
-        case 'method' 
+        case 'method'
             method = s.(name);
         case 'iter'
             iter = s.(name);
-        case 'smoothf' 
+        case 'smoothf'
             smoothf = s.(name);
         case 'contractionbias'
             contractionbias = s.(name);
@@ -106,7 +107,7 @@ for ix=1:length(fnames)
 end
 end
 
-function [g] = imagefunction(I, whichfn) 
+function [g] = imagefunction(I, whichfn)
 % image function used in active contours
 switch lower(whichfn)
     case {'eye', 'nothing', 'identity'}
@@ -114,10 +115,28 @@ switch lower(whichfn)
     case {'gradmag', 'gradients'}
         g = abs(imgradient(imfilter(I, fspecial('gaussian'))));
     case {'inversegrad', 'ig', 'inversegradient'}
-        g = 1./(1+abs(imgradient(imfilter(I, fspecial('gaussian')))).^2); 
-    otherwise 
+        g = 1./(1+abs(imgradient(imfilter(I, fspecial('gaussian')))).^2);
+    otherwise
         fprintf('%s: ERROR. wrong image function %s. Using identity.\n',...
             mfilename, upper(whichfn));
         g = I;
+end
+end
+
+function [fixedmask] = checkmask(evomask, dataL, seglabel)
+% check multiple shapes
+fixedmask = evomask;
+[auxevo, nx] = bwlabeln(fixedmask>0);
+if nx > 1
+    fprintf('%s: Mask separated after Active Contours, fixing...\n', mfilename);
+    thisnucleus = dataL==seglabel;
+    for qqx=1:nx
+        testmat = bitand(auxevo==qqx, thisnucleus);
+        if length(unique(testmat(:)))==1
+            % only zeros => no intersection
+            fixedmask(auxevo==qqx) = 0;
+        end
+    end
+    fixedmask = imdilate(fixedmask, ones(3));
 end
 end

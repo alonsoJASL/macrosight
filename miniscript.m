@@ -30,7 +30,7 @@ elseif newrgs(1).(whichfield) <= lowbound
     newrgs = macregionprops(newfr.evomask);
     badbool = true;
 else
-    fprintf('\n\t %s: ALL GOOD MAN!.\n',...
+    fprintf('\n\t %s: ALL GOOD!.\n',...
         mfilename);
     acopt = acoptions('nothing');
     badbool = false;
