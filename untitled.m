@@ -6,7 +6,7 @@ clumptracktable(ismember(tablenet.timeframe, DATASETHOLES), :)=[];
 tablenet(ismember(tablenet.timeframe, DATASETHOLES),:)=[];
 
 rootdir = handlesdir.pathtodir;
-whichdata = 'ACOPTIONS';
+whichdata = 'NOTHING';
 %%
 
 a = dir(fullfile(handlesdir.pathtodir, [handlesdir.data '_mat_TRACKS_lab*']));

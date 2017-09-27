@@ -44,7 +44,7 @@ for ix=1:length(flabs)
         mkdir(fullfile(handlesdir.pathtodir, outfolder));
     end
     
-    outtrackname = sprintf('label%dtracks-knwonfr', ndigitsenum(wuc,4));
+    outtrackname = sprintf('label%s-tracks-knwonfr', ndigitsenum(wuc,3));
     
     % from here, just choose a path and check the evolutions
     acopt=acoptions('nothing');
@@ -74,7 +74,7 @@ for ix=1:length(flabs)
         meta.fname = filenames{framet};
         
         save(fullfile(handlesdir.pathtodir, outfolder, ...
-            sprintf('%s%d.mat',outtrackname,framet)),...
+            sprintf('%s%s.mat',outtrackname,ndigitsenum(framet,3))),...
             'frameinfo', 'meta');
         try
             for tk=1:(size(thispath,1)-1)
@@ -99,7 +99,7 @@ for ix=1:length(flabs)
                 meta.fname = filenames{frametplusT};
                 
                 save(fullfile(handlesdir.pathtodir, outfolder, ...
-                    sprintf('%s%d.mat',outtrackname,frametplusT)),...
+                    sprintf('%s%s.mat',outtrackname,ndigitsenum(frametplusT,3))),...
                     'frameinfo', 'meta');
             end
         catch e
@@ -132,7 +132,7 @@ for ix=1:length(flabs)
         fprintf('%s: Creating folder %s.\n', mfilename, outfolder);
         mkdir(fullfile(handlesdir.pathtodir, outfolder));
     end
-    outtrackname = sprintf('label%dtracks-knwonfr', ndigitsenum(wuc,4));
+    outtrackname = sprintf('label%s-tracks-knwonfr', ndigitsenum(wuc,3));
     
     % from here, just choose a path and check the evolutions
     acopt=acoptions('grow');
@@ -159,7 +159,7 @@ for ix=1:length(flabs)
         meta.fname = filenames{framet};
         
         save(fullfile(handlesdir.pathtodir, outfolder, ...
-            sprintf('%s%d.mat',outtrackname,framet)),...
+            sprintf('%s%s.mat',outtrackname,ndigitsenum(framet,3))),...
             'frameinfo', 'meta');
         
         try
@@ -186,7 +186,7 @@ for ix=1:length(flabs)
                 meta.fname = filenames{frametplusT};
                 
                 save(fullfile(handlesdir.pathtodir, outfolder, ...
-                    sprintf('%s%d.mat',outtrackname,frametplusT)),...
+                    sprintf('%s%s.mat',outtrackname,ndigitsenum(frametplusT,3))),...
                     'frameinfo', 'meta');
             end
         catch e
