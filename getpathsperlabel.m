@@ -1,6 +1,9 @@
 function [allpaths, wendys] = getpathsperlabel(whichlabel, trackinfo)
 % GET ALL SINGLE PATHS PER FINAL LABEL.
 %
+% Usage: 
+%           [allpaths, wendys] = getpathsperlabel(whichlabel, trackinfo)
+%
 
 fprintf('%s: Getting all paths for clump %d.\n', mfilename, whichlabel);
 jumpsix=find(diff(trackinfo.clumpcode>0));

@@ -77,3 +77,7 @@ catch e
         'clumptracktable', 'clumpidcodes', 'timedfinalnetwork', ...
         'tablenet');
 end
+
+load DATASETHOLES;
+clumptracktable(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
+tablenet(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
