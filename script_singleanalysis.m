@@ -43,7 +43,8 @@ for ix=1:length(flabs)
         fprintf('%s: Creating folder %s.\n', mfilename, outfolder);
         mkdir(fullfile(handlesdir.pathtodir, outfolder));
     end
-    outtrackname = sprintf('label%dtracks-knwonfr', wuc);
+    
+    outtrackname = sprintf('label%dtracks-knwonfr', ndigitsenum(wuc,4));
     
     % from here, just choose a path and check the evolutions
     acopt=acoptions('nothing');
@@ -82,6 +83,8 @@ for ix=1:length(flabs)
                     filenames{frametplusT}, frametplusT);
                 [newfr] = nextframeevolution(ukfr, kftr, trackinfo, clumplab, acopt);
                 %miniscript;
+                
+                [knownfr, kftr] = updateKnownFrame(ukfr, newfr, clumplab);
                 
                 frameinfo.X = knownfr.X;
                 frameinfo.dataL = knownfr.dataL;
@@ -129,7 +132,7 @@ for ix=1:length(flabs)
         fprintf('%s: Creating folder %s.\n', mfilename, outfolder);
         mkdir(fullfile(handlesdir.pathtodir, outfolder));
     end
-    outtrackname = sprintf('label%dtracks-knwonfr', wuc);
+    outtrackname = sprintf('label%dtracks-knwonfr', ndigitsenum(wuc,4));
     
     % from here, just choose a path and check the evolutions
     acopt=acoptions('grow');

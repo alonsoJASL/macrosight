@@ -1,9 +1,13 @@
-function [allpaths, wendys] = getpathsperlabel(whichlabel, trackinfo)
+function [allpaths, wendys] = getpathsperlabel(whichlabel, trackinfo, minimbool)
 % GET ALL SINGLE PATHS PER FINAL LABEL.
 %
 % Usage: 
 %           [allpaths, wendys] = getpathsperlabel(whichlabel, trackinfo)
 %
+
+if nargin < 3
+    minimbool = false;
+end
 
 fprintf('%s: Getting all paths for clump %d.\n', mfilename, whichlabel);
 jumpsix=find(diff(trackinfo.clumpcode>0));
@@ -21,6 +25,7 @@ wendys = reshape(jumpsix,2, length(jumpsix)/2)';
 %wendys = wendys+1;
 
 % join paths that only overlap on a single frame
+if minimbool == true
 a = wendys(2:end,1) - wendys(1:end-1,2);
 idx = find(a==1);
 while ~isempty(idx)
@@ -30,6 +35,7 @@ while ~isempty(idx)
     
     a = wendys(2:end,1) - wendys(1:end-1,2);
     idx = find(a==1);
+end
 end
 
 allpaths = cell(size(wendys,1),1);
