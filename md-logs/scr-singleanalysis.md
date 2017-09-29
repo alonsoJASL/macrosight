@@ -72,3 +72,9 @@ _Shrink_ or _Normal_.
 | Contraction bias |   0.1  | -0.25 |  -0.1  |
 
 ![area-ctrl-full](../figs/singlecells-ac-full.gif)
+
+## Some more results
+Once a workflow to retrieve the results and present them. Better examples
+can be introduced. 
+
+![track16-full](../figs/eg-lab16-ACOPTIONS-results.png)
