@@ -79,6 +79,8 @@ Traditionally,
 ![example-track8](../figs/eg-lab8-ACOPTIONS-results.png)
 
 ### Some new measurements
-The measurement for circularity seemed noisy and non helpful. A new 
+The measurement for circularity seemed noisy and non helpful. The
+Orientation was preferred, because it could lead to findings with the
+
 
 ![example-orientation-8](../figs/track8-allframes-measurements.png)
