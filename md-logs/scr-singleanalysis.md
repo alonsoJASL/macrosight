@@ -31,7 +31,7 @@ non-overlapping tracks.
     [`scr-iteravolution-vs-leaking.md`](./scr-iteraiteravolution-vs-leaking.md)
     and [`scr-iterevol-areacontrol.md`](./scr-iterevol-areacontrol.md).
 
-## Experiments and Results: Shape analysis
+## Full dataset - Experiments and Results
 The previous workflow was run on all images from the dataset. Individual
 changes can be found on single tracks, as shown in the figure  below.
 
@@ -72,3 +72,13 @@ _Shrink_ or _Normal_.
 | Contraction bias |   0.1  | -0.25 |  -0.1  |
 
 ![area-ctrl-full](../figs/singlecells-ac-full.gif)
+
+## Single track - Experiments and Shape analysis
+Traditionally,
+
+![example-track8](../figs/eg-lab8-ACOPTIONS-results.png)
+
+### Some new measurements
+The measurement for circularity seemed noisy and non helpful. A new 
+
+![example-orientation-8](../figs/track8-allframes-measurements.png)
