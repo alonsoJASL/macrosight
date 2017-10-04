@@ -46,13 +46,17 @@ end
 %% PLOT RESULTS
 
 T = [];
+numpeaks = zeros(length(bx),1);
+cornies = cell(length(bx),1);
 for whichfr = 1:length(bx)
     %fprintf('%s: Loading file:\n %s\n', mfilename, fullfile(rootdir, a{whichTrackIdx}, b{whichfr}));
     load(fullfile(rootdir, a{whichTrackIdx}, b{whichfr}));
     
+    [cornies{whichfr}, ~, ch] = computeCorners([], frameinfo.outboundy{1});
+    numpeaks(whichfr) = ch.guesslabel-1;
     T = [T;struct2table(frameinfo.regs)];
 end
-
+T = [T table(numpeaks)];
 % what to plot
 [m1.yleft, m1.lableft] = getvectorandtext(T, 'Orientation');
 [m1.yright, m1.labright] = getvectorandtext(T, 'AspectRatio');
@@ -62,7 +66,7 @@ end
 %%
 close all
 
-ixx = (15:25:length(frnumbers));
+ixx = fix(linspace(1,length(bx),10));
 Nixx = length(ixx);
 
 f33=figure(33);
@@ -84,6 +88,7 @@ for whichfr = 1:Nixx
     
     plotBoundariesAndPoints(frameinfo.X, frameinfo.initboundy, ...
         frameinfo.outboundy,'m-');
+    plotBoundariesAndPoints([],[],cornies{ixx(whichfr)});
 
     axis(bb);
     title(sprintf('tk = %d', frnumbers(ixx(whichfr))));

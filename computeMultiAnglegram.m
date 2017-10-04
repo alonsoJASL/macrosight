@@ -13,7 +13,10 @@ if nargin < 2
     whix = 1;
 end
 
-auxaghandles.oganglegram = computeAngleMatrix(boundies,whix,1);
+if ~iscell(boundies)
+    boundies = {boundies};
+end
+    auxaghandles.oganglegram = computeAngleMatrix(boundies,whix,1);
 anglegram = zeros(size(auxaghandles.oganglegram,1), ...
     size(auxaghandles.oganglegram,2),10);
 anglegram(:,:,1) = auxaghandles.oganglegram;
