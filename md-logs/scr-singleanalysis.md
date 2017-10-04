@@ -82,5 +82,28 @@ Traditionally,
 The measurement for circularity seemed noisy and non helpful. The
 Orientation was preferred, because it could lead to findings with the
 
-
 ![example-orientation-8](../figs/track8-allframes-measurements.png)
+
+## Corner detection
+Using the [anglegram](https://github.com/alonsoJASL/matlab.anglegram)
+matrix, the shape can be analysed and find the corners. Synthetic data
+was used to test the corner detection. An example below:
+
+![test-corners](../figs/test-corners.png)
+
+From the 700 test images, around 90% of the cases were correctly
+predicted.
+
+### Preliminary results from corner detection
+Some preliminary results from `track=8` show the detected corners and
+spanning in some interesting frames where `Orientation` and the
+`aspectRatio` variables have interesting behaviour.
+
+###### tr8-290to330
+![example-tr8-290to330](../figs/track8-fr290to330-measurements.png)
+
+###### tr8-365to395
+![example-tr8-365to395](../figs/track8-fr365to395-measurements.png)
+
+###### tr8-420to470
+![example-tr8-420to470](../figs/track8-fr420to470-measurements.png)
