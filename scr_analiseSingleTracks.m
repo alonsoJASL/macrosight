@@ -48,11 +48,23 @@ end
 T = [];
 numpeaks = zeros(length(bx),1);
 cornies = cell(length(bx),1);
+angie = cell(length(bx), 1);
+anglesumve = cell(length(bx), 1);
+mam = cell(length(bx), 1);
+stam = cell(length(bx), 1);
+
 for whichfr = 1:length(bx)
     %fprintf('%s: Loading file:\n %s\n', mfilename, fullfile(rootdir, a{whichTrackIdx}, b{whichfr}));
     load(fullfile(rootdir, a{whichTrackIdx}, b{whichfr}));
     
     [cornies{whichfr}, ~, ch] = computeCorners([], frameinfo.outboundy{1});
+    angie{whichfr} = ch.anglegram;
+    anglesumve{whichfr} = ch.anglesumve;
+    mam{whichfr} = ch.mam;
+    stam{whichfr} = ch.stam;
+    minval{whichfr} = ch.minval;
+    minlocations{whichfr} = ch.minlocations;
+    
     numpeaks(whichfr) = ch.guesslabel-1;
     T = [T;struct2table(frameinfo.regs)];
 end
@@ -66,7 +78,7 @@ T = [T table(numpeaks)];
 %%
 close all
 
-ixx = fix(linspace(1,length(bx),10));
+ixx = fix(linspace(1,length(bx),8));
 Nixx = length(ixx);
 
 f33=figure(33);
@@ -82,13 +94,18 @@ bb = bbox2axis(T(ixx,:).BoundingBox);
 bb = [min(bb(:,1)) max(bb(:,2)) min(bb(:,3)) max(bb(:,4))];
 for whichfr = 1:Nixx
     load(fullfile(rootdir, a{whichTrackIdx}, b{ixx(whichfr)}));
+    fr = getdatafromhandles(handles, filenames{meta.framet});
+    [cellhandles] = singlecellprops(fr);
     
     figure(33)
     subplot(3,Nixx,whichfr)
     
     plotBoundariesAndPoints(frameinfo.X, frameinfo.initboundy, ...
         frameinfo.outboundy,'m-');
-    plotBoundariesAndPoints([],[],cornies{ixx(whichfr)});
+    %plotBoundariesAndPoints([],[],cornies{ixx(whichfr)},'y*');
+    plotBoundariesAndPoints([], [], cellhandles.rCentroid,'yx')
+    plotBoundariesAndPoints([], [], cellhandles.gCentroid,'g+')
+    axis square
 
     axis(bb);
     title(sprintf('tk = %d', frnumbers(ixx(whichfr))));
@@ -115,7 +132,7 @@ function [V, Vtxt] = getvectorandtext(T, str)
 % 
 if strcmpi(str, 'aspectratio')
     V = T.MinorAxisLength ./ T.MajorAxisLength;
-    Vtxt = 'aspectRatio = minorAxis / majorAxis';
+    Vtxt = 'aspect ratio';
 else
     V = T.(str);
     Vtxt = str;

@@ -19,11 +19,11 @@ gca;
 yyaxis left
 plot(x, yleft, linl, 'markersize', 8, 'linewidth', 1.5); 
 grid on;
-ylabel(labl);
+ylabel(labl, 'fontsize',16);
 yyaxis right
 plot(x, yright, linr, 'markersize', 8, 'linewidth', 1.5);
 grid on;
-ylabel(labr);
+ylabel(labr, 'fontsize',16);
 
 end
 
