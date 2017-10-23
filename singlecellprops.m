@@ -26,7 +26,7 @@ function [cellhandles] = singlecellprops(fr)
 %                              - theta: angle from the direction.
 % 
 if nargin < 2
-    originalImage =fr.X;
+    originalImage = fr.X;
 end
 
 red = (fr.dataL).*(fr.clumphandles.nonOverlappingClumps>0);

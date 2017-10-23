@@ -46,6 +46,8 @@ end
 %% PLOT RESULTS
 
 T = [];
+gCentroid = [];
+rCentroid = [];
 numpeaks = zeros(length(bx),1);
 cornies = cell(length(bx),1);
 angie = cell(length(bx), 1);
@@ -66,9 +68,21 @@ for whichfr = 1:length(bx)
     minlocations{whichfr} = ch.minlocations;
     
     numpeaks(whichfr) = ch.guesslabel-1;
+    
+    aa = poly2mask(frameinfo.outboundy{1}(:,2), frameinfo.outboundy{1}(:,1), ...
+        handles.rows, handles.cols);
+    gCentroid = [gCentroid;regionprops('table',aa,'Centroid')];
+    rCentroid = [rCentroid;regionprops('table',aa.*(frameinfo.dataL>0),'Centroid')];
+    
     T = [T;struct2table(frameinfo.regs)];
 end
-T = [T table(numpeaks)];
+
+rCentroid.Properties.VariableNames{1} = 'rCentroid';
+gCentroid.Properties.VariableNames{1} = 'gCentroid';
+rCentroid.Variables = rCentroid.rCentroid(:,2:-1:1);
+gCentroid.Variables = gCentroid.gCentroid(:,2:-1:1);
+
+T = [T table(numpeaks) rCentroid gCentroid];
 % what to plot
 [m1.yleft, m1.lableft] = getvectorandtext(T, 'Orientation');
 [m1.yright, m1.labright] = getvectorandtext(T, 'AspectRatio');
@@ -94,17 +108,15 @@ bb = bbox2axis(T(ixx,:).BoundingBox);
 bb = [min(bb(:,1)) max(bb(:,2)) min(bb(:,3)) max(bb(:,4))];
 for whichfr = 1:Nixx
     load(fullfile(rootdir, a{whichTrackIdx}, b{ixx(whichfr)}));
-    fr = getdatafromhandles(handles, filenames{meta.framet});
-    [cellhandles] = singlecellprops(fr);
-    
+        
     figure(33)
     subplot(3,Nixx,whichfr)
     
     plotBoundariesAndPoints(frameinfo.X, frameinfo.initboundy, ...
         frameinfo.outboundy,'m-');
     %plotBoundariesAndPoints([],[],cornies{ixx(whichfr)},'y*');
-    plotBoundariesAndPoints([], [], cellhandles.rCentroid,'yx')
-    plotBoundariesAndPoints([], [], cellhandles.gCentroid,'g+')
+    plotBoundariesAndPoints([], [], T.rCentroid(ixx(whichfr),:),'yx')
+    plotBoundariesAndPoints([], [], T.gCentroid(ixx(whichfr),:),'g+')
     axis square
 
     axis(bb);
