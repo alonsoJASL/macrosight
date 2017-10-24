@@ -1,31 +1,13 @@
 %% INITIALISATION
 initscript;
-rootdir = handlesdir.pathtodir;
-
-a = dir(fullfile(rootdir,[handlesdir.data '_mat_TRACKS_*']));
-a={a.name};
-a(contains(a,'NOTHING')) = [];
 %%
 whichtrack = 8;
+loadtrackscript; 
 
-whichTrackIdx = find(contains(a, sprintf('lab%d-', whichtrack)));
-b = dir(fullfile(rootdir, a{whichTrackIdx}, '*.mat'));
-b={b.name};
-vect = zeros(length(b),1);
-for ix=1:length(b)
-    c = b{ix}(end-6:end-4);
-    d = str2num(c);
-    jx=1;
-    while isempty(d)
-        jx=jx+1;
-        d=str2num(c(jx:end));
-    end
-    vect(ix) = d;
-end
-clear ix jx c d;
-
-[frnumbers, bx] = sort(vect);
-b = b(bx);
+subidx = 420:470;
+b(~ismember(frnumbers, subidx)) = [];
+bx(~ismember(frnumbers, subidx)) = [];
+frnumbers(~ismember(frnumbers, subidx)) = [];
 
 %% VISUALISE TRACK 
 for whichfr = 1:length(bx)
@@ -115,8 +97,9 @@ for whichfr = 1:Nixx
     plotBoundariesAndPoints(frameinfo.X, frameinfo.initboundy, ...
         frameinfo.outboundy,'m-');
     %plotBoundariesAndPoints([],[],cornies{ixx(whichfr)},'y*');
-    plotBoundariesAndPoints([], [], T.rCentroid(ixx(whichfr),:),'yx')
-    plotBoundariesAndPoints([], [], T.gCentroid(ixx(whichfr),:),'g+')
+    plotBoundariesAndPoints([], [], T.rCentroid,'y-');
+    plotBoundariesAndPoints([], [], T.rCentroid(ixx(whichfr),:),'yx');
+    plotBoundariesAndPoints([], [], T.gCentroid(ixx(whichfr),:),'g+');
     axis square
 
     axis(bb);
