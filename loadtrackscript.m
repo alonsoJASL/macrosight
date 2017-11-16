@@ -27,5 +27,5 @@ try
     b = b(bx);
     
 catch e
-    disp('ERROR')
+    disp('ERROR. You need to choose the treack with variable [whichtrack]')
 end
