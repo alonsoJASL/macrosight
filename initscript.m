@@ -14,7 +14,8 @@ foldernames = handles;
 clear handles;
 
 %if strcmp(chooseplatform, 'mac')
-fprintf('%s: Changing folder names to fix OS...\n',mfilename);
+fprintf('%s: Changing folder names to fix OS (%s) \n',...
+    mfilename, upper(chooseplatform));
 foldernames = fixhandlesdir(foldernames);
 %end
 
