@@ -1,13 +1,15 @@
 %% INITIALISATION
 initscript;
-%%
+
 whichtrack = 8;
-loadtrackscript; 
+loadtrackscript;
+%%
 
 subidx = 420:470;
 b(~ismember(frnumbers, subidx)) = [];
 bx(~ismember(frnumbers, subidx)) = [];
 frnumbers(~ismember(frnumbers, subidx)) = [];
+
 
 %% 
 arrangetracktablescript;
