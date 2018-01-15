@@ -2,7 +2,7 @@
 This log file follows the development described in the
 [`shapeevolution-iterative.md`](./shapeevolution-iterative.md) file.
 The script file
-[`script_iterevolve-vs-leaking.m`](../script_iterevolve-vs-leaking.m)
+[`script_iterevolveVSleaking.m`](../script_iterevolveVSleaking.m)
 is described in this case, which is a condensed version of
 [`script_iterevolve.m`](../script_iterevolve.m)
 that allows to make the detection and handling of leaking segmentation
