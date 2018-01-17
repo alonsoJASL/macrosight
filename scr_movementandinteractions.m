@@ -9,7 +9,7 @@ initscript;
 %% Create trackinfo from clump frames
 % Choose the entries in `tablenet` that contain the tracks in
 % `whichclump`. Get them into variable `trackinfo`.
-wuc = 8007;
+wuc = 2;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
