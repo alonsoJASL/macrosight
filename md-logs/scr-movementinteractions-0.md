@@ -30,7 +30,7 @@ A small test can be made to find out the velocity of nuclei within clumps
 in variable `velclumps` and outside of them using variable `velsingles`.
 This can be done through `tablenet` and `clumptracktable` in the following
 way:
-```
+```Matlab
 velsingles = tablenet(clumptracktable.clumpcode==0,:).velocity;
 velclumps = tablenet(clumptracktable.clumpcode~=0,:).velocity;
 ```
@@ -39,4 +39,8 @@ velclumps = tablenet(clumptracktable.clumpcode~=0,:).velocity;
 |:-----------------:|:------------------:|
 | 1.6115 +/- (1.3981) | 2.1671 +/- (1.6470) |
 
-A brief
+A brief analysis was made to see if the difference between both states 
+(clump and single) was significant for the mean velocity of the nuclei.
+The analysis used `signrank` and it shows that the hypothesis of 
+`velclumps - velsingles` having zero median cannot be rejected. 
+
