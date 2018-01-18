@@ -2,7 +2,7 @@
 % Log file: ./md-logs/scr-movementinteractions-0.md
 % scr_movementandinteractions.m
 %
-%% Initialisation 
+%% Initialisation
 
 initscript;
 
@@ -20,7 +20,13 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
 disp(trackinfo);
 
 % check 10 and 11 after frame 135 (they seem to speed up like hell!
-
+for ix=1:size(trackinfo, 1)
+    thisfr = getdatafromhandles(handles, filenames{ix});
+    clf
+    plotframeandpoint(thisfr, trackinfo, ix);
+    title(filenames{ix});
+    pause(0.1);
+end
 %%
 % Evaluate the tracks and choose an appropriate segment of the
 % dataset that shows the cells before and after the clump.
