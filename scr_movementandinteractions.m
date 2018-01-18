@@ -9,7 +9,7 @@ initscript;
 %% Create trackinfo from clump frames
 % Choose the entries in `tablenet` that contain the tracks in
 % `whichclump`. Get them into variable `trackinfo`.
-wuc = 11;
+wuc = 7;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -19,13 +19,24 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
 
 disp(trackinfo);
 
-% check 10 and 11 after frame 135 (they seem to speed up like hell!
-for ix=1:size(trackinfo, 1)
-    thisfr = getdatafromhandles(handles, filenames{ix});
+%% check 10 and 11 after frame 135 (they seem to speed up like hell!
+for ix=282:462%282:410%1:size(trackinfo, 1)
+    thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
     clf
     plotframeandpoint(thisfr, trackinfo, ix);
-    title(filenames{ix});
+    title(filenames{trackinfo.timeframe(ix)});
     pause(0.1);
+end
+%%
+for ix=262:374%282:462%282:410%1:size(trackinfo, 1)
+    thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
+    if ix==262
+        plotframeandpoint(thisfr, trackinfo, ix);
+    else
+        plotframeandpoint([], trackinfo, ix);
+    end
+    title(filenames{trackinfo.timeframe(ix)});
+    pause;
 end
 %%
 % Evaluate the tracks and choose an appropriate segment of the
