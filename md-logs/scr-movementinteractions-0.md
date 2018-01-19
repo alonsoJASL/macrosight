@@ -50,10 +50,12 @@ it appears to stop and then switches direction back up.
 ![visualisation-2](../figs/visualisation-log2.png)
 
 Following the path set out before, from frames `306:406`, the cell can be
-seen switching back to a different clump and then leaving it changing
-direction.
+seen switching back to a different clump and then leaving it changing its
+original direction.
 
 ![visualisation-3](../figs/visualisation-log3.png)
+
+Both pictures before had 
 
 ### Velocity of nuclei inside and outside of clumps
 A small test can be made to find out the velocity of nuclei within clumps
