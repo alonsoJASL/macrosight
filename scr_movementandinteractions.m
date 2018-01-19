@@ -20,7 +20,8 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
 disp(trackinfo);
 
 %% check 10 and 11 after frame 135 (they seem to speed up like hell!
-for ix=282:462%282:410%1:size(trackinfo, 1)
+
+for ix=283:462%282:410%1:size(trackinfo, 1)
     thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
     clf
     plotframeandpoint(thisfr, trackinfo, ix);

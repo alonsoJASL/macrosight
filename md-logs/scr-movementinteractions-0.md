@@ -15,9 +15,9 @@ of the work should:
   dataset that shows the cells before and after the clump.
 + Analyse the mean velocity before and after a certain amount of
   frames (10?, 100?, ...)
-+ Analyse the direction before and after the clump (how many frames 
++ Analyse the direction before and after the clump (how many frames
   back should I consider the direction to be on? ...)
-  + What to do with clumps that start aggregating with more and more cells? 
+  + What to do with clumps that start aggregating with more and more cells?
 
 ## Exploration of the data
 ### Visualisation
@@ -55,8 +55,12 @@ original direction.
 
 ![visualisation-3](../figs/visualisation-log3.png)
 
-Both pictures include interesting cases for the analysis for that particular 
-cell. More cases have been looked for, but other problems arise when doing so. 
+Both pictures include interesting cases for the analysis for that particular
+cell. More cases have been looked for, but other problems arise when doing
+so. The visualisation of the entire track segment can be seen below.
+
+![visualisation-4](../figs/visualisation-log4.gif)
+
 
 ### Velocity of nuclei inside and outside of clumps
 A small test can be made to find out the velocity of nuclei within clumps
@@ -76,3 +80,7 @@ A brief analysis was made to see if the difference between both states
 (clump and single) was significant for the mean velocity of the nuclei.
 The analysis used `signrank` and it shows that the hypothesis of
 `velclumps - velsingles` having zero median cannot be rejected.
+
+## Analysis of change of direction
+
+### Average position of cell within clump (reference point)
