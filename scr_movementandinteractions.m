@@ -9,7 +9,7 @@ initscript;
 %% Create trackinfo from clump frames
 % Choose the entries in `tablenet` that contain the tracks in
 % `whichclump`. Get them into variable `trackinfo`.
-wuc = 7;
+wuc = 8;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -24,7 +24,9 @@ for ix=282:462%282:410%1:size(trackinfo, 1)
     thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
     clf
     plotframeandpoint(thisfr, trackinfo, ix);
-    title(filenames{trackinfo.timeframe(ix)});
+    title(filenames{trackinfo.timeframe(ix)}, 'fontsize', 24);
+    rmticklabels;
+    halfposition;
     pause(0.1);
 end
 %%

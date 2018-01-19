@@ -26,9 +26,11 @@ end
 for qx=1:size(XY,1)
     [~, ix] = min(abs(velocity(qx)-auxv));
     plot(XY(qx,1), XY(qx,2), whichmarker, 'Color', cmap(ix(1),:), ...
-        'LineWidth', 1.1, 'markersize', 10);
+        'LineWidth', 1.5, 'markersize', 10);
 end
 end
+
+
 
 function [options] = getoptions(s)
 options = '';

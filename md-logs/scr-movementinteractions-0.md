@@ -25,6 +25,8 @@ Function [`plotframeandpoint.m`](../plotframeandpoint.m) was developed
 to show a frame, with the overlapping and non-overlapping cells, while
 displaying a set of points of interest.
 
+![visualisation-1](../figs/visualisation-log1.png)
+
 ### Velocity of nuclei inside and outside of clumps
 A small test can be made to find out the velocity of nuclei within clumps
 in variable `velclumps` and outside of them using variable `velsingles`.
@@ -39,8 +41,7 @@ velclumps = tablenet(clumptracktable.clumpcode~=0,:).velocity;
 |:-----------------:|:------------------:|
 | 1.6115 +/- (1.3981) | 2.1671 +/- (1.6470) |
 
-A brief analysis was made to see if the difference between both states 
+A brief analysis was made to see if the difference between both states
 (clump and single) was significant for the mean velocity of the nuclei.
-The analysis used `signrank` and it shows that the hypothesis of 
-`velclumps - velsingles` having zero median cannot be rejected. 
-
+The analysis used `signrank` and it shows that the hypothesis of
+`velclumps - velsingles` having zero median cannot be rejected.
