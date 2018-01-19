@@ -55,7 +55,8 @@ original direction.
 
 ![visualisation-3](../figs/visualisation-log3.png)
 
-Both pictures before had 
+Both pictures include interesting cases for the analysis for that particular 
+cell. More cases have been looked for, but other problems arise when doing so. 
 
 ### Velocity of nuclei inside and outside of clumps
 A small test can be made to find out the velocity of nuclei within clumps
