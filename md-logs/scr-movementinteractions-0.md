@@ -17,6 +17,7 @@ of the work should:
   frames (10?, 100?, ...)
 + Analyse the direction before and after the clump (how many frames 
   back should I consider the direction to be on? ...)
+  + What to do with clumps that start aggregating with more and more cells? 
 
 ## Exploration of the data
 ### Visualisation
