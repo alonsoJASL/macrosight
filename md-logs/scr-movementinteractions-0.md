@@ -15,7 +15,8 @@ of the work should:
   dataset that shows the cells before and after the clump.
 + Analyse the mean velocity before and after a certain amount of
   frames (10?, 100?, ...)
-+ Analyse the direction before and after the clump.
++ Analyse the direction before and after the clump (how many frames 
+  back should I consider the direction to be on? ...)
 
 ## Exploration of the data
 ### Visualisation
