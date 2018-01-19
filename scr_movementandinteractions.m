@@ -30,15 +30,18 @@ for ix=282:462%282:410%1:size(trackinfo, 1)
     pause(0.1);
 end
 %%
-for ix=262:374%282:462%282:410%1:size(trackinfo, 1)
+firstframeidx = 300;
+lastframeidx = 400;
+
+for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
     thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
-    if ix==262
+    if ix==firstframeidx
         plotframeandpoint(thisfr, trackinfo, ix);
     else
         plotframeandpoint([], trackinfo, ix);
     end
     title(filenames{trackinfo.timeframe(ix)});
-    pause;
+    pause(0.1);
 end
 %%
 % Evaluate the tracks and choose an appropriate segment of the

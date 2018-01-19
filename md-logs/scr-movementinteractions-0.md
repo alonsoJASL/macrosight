@@ -27,6 +27,32 @@ displaying a set of points of interest.
 
 ![visualisation-1](../figs/visualisation-log1.png)
 
+In the figure, two frames of track `8` are shown; on the left, where the
+cell is on its own, and on the right some frames later when the cell is
+inside a clump. To represent whether the cell is part of a clump or single,
+different markers are used (.) for single and diamonds for clumped cells.
+Finally, different colours of the `parula` colourmap are used to display
+the different velocities at which the cell is moving in that particular
+frame (from blue to yellow).
+
+The [`plotframeandpoint.m`](../plotframeandpoint.m) function has a mode
+in which no image is passed to it, which causes only the designated points
+to be shown on an already existing image. The following figure showcases
+this mode, arrows were added to highlight the direction of the cells during
+the time it was clumped and the times it was out of it. The sequence shown
+for track `8` is taken from timeframes `267:346` it shows the first frame
+in the sequence, and the progression of the cell as time passes. The
+velocity of the frame increases significantly after leaving the clump, then
+it appears to stop and then switches direction back up.
+
+![visualisation-2](../figs/visualisation-log2.png)
+
+Following the path set out before, from frames `306:406`, the cell can be
+seen switching back to a different clump and then leaving it changing
+direction.
+
+![visualisation-3](../figs/visualisation-log3.png)
+
 ### Velocity of nuclei inside and outside of clumps
 A small test can be made to find out the velocity of nuclei within clumps
 in variable `velclumps` and outside of them using variable `velsingles`.
