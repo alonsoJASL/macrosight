@@ -18,10 +18,14 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
     clumptracktable(ismember(tablenet.track, clumplab),:)];
 
 disp(trackinfo);
-
 %% check 10 and 11 after frame 135 (they seem to speed up like hell!
+ffix = 1;
+lfix = 541;
 
-for ix=283:462%282:410%1:size(trackinfo, 1)
+firstframeidx = find(trackinfo.timeframe==ffix);
+lastframeidx = find(trackinfo.timeframe==lfix);
+
+for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
     thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
     clf
     plotframeandpoint(thisfr, trackinfo, ix);
@@ -31,8 +35,11 @@ for ix=283:462%282:410%1:size(trackinfo, 1)
     pause(0.1);
 end
 %%
-firstframeidx = 300;
-lastframeidx = 400;
+ffix = 1;
+lfix = 541;
+
+firstframeidx = find(trackinfo.timeframe==ffix);
+lastframeidx = find(trackinfo.timeframe==lfix);
 
 for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
     thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
@@ -47,7 +54,30 @@ end
 %%
 % Evaluate the tracks and choose an appropriate segment of the
 % dataset that shows the cells before and after the clump.
+ffix = 1;
+lfix = 541;
 
+firstframeidx = find(trackinfo.timeframe==ffix);
+lastframeidx = find(trackinfo.timeframe==lfix);
+
+for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
+    thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
+    %if ix==firstframeidx
+     %   plotframeandpoint(thisfr, trackinfo, ix);
+    %else
+        plotframeandpoint([], trackinfo, ix);
+    %end
+    title(filenames{trackinfo.timeframe(ix)});
+    pause(0.1);
+end
 %%
 % Analyse the mean velocity before and after a certain amount of
 % frames (10?, 100?, ...)
+
+for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
+    thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
+    plotclumpsandsingles(thisfr)
+    title(filenames{trackinfo.timeframe(ix)});
+    pause(0.1);
+end
+
