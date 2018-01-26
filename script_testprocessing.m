@@ -8,7 +8,7 @@ tidy;
 
 try
     % function not available in package
-    whichmacro = 1;
+    whichmacro = 3;
     [dn,ds] = loadnames('macros', chooseplatform, whichmacro);
     
     handlesdir = getMatFolders(fullfile(dn,ds));

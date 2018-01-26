@@ -17,8 +17,8 @@ else
 end
 
 [singlepaths, singlewendys] = getpathsperlabel(wuc, trackinfo);
-for qx=1:(size(wendys,1)-1)
-    wendys2(qx,:) = [wendys(qx,2)+1 wendys(qx+1,1)-1];
+for qx=1:(size(singlewendys,1)-1)
+    wendys2(qx,:) = [singlewendys(qx,2)+1 singlewendys(qx+1,1)-1];
 end
 wendys2(:,1) = wendys2(:,1)-1;
 

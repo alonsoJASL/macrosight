@@ -9,7 +9,7 @@ initscript;
 %% Create trackinfo from clump frames
 % Choose the entries in `tablenet` that contain the tracks in
 % `whichclump`. Get them into variable `trackinfo`.
-wuc = 8;
+wuc = 1;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -18,9 +18,11 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
     clumptracktable(ismember(tablenet.track, clumplab),:)];
 
 disp(trackinfo);
+
+
 %% check 10 and 11 after frame 135 (they seem to speed up like hell!
 ffix = 1;
-lfix = 541;
+lfix = 261;
 
 firstframeidx = find(trackinfo.timeframe==ffix);
 lastframeidx = find(trackinfo.timeframe==lfix);
@@ -32,7 +34,7 @@ for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
     title(filenames{trackinfo.timeframe(ix)}, 'fontsize', 24);
     rmticklabels;
     halfposition;
-    pause(0.1);
+    pause;
 end
 %%
 ffix = 1;

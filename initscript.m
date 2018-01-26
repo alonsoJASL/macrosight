@@ -78,7 +78,13 @@ catch e
         'clumptracktable', 'clumpidcodes', 'timedfinalnetwork', ...
         'tablenet');
 end
-
-load DATASETHOLES;
-clumptracktable(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
-tablenet(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
+switch whichmacro
+    case 1
+        fprintf('%s: Clearing holes in dataset.\n', mfilename);
+        load DATASETHOLES;
+        clumptracktable(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
+        tablenet(ismember(tablenet.timeframe, DATASETHOLES),:) = [];
+    otherwise
+        fprintf('\n')
+end
+        

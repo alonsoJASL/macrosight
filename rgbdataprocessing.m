@@ -84,9 +84,9 @@ switch nargin
                         'numNeutrop','clumphandles');
                 else
                     dataR = dataL;
-                    dataRG = dataG;
+                    dataG = dataG;
                     save(fullfile(outdir, matname),...
-                        'dataR', 'dataRG');
+                        'dataR', 'dataG');
                 end
                 
             end
