@@ -4,12 +4,12 @@
 %
 %% Initialisation
 
-initscript;
+initscript; 
 
 %% Create trackinfo from clump frames
 % Choose the entries in `tablenet` that contain the tracks in
 % `whichclump`. Get them into variable `trackinfo`.
-wuc = 1;
+wuc = 11010;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -19,10 +19,27 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
 
 disp(trackinfo);
 
-
-%% check 10 and 11 after frame 135 (they seem to speed up like hell!
+%% plot all the tracks by frames
 ffix = 1;
-lfix = 261;
+lfix = 160;
+
+firstframeidx = find(trackinfo.timeframe==ffix);
+lastframeidx = find(trackinfo.timeframe==lfix);
+
+tframe = unique(trackinfo.timeframe);
+
+for ix=ffix:lfix%282:462%282:410%1:size(trackinfo, 1)
+    thisfr = getdatafromhandles(handles, filenames{ix});
+    clf
+    plotalltracksperframe(thisfr, trackinfo, ix)
+    title(['Frame' 32 num2str(ix)], 'fontsize', 24);
+    rmticklabels;
+    halfposition;
+    pause;
+end
+%% plot each frame with the track
+ffix = 1;
+lfix = 160;
 
 firstframeidx = find(trackinfo.timeframe==ffix);
 lastframeidx = find(trackinfo.timeframe==lfix);
@@ -30,13 +47,13 @@ lastframeidx = find(trackinfo.timeframe==lfix);
 for ix=firstframeidx:lastframeidx%282:462%282:410%1:size(trackinfo, 1)
     thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(ix)});
     clf
-    plotframeandpoint(thisfr, trackinfo, ix);
-    title(filenames{trackinfo.timeframe(ix)}, 'fontsize', 24);
+    plotframeandpoint(thisfr, trackinfo, ix, true);
+    title(['Frame' 32 num2str(trackinfo.timeframe(ix))], 'fontsize', 24);
     rmticklabels;
     halfposition;
     pause;
 end
-%%
+%% Plot one frame and then follow the track
 ffix = 1;
 lfix = 541;
 
