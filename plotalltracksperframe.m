@@ -1,10 +1,11 @@
 function plotalltracksperframe(thisfr, trackinfo, indx)
 
-fr = trackinfo.timeframe(indx);
-alllabels = trackinfo.finalLabel(trackinfo.timeframe==fr);
-XY = trackinfo(trackinfo.timeframe==fr, [3 2]).Variables;
-velocity = trackinfo.velocity(trackinfo.timeframe==fr);
-clumpid = trackinfo.clumpID(trackinfo.timeframe==fr);
+fr = find(trackinfo.timeframe==indx);
+
+alllabels = trackinfo.finalLabel(fr);
+XY = trackinfo(fr, [3 2]).Variables;
+velocity = trackinfo.velocity(fr);
+clumpid = trackinfo.clumpID(fr);
 
 cmap = parula;
 auxv = linspace(-2.7701, 6.5582, 64);
@@ -28,6 +29,6 @@ for qx=1:size(XY,1)
     plot(XY(qx,1), XY(qx,2), whichmarker, 'Color', cmap(ix(1),:), ...
         'LineWidth', 1.5, 'markersize', 10);
     text(XY(qx,1),XY(qx,2),...
-        ['\leftarrow' num2str(trackinfo.finalLabel(qx))],...
+        ['\leftarrow' num2str(alllabels(qx))],...
         'Color',cmap(ix(1),:),'FontSize',15);
 end

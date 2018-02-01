@@ -1,9 +1,16 @@
 % Initialisation script for the Analysis of shapes
 %% INITIALISATION
-tidy;
 
-% function not available in package
-whichmacro = 1;
+if ~exist('whichmacro')
+    tidy;
+    whichmacro = 1;
+    fprintf('%s: Macrophage dataset id not found, creating: whichmacro=%d.\n',...
+        mfilename, whichmacro);
+else
+    fprintf('%s: Dataset id variable [whichmacro=%d] found.\n', ...
+        mfilename, whichmacro);
+end
+
 [dn,ds] = loadnames('macros', chooseplatform, whichmacro);
 handlesdir = getMatFolders(fullfile(dn,ds));
 
