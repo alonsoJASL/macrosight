@@ -101,7 +101,7 @@ of the macrophage at that frame.
 
 **MACROS2** _AN INTERESTING CASE_ is highlighted below, where two tracks 
 interact various times and directions seem to change constantlty.
-![visualisation-5-2-1](../figs/visualisation-macros2-clump8007.gif')
+![visualisation-5-2-1](../figs/visualisation-macros2-clump8007.gif)
 
 **MACROS3** dataset
 ![visualisation-5-3](../figs/visualisation-macros3.gif)
