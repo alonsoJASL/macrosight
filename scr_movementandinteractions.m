@@ -9,7 +9,7 @@ initscript;
 %% Create trackinfo from clump frames
 % Choose the entries in `tablenet` that contain the tracks in
 % `whichclump`. Get them into variable `trackinfo`.
-wuc = 11010;
+wuc = 8007;
 fprintf('%s:Working on clump with ID=%d.\n', mfilename, wuc);
 
 % get labels from the clump
@@ -20,8 +20,11 @@ trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
 disp(trackinfo);
 
 %% plot all the tracks by frames
-ffix = min(trackinfo.timeframe);
-lfix = max(trackinfo.timeframe);
+
+debugvar = true;
+
+ffix = 5;%min(trackinfo.timeframe);
+lfix = 72;%max(trackinfo.timeframe);
 
 firstframeidx = find(trackinfo.timeframe==ffix);
 lastframeidx = find(trackinfo.timeframe==lfix);
@@ -34,6 +37,7 @@ for ix=ffix:lfix%282:462%282:410%1:size(trackinfo, 1)
     rmticklabels;
     halfposition;
     removeBorders;
+    if debugvar
     if ix==ffix
         f = getframe(gcf);
         [im, map] = rgb2ind(f.cdata, 256, 'nodither');
@@ -42,10 +46,14 @@ for ix=ffix:lfix%282:462%282:410%1:size(trackinfo, 1)
         f = getframe(gcf);
         im(:,:,1,ix) = rgb2ind(f.cdata, map, 'nodither');
     end
+    end
     pause(0.1);
 end
-imwrite(im,map,['./figs/visualisation-macros' num2str(whichmacro) '.gif'],...
-    'DelayTime', 0.5, 'LoopCount',inf);
+if debugvar
+imwrite(im,map,['./figs/visualisation-macros' num2str(whichmacro) ...
+    '-clump' num2str(wuc)  '.gif'],...
+    'DelayTime', 0.1, 'LoopCount',inf);
+end
 
 %% plot each frame with the track
 ffix = min(trackinfo.timeframe);
