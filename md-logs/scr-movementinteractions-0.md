@@ -99,7 +99,7 @@ of the macrophage at that frame.
 **MACROS2** dataset
 ![visualisation-5-2](../figs/visualisation-macros2.gif)
 
-**MACROS1** dataset
+**MACROS3** dataset
 ![visualisation-5-3](../figs/visualisation-macros3.gif)
 
-### Average position of cell within clump (reference point)
+
