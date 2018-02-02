@@ -3,7 +3,7 @@
 % scr_movementandinteractions.m
 %
 %% Initialisation
-whichmacro = 3;
+whichmacro = 2;
 initscript; 
 
 %% Create trackinfo from clump frames
@@ -34,18 +34,22 @@ for ix=ffix:lfix%282:462%282:410%1:size(trackinfo, 1)
     rmticklabels;
     halfposition;
     removeBorders;
-    
-    
-    f = getframe(gcf);
-    [im, map] = rgb2ind(f.cdata, 256, 'nodither');
-    imwrite(im,map, strcat('D:\macros2-pretrackfix\', ...
-        filenames{ix}(1:end-3), 'png'));
-    
+    if ix==ffix
+        f = getframe(gcf);
+        [im, map] = rgb2ind(f.cdata, 256, 'nodither');
+        im(1,1,1,length(ffix:lfix)) = 0;
+    else
+        f = getframe(gcf);
+        im(:,:,1,ix) = rgb2ind(f.cdata, map, 'nodither');
+    end
     pause(0.1);
 end
+imwrite(im,map,['./figs/visualisation-macros' num2str(whichmacro) '.gif'],...
+    'DelayTime', 0.5, 'LoopCount',inf);
+
 %% plot each frame with the track
-ffix = 1;
-lfix = 160;
+ffix = min(trackinfo.timeframe);
+lfix = max(trackinfo.timeframe);
 
 firstframeidx = find(trackinfo.timeframe==ffix);
 lastframeidx = find(trackinfo.timeframe==lfix);
