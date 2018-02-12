@@ -82,15 +82,15 @@ The analysis used `signrank` and it shows that the hypothesis of
 `velclumps - velsingles` having zero median cannot be rejected.
 
 ## Analysis of change of direction
-In order to assess the changes in direction, a thorough review of the 
-generated tracks by PhagoSight must be made, ensuring that any suddent 
-change in direction detected was not caused by a track confusing nuclei 
-when the cells were clumped and 
+In order to assess the changes in direction, a thorough review of the
+generated tracks by PhagoSight must be made, ensuring that any suddent
+change in direction detected was not caused by a track confusing nuclei
+when the cells were clumped and
 
-The three datasets were analysed this time. The dataset normally used 
+The three datasets were analysed this time. The dataset normally used
 is dataset **MACROS1**, while the other two are labelled as **MACROS2**
-and **MACROS3**. Below see visualisations of the macrophages moving with 
-the `finalLabel` next to each track. The colours represent the velocity 
+and **MACROS3**. Below see visualisations of the macrophages moving with
+the `finalLabel` next to each track. The colours represent the velocity
 of the macrophage at that frame.
 
 **MACROS1** dataset
@@ -99,13 +99,15 @@ of the macrophage at that frame.
 **MACROS2** dataset
 ![visualisation-5-2](../figs/visualisation-macros2.gif)
 
-**MACROS2** _AN INTERESTING CASE_ is highlighted below, where two tracks 
+**MACROS2** _AN INTERESTING CASE_ is highlighted below, where two tracks
 interact various times and directions seem to change constantlty.
 ![visualisation-5-2-1](../figs/visualisation-macros2-clump8007.gif)
 
 **MACROS3** dataset
 ![visualisation-5-3](../figs/visualisation-macros3.gif)
 
+# **MACROS2**: Example of change in direction
+![visualisation-5-3](../figs/visualisation-dirchange-1.gif)
 
-
-
+## Measurement options for the angle
+![visualisation-5-3](../figs/visualisation-changedir-2.png)

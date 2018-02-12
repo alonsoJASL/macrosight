@@ -23,10 +23,10 @@ lfix = 72;%max(trackinfo.timeframe);
 trackinfo(~ismember(trackinfo.timeframe, ffix:lfix),:) = [];
 
 %%
-if length(clumplab)>1
+if exist('clumplab') && length(clumplab)>1
     [trackinfo] = tablecompression(trackinfo, clumplab);
 end
-[allpaths, wendys] = getpathsperlabel(8007, trackinfo);
+[allpaths, wendys] = getpathsperlabel(wuc, trackinfo);
 wendys(:,2) = wendys(:,2)-1;
 
 for ix=1:(size(wendys,1)-1)
@@ -51,7 +51,7 @@ for jx=pretab.timeframe(1):posttab.timeframe(end)
     %thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(jx)});
     thisfr = getdatafromhandles(handles, filenames{jx});
     clf;
-    plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), meanXY,'cm');
+    plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), meanXY,'md');
     plot(preline(:,2), preline(:,1), '-xr');
     plot(postline(:,2), postline(:,1), '-vg');
     pause;
