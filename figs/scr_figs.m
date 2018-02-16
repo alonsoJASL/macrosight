@@ -48,14 +48,14 @@ end
 %% Visualisation cell changing direction
 
 jx=pretab.timeframe(1);
-tot = length(pretab.timeframe(1):posttab.timeframe(end));
+tot = length(pretab.timeframe(1):posttab.timeframe(21));
 
 thisfr = getdatafromhandles(handles, filenames{jx});
 clf;
 plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), meanXY,'md');
 plot(preline(:,2), preline(:,1), '-xr');
 plot(postline(:,2), postline(:,1), '-vg');
-axis([330   546    69   234]);
+%axis([330   546    69   234]);
 halfposition;
 title([filenames{jx} 32 '(' num2str(1) 32 'out of ' num2str(tot) ')'], ...
     'FontSize', 24);
@@ -64,14 +64,14 @@ f = getframe(gcf);
 [im,map] = rgb2ind(f.cdata,256,'nodither');
 im(1,1,1,tot) = 0;
 
-for jx=pretab.timeframe(2):posttab.timeframe(end)
+for jx=pretab.timeframe(2):posttab.timeframe(21)
     %thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(jx)});
     thisfr = getdatafromhandles(handles, filenames{jx});
     clf;
     plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), meanXY,'md');
     plot(preline(:,2), preline(:,1), '-xr');
     plot(postline(:,2), postline(:,1), '-vg');
-    axis([330   546    69   234]);
+    %axis([330   546    69   234]);
     halfposition;
     title([filenames{jx} 32 '(' num2str(jx-pretab.timeframe(1)) 32 'out of ' num2str(tot) ')'],...
         'FontSize', 24);
@@ -83,5 +83,5 @@ for jx=pretab.timeframe(2):posttab.timeframe(end)
     
 end
 
-outputname = './figs/visualisation-dirchange-1.gif';
+outputname = './figs/visualisation-dirchange-1-other.gif';
 imwrite(im,map,outputname,'DelayTime',0.25, 'LoopCount',inf);

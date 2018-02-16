@@ -107,7 +107,8 @@ interact various times and directions seem to change constantlty.
 ![visualisation-5-3](../figs/visualisation-macros3.gif)
 
 # **MACROS2**: Example of change in direction
-![visualisation-5-3](../figs/visualisation-dirchange-1.gif)
+![visualisation-6-1](../figs/visualisation-dirchange-1.gif)
+![visualisation-6-2](../figs/visualisation-dirchange-1-other.gif)
 
 ## Measurement options for the angle
-![visualisation-5-3](../figs/visualisation-changedir-2.png)
+![visualisation-6-1-1](../figs/visualisation-changedir-2.png)

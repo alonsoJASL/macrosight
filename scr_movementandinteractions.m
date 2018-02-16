@@ -3,7 +3,7 @@
 % scr_movementandinteractions.m
 %
 %% Initialisation
-whichmacro = 2;
+whichmacro = 3;
 initscript;
 
 %% Create trackinfo from clump frames
@@ -23,9 +23,9 @@ lfix = 72;%max(trackinfo.timeframe);
 trackinfo(~ismember(trackinfo.timeframe, ffix:lfix),:) = [];
 
 %%
-if exist('clumplab') && length(clumplab)>1
-    [trackinfo] = tablecompression(trackinfo, clumplab);
-end
+% if exist('clumplab') && length(clumplab)>1
+%     [trackinfo] = tablecompression(trackinfo, clumplab);
+% end
 [allpaths, wendys] = getpathsperlabel(wuc, trackinfo);
 wendys(:,2) = wendys(:,2)-1;
 
@@ -34,7 +34,7 @@ for ix=1:(size(wendys,1)-1)
     allclumppaths{ix} = trackinfo(clumpwendys(ix,1):clumpwendys(ix,2),:);
 end
 
-%%
+%% 
 
 wcix = 3; % which clump interaction index.
 citab = allclumppaths{wcix};
@@ -44,9 +44,19 @@ pretab = allpaths{clumpwendys(wcix,3)};
 posttab = allpaths{clumpwendys(wcix,4)};
 
 preline = [pretab([1 end],:).X pretab([1 end],:).Y];
-postline = [posttab([1 end],:).X posttab([1 end],:).Y];
+postline = [posttab([1 21],:).X posttab([1 21],:).Y];
 
+x1=preline(1,:);
+x2=preline(2,:);
+y1=postline(1,:);
+y2=postline(2,:);
+x2prime = x2-x1;
+th1 = rad2deg(angle(x2prime(2)+x2prime(1).*1i));
+R = [cosd(-th1) -sind(-th1); sind(-th1) cosd(-th1)];
+y2prime = (y2-y1)*R(:,2:-1:1)';
+thx = rad2deg(angle(y2prime(2)+y2prime(1).*1i));
 
+%%
 for jx=pretab.timeframe(1):posttab.timeframe(end)
     %thisfr = getdatafromhandles(handles, filenames{trackinfo.timeframe(jx)});
     thisfr = getdatafromhandles(handles, filenames{jx});
