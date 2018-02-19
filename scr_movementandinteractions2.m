@@ -6,7 +6,7 @@ initscript;
 T = readtable('./macros123.xlsx');
 T(~contains(T.whichdataset, ds(1:end-1)),:) = [];
 
-rowix = 8;
+rowix = 3;
 mT = T(rowix,:);
 
 wuc= mT.whichclump;
@@ -20,7 +20,7 @@ lfix=mT.finalframe;
 
 trackinfo(~ismember(trackinfo.timeframe, ffix:lfix),:) = [];
 
-%%
+% CLUMPPATHS
 % if exist('clumplab') && length(clumplab)>1
 %     [trackinfo] = tablecompression(trackinfo, clumplab);
 % end
@@ -32,7 +32,7 @@ for ix=1:(size(wendys,1)-1)
     allclumppaths{ix} = trackinfo(clumpwendys(ix,1):clumpwendys(ix,2),:);
 end
 
-%%
+% ANGLES
 
 wcix = 1; % which clump interaction index.
 citab = allclumppaths{wcix};
@@ -56,7 +56,7 @@ y2prime = R'*[y2(2)-y1(2);y2(1)-y1(1)];
 y2prime = y2prime(2:-1:1)';
 %y2prime = (y2-y1)*R(:,2:-1:1)';
 thx = rad2deg(angle(y2prime(2)+y2prime(1).*1i));
-
+disp('Done')
 
 %% Check one
 jx=randi([pretab.timeframe(1) posttab.timeframe(end)]);
