@@ -1,12 +1,12 @@
 %% Initialisation
 tidy;
-whichmacro = 3;
+whichmacro = 2;
 initscript;
 
-T = readtable('/Users/jsolisl/Desktop/macros123.xlsx');
+T = readtable('./macros123.xlsx');
 T(~contains(T.whichdataset, ds(1:end-1)),:) = [];
 
-rowix = 5;
+rowix = 8;
 mT = T(rowix,:);
 
 wuc= mT.whichclump;
@@ -50,8 +50,11 @@ y1=postline(1,:);
 y2=postline(2,:);
 x2prime = x2-x1;
 th1 = rad2deg(angle(x2prime(2)+x2prime(1).*1i));
-R = [cosd(-th1) -sind(-th1); sind(-th1) cosd(-th1)];
-y2prime = (y2-y1)*R(:,2:-1:1)';
+R = [cosd(th1) -sind(th1); sind(th1) cosd(th1)];
+
+y2prime = R'*[y2(2)-y1(2);y2(1)-y1(1)];
+y2prime = y2prime(2:-1:1)';
+%y2prime = (y2-y1)*R(:,2:-1:1)';
 thx = rad2deg(angle(y2prime(2)+y2prime(1).*1i));
 
 
