@@ -1,5 +1,5 @@
 tidy;
-whichmacro = 3;
+whichmacro = 2;
 initscript;
 T = readtable('./macros123.xlsx');
 T(~contains(T.whichdataset, ds(1:end-1)),:) = [];
