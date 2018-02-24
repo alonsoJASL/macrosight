@@ -1,12 +1,12 @@
 %% Initialisation
 tidy;
-whichmacro = 3;
+whichmacro = 2;
 initscript;
 
 T = readtable('./macros123.xlsx');
 T(~contains(T.whichdataset, ds(1:end-1)),:) = [];
 
-rowix = 15;
+rowix = 1;
 mT = T(rowix,:);
 
 wuc= mT.whichclump;
