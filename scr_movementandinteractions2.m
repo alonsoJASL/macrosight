@@ -2,12 +2,15 @@
 tidy;
 whichmacro = 2;
 initscript;
+rowix = 11;
 
 T = readtable('./macros123.xlsx');
-T(~contains(T.whichdataset, ds(1:end-1)),:) = [];
-
-rowix = 1;
+T(~contains(upper(T.whichdataset), ds(1:end-1)),:) = [];
 mT = T(rowix,:);
+
+TS = readtable('./macros123singles.xlsx');
+TS(~contains(upper(TS.whichdataset), ds(1:end-1)),:) = [];
+mTS = TS(rowix,:);
 
 wuc= mT.whichclump;
 clumplab = mT.whichlabel;
@@ -21,9 +24,6 @@ lfix=mT.finalframe;
 trackinfo(~ismember(trackinfo.timeframe, ffix:lfix),:) = [];
 
 % CLUMPPATHS
-% if exist('clumplab') && length(clumplab)>1
-%     [trackinfo] = tablecompression(trackinfo, clumplab);
-% end
 [allpaths, wendys] = getpathsperlabel(wuc, trackinfo);
 wendys(:,2) = wendys(:,2)-1;
 disp(wendys)
@@ -31,7 +31,7 @@ disp(wendys)
 allpaths(wendys(:,1)==wendys(:,2),:)=[];
 wendys(wendys(:,1)==wendys(:,2),:)=[];
 
-%
+% CREATE CLUMP PATHS
 for ix=1:(size(wendys,1)-1)
     clumpwendys(ix,:) = [wendys(ix,2)+1 wendys(ix+1,1)-1 ix ix+1];
     allclumppaths{ix} = trackinfo(clumpwendys(ix,1):clumpwendys(ix,2),:);
@@ -85,8 +85,8 @@ qqq = [-s.*qq(:,2)+c.*qq(:,1) c.*qq(:,2)+s.*qq(:,1)];
 rr = postXY - repmat(y1, size(postXY,1),1);
 rrr = [-s.*rr(:,2)+c.*rr(:,1) c.*rr(:,2)+s.*rr(:,1)];
 
-%
-figure(2)
+%% 
+figure(1)
 clf;
 hold on; grid on;
 plot(qqq(:,2)-qqq(end,2), qqq(:,1)-qqq(end,1), '--d', ...
@@ -115,14 +115,15 @@ set(gcf, 'Position',[2   562   958   434]);
 
 
 %% Check one
+figure(2)
 jx=randi([pretab.timeframe(1) posttab.timeframe(end)]);
 thisfr = getdatafromhandles(handles, filenames{jx});
 clf;
 plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), meanXY,'md');
-plot(preline(:,2), preline(:,1), '-xr');
-plot(postline(:,2), postline(:,1), '-vg');
+plot(xtras(rowix).preline(:,2), xtras(rowix).preline(:,1), '-xr');
+plot(xtras(rowix).postline(:,2), xtras(rowix).postline(:,1), '-vg');
 axis xy;
-title(['Angle =' 32 num2str(thx)]);
+title(['Angle =' 32 num2str(stt(rowix).thx)]);
 
 %% check all
 for jx=pretab.timeframe(1):posttab.timeframe(end)
