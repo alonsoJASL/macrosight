@@ -120,8 +120,8 @@ jx=randi([pretab.timeframe(1) posttab.timeframe(end)]);
 thisfr = getdatafromhandles(handles, filenames{jx});
 clf;
 plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), meanXY,'md');
-plot(xtras(rowix).preline(:,2), xtras(rowix).preline(:,1), '-xr');
-plot(xtras(rowix).postline(:,2), xtras(rowix).postline(:,1), '-vg');
+plot(preline(:,2), preline(:,1), '-xr');
+plot(postline(:,2), postline(:,1), '-vg');
 axis xy;
 title(['Angle =' 32 num2str(stt(rowix).thx)]);
 
