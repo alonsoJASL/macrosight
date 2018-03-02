@@ -56,16 +56,18 @@ for ix=1:length(clus)
         figure(ix)
         subplot(howmany, 3, spaux(jx, 1))
         thisfr = getdatafromhandles(handles, filenames{midclumppos});
-        clf;
         plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), xtras(rowix).meanXY,'md');
         plot(xtras(rowix).preline(:,2), xtras(rowix).preline(:,1), '-xr');
         plot(xtras(rowix).postline(:,2), xtras(rowix).postline(:,1), '-vg');
         
         subplot(howmany, 3, spaux(jx,2):spaux(jx,3))
-        plotdirectionchange(stt(ix), xtras(ix));
+        plotdirectionchange(stt(jx), xtras(jx));
         
         rowix = rowix+1;
-        clearvars -except whichmacro allrowsix rowix xtras T stt ix jx howmany spaux clus
-        initscript;
+        %clearvars -except whichmacro allrowsix rowix xtras T stt ix jx howmany spaux clus
+        %initscript;
     end
+    tightfig;
+    fullposition;
+    tightfig;
 end

@@ -3,7 +3,7 @@
 % scr_movementandinteractions.m
 %
 %% Initialisation
-whichmacro = 3;
+whichmacro = 2;
 initscript;
 
 %% Create trackinfo from clump frames
