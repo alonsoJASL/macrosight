@@ -31,6 +31,7 @@ end
 wcix = 1; % which clump interaction index.
 citab = allclumppaths{wcix};
 meanXY = [mean(allclumppaths{wcix}.X,1)' mean(allclumppaths{wcix}.Y,1)']; % [X Y]
+stdXY = [std(allclumppaths{wcix}.X,1)' std(allclumppaths{wcix}.Y,1)']; % [X Y]
 
 pretab = allpaths{clumpwendys(wcix,3)};
 posttab = allpaths{clumpwendys(wcix,4)};
@@ -69,6 +70,7 @@ if nargout > 1
     if nargout > 2
         xtras.ticlumps = ticlump;
         xtras.meanXY = meanXY;
+        xtras.stdXY = stdXY;
         xtras.preline = preline;
         xtras.postline = postline;
         xtras.preXY = [pretab.X pretab.Y];

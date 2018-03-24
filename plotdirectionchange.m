@@ -14,14 +14,15 @@ y1 = postXY(1,:);
 
 qq = preXY - repmat(x1, size(preXY,1),1);
 qqq = [-s.*qq(:,2)+c.*qq(:,1) c.*qq(:,2)+s.*qq(:,1)];
+qqq = qqq - repmat(qqq(end,:), size(qqq,1),1);
 
 rr = postXY - repmat(y1, size(postXY,1),1);
 rrr = [-s.*rr(:,2)+c.*rr(:,1) c.*rr(:,2)+s.*rr(:,1)];
 
 hold on; grid on;
-plot(qqq(:,2)-qqq(end,2), qqq(:,1)-qqq(end,1), '--d', ...
-    qqq([1 end],2)-qqq(end,2), qqq([1 end],1)-qqq(end,1), 'r-o', ...
-    'LineWidth', 2, 'MarkerSize', 7)
+plot(qqq(:,2), qqq(:,1), '--d', ...
+    qqq([1 end],2), qqq([1 end],1), 'r-o', ...
+    'LineWidt', 2, 'MarkerSize', 7)
 plot(rrr(:,2), rrr(:,1), ':*', rrr([1 end], 2), rrr([1 end],1), 'x-g', ...
     'LineWidth', 2, 'MarkerSize', 7)
 THX = anglestats.thx;

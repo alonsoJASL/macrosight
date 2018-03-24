@@ -1,8 +1,12 @@
+% LOOP
 tidy;
-whichmacro = 2;
+whichmacro = 3;
 initscript;
 T = readtable('./macros123.xlsx');
-T(~contains(T.whichdataset, ds(1:end-1)),:) = [];
+T(~contains(upper(T.whichdataset), ds(1:end-1)),:) = [];
+
+TS = readtable('./macros123singles.xlsx');
+TS(~contains(upper(TS.whichdataset), ds(1:end-1)),:) = [];
 %%
 allrowsix = size(T,1);
 for rowix=1:allrowsix
@@ -22,52 +26,61 @@ for rowix=1:allrowsix
     
     fprintf('Done, thetaX = %f \n ', stt.thx);
     
-    
-    
     clearvars -except whichmacro allrowsix rowix xtras T stt
     initscript;
 end
 
 
 %%
-
-clus = unique(T.whichclump);
-rowix = 1;
-for ix=1:length(clus)
-    howmany = size(T(T.whichclump==clus(ix),:),1);
-    spaux = reshape(1:howmany*3, 3, howmany)';
+%figure
+allrowsix = size(T,1);
+for rowix=1:allrowsix
     
-    for jx=1:howmany
-        mT = T(rowix,:);
-        midclumppos = fix(mean(mT.clumpinit, mT.clumpfin));
-        wuc= mT.whichclump;
-        clumplab = mT.whichlabel;
-        
-        trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-            clumptracktable(ismember(tablenet.track, clumplab),:)];
-        
-        ffix=mT.initialframe;
-        lfix=mT.finalframe;
-        
-        [~, stt(rowix), xtras(rowix)] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
-        
-        fprintf('Done, thetaX = %f \n ', stt.thx);
-        
-        figure(ix)
-        subplot(howmany, 3, spaux(jx, 1))
-        thisfr = getdatafromhandles(handles, filenames{midclumppos});
-        plotBoundariesAndPoints(thisfr.X, bwboundaries(thisfr.clumphandles.overlappingClumps>0), xtras(rowix).meanXY,'md');
-        plot(xtras(rowix).preline(:,2), xtras(rowix).preline(:,1), '-xr');
-        plot(xtras(rowix).postline(:,2), xtras(rowix).postline(:,1), '-vg');
-        
-        subplot(howmany, 3, spaux(jx,2):spaux(jx,3))
-        plotdirectionchange(stt(jx), xtras(jx));
-        
-        rowix = rowix+1;
-        %clearvars -except whichmacro allrowsix rowix xtras T stt ix jx howmany spaux clus
-        %initscript;
-    end
-    tightfig;
-    fullposition;
-    tightfig;
+    mT = T(rowix,:);
+    mTS = TS(rowix,:);
+    
+    wuc= mT.whichclump;
+    clumplab = mT.whichlabel;
+    
+    trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
+        clumptracktable(ismember(tablenet.track, clumplab),:)];
+    
+    ffix=mT.initialframe;
+    lfix=mT.finalframe;
+%     
+    [~, stt(rowix), xtras] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
+    [prePoints, postPoints] = getpointsforplot(xtras, true);
+    figure(1)
+    plotsimpledirchange(prePoints, postPoints, true)
+    
+    strackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
+        clumptracktable(ismember(tablenet.track, clumplab),:)];
+    pretrinf = strackinfo(ismember(strackinfo.timeframe, ...
+        (mTS.initialfr_pre):mTS.finalfr_pre),:);
+    posttrinf = strackinfo(ismember(strackinfo.timeframe, ...
+        mTS.initialfr_post:(mTS.finalfr_post)),:);
+    
+    brkidx1 = round(size(pretrinf,1)/2);
+    brkidx2 = round(size(posttrinf,1)/2);
+%     
+    prextras.preXY = [pretrinf.X(1:brkidx1) pretrinf.Y(1:brkidx1)];
+    prextras.postXY = [pretrinf.X(brkidx1:end) pretrinf.Y(brkidx1:end)];
+    [prePoints, postPoints, thnon(rowix)] = getpointsforplot(prextras, true);
+    figure(2)
+    plotsimpledirchange(prePoints, postPoints, false);
+%     
+    
+%     postxtras.preXY = [posttrinf.X(1:brkidx2) posttrinf.Y(1:brkidx2)];
+%     postxtras.postXY = [posttrinf.X(brkidx2:end) posttrinf.Y(brkidx2:end)];
+%     [prePoints, postPoints] = getpointsforplot(postxtras, false);
+%     plotsimpledirchange(prePoints, postPoints, false);
+    
+    %pause;
 end
+
+
+
+
+
+
+
