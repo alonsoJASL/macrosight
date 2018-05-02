@@ -1,6 +1,6 @@
 %% Initialisation
 tidy;
-whichmacro = 3;
+whichmacro = 2;
 initscript;
 
 %% 

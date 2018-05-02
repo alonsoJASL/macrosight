@@ -22,6 +22,9 @@ if isclump == true
     
     rr = postXY - repmat(y1, size(postXY,1),1);
     postPoints = [-s.*rr(:,2)+c.*rr(:,1) c.*rr(:,2)+s.*rr(:,1)];
+    if nargout >2
+        anglepos = th1;
+    end
     
 else
     brkix = length(anglextras.preXY);
@@ -37,14 +40,15 @@ else
     qq = XY - repmat(x1, size(XY,1),1);
     Points = [-s.*qq(:,2)+c.*qq(:,1) c.*qq(:,2)+s.*qq(:,1)];
     
-    prePoints = Points(1:brkix,:);    
+    prePoints = Points(1:brkix,:);
     prePoints = prePoints - repmat(prePoints(end,:), size(prePoints,1),1);
-    postPoints = Points((brkix+1):end,:);    
+    postPoints = Points((brkix+1):end,:);
     postPoints = postPoints - repmat(postPoints(1,:), size(postPoints,1),1);
     
+    if nargout >2
+        anglepos = th1;
+    end
 end
 
-if nargout >2
-    anglepos = th1;
-end
+
 

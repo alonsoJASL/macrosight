@@ -22,9 +22,9 @@ for rowix=1:allrowsix
     ffix=mT.initialframe;
     lfix=mT.finalframe;
     
-    [~, stt(rowix), xtras(rowix)] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
+    [~, interactionStats(rowix), xtras(rowix)] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
     
-    fprintf('Done, thetaX = %f \n ', stt.thx);
+    fprintf('Done, thetaX = %f \n ', interactionStats.thx);
     
     clearvars -except whichmacro allrowsix rowix xtras T stt
     initscript;
@@ -34,6 +34,15 @@ end
 %%
 %figure
 allrowsix = size(T,1);
+
+try 
+    load('angleChanges.mat');
+    indx2start = length(angleChangesWithInteraction);
+catch e 
+    fprintf('%s: no angle strcture found, creating a new one.\n', mfilename);
+    indx2start = 0;
+end
+
 for rowix=1:allrowsix
     
     mT = T(rowix,:);
@@ -48,8 +57,17 @@ for rowix=1:allrowsix
     ffix=mT.initialframe;
     lfix=mT.finalframe;
 %     
-    [~, stt(rowix), xtras] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
+    [~, interactionStats(indx2start+rowix), xtras] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
     [prePoints, postPoints] = getpointsforplot(xtras, true);
+    
+    angleChangesWithInteraction(indx2start+rowix).datasetID = whichmacro;
+    angleChangesWithInteraction(indx2start+rowix).clumpID = wuc;
+    angleChangesWithInteraction(indx2start+rowix).angleChange = interactionStats(rowix).thx;
+    angleChangesWithInteraction(indx2start+rowix).previousLine = xtras.preline;
+    angleChangesWithInteraction(indx2start+rowix).postLine = xtras.postline;
+    angleChangesWithInteraction(indx2start+rowix).previousTrackPoints = xtras.preXY;
+    angleChangesWithInteraction(indx2start+rowix).postTrackPoints = xtras.postXY;
+    
     figure(1)
     plotsimpledirchange(prePoints, postPoints, true)
     
@@ -66,6 +84,15 @@ for rowix=1:allrowsix
     prextras.preXY = [pretrinf.X(1:brkidx1) pretrinf.Y(1:brkidx1)];
     prextras.postXY = [pretrinf.X(brkidx1:end) pretrinf.Y(brkidx1:end)];
     [prePoints, postPoints, thnon(rowix)] = getpointsforplot(prextras, true);
+    
+    angleNoInteraction(indx2start+rowix).datasetID = whichmacro;
+    angleNoInteraction(indx2start+rowix).beforeClump = wuc;
+    angleNoInteraction(indx2start+rowix).angleChange = thnon(rowix);
+    angleNoInteraction(indx2start+rowix).previousLine = xtras.preline;
+    angleNoInteraction(indx2start+rowix).postLine = xtras.postline;
+    angleNoInteraction(indx2start+rowix).previousTrackPoints = prextras.preXY;
+    angleNoInteraction(indx2start+rowix).postTrackPoints = prextras.postXY;
+    
     figure(2)
     plotsimpledirchange(prePoints, postPoints, false);
 %     
@@ -78,9 +105,9 @@ for rowix=1:allrowsix
     %pause;
 end
 
-
-
-
+save('angleChanges.mat', 'angleChangesWithInteraction',...
+    'angleNoInteraction', 'interactionStats');
+fprintf('%s: Structure Saved.\n', mfilename);
 
 
 

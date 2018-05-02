@@ -31,8 +31,9 @@
 
 # matlab files #
 ##########
-*.mat
 *~
 *asv
 test-nodenet.xls
 fails.txt
+LAB2-frames200to300.mat
+man0018.mat
