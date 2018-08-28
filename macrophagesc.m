@@ -31,6 +31,12 @@ if nargin < 4
         distperpix = 0.21e-6;
     end
 else
+    if isempty(linedist)
+        linedist = 10e-6;
+    end
+    if isempty(distperpix)
+        distperpix = 0.21e-6;
+    end
     [linwidth, lincolour, ...
         linstyle, mymap, ...
         xtix, ytix, axx] = getoptions(options);

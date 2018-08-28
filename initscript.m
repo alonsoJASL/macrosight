@@ -29,7 +29,13 @@ foldernames = fixhandlesdir(foldernames);
 %% LOAD HANDLES
 try
     disp('Loading handles structure...');
-    load(fullfile(foldernames.dataHa, 'handles.mat'));
+    
+    try 
+        load(fullfile(handlesdir.pathtodir, handlesdir.dataHa,'handles.mat'));
+        foldernames.dataHa = fullfile(handlesdir.pathtodir, handlesdir.dataHa);
+    catch
+        load(fullfile(foldernames.dataHa, 'handles.mat'));
+    end
     fprintf('%s: Changing folder names in HANDLES to fix OS...\n',mfilename);
     handles = fixhandlesdir(handles);
     [~, filenames] = loadone(foldernames.dataLa, 'all');

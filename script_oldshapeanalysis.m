@@ -75,7 +75,7 @@ rectangle('Position', singlebbox, 'EdgeColor', 'c');
 %% SURF test 1: detectSURF -> extractFeatures -> matchFeatures
 
 % SURF detection options:
-metthresh = 1000; % default=1000
+metthresh = 500; % default=1000
 numoct = 3; % default=3
 numscale = 4; % default=4
 
@@ -99,14 +99,15 @@ indexPairs = matchFeatures(fcell2,ftplus1);
 matchedPoints1 = vptscell2(indexPairs(:,1));
 matchedPoints2 = vptstplus1(indexPairs(:,2));
 
-[tform, inlierDistorted, inlierOriginal] = estimateGeometricTransform(...
-    matchedPoints2, matchedPoints1, 'projective');
-
 figure(3);
 clf;
 showMatchedFeatures(framecell2,tplusone,matchedPoints1,matchedPoints2, 'montage');
 legend('matched points 1','matched points 2');
 title('Matched points from both ')
+
+%%
+[tform, inlierDistorted, inlierOriginal] = estimateGeometricTransform(...
+    matchedPoints2, matchedPoints1, 'projective');
 
 figure(4);
 clf;
