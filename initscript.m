@@ -23,8 +23,13 @@ clear handles;
 %if strcmp(chooseplatform, 'mac')
 fprintf('%s: Changing folder names to fix OS (%s) \n',...
     mfilename, upper(chooseplatform));
-foldernames = fixhandlesdir(foldernames);
-%end
+try 
+    foldernames = fixhandlesdir(foldernames);
+catch e
+    disp('Something wrong happened. You can make the change manually.');
+    disp('Take the [handles] structure and change the names of the dataRe');
+    disp('and dataLa paths to the corresponding ones for your OS.');
+end
 
 %% LOAD HANDLES
 try
