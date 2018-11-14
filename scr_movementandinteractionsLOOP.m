@@ -1,35 +1,12 @@
 % LOOP
 tidy;
-whichmacro = 3;
+whichmacro = 1;
 initscript;
 T = readtable('./macros123.xlsx');
-T(~contains(upper(T.whichdataset), ds(1:end-1)),:) = [];
+T(~contains(upper(T.whichdataset), ['MACROS' num2str(whichmacro)]),:) = [];
 
 TS = readtable('./macros123singles.xlsx');
-TS(~contains(upper(TS.whichdataset), ds(1:end-1)),:) = [];
-%%
-allrowsix = size(T,1);
-for rowix=1:allrowsix
-    
-    mT = T(rowix,:);
-    
-    wuc= mT.whichclump;
-    clumplab = mT.whichlabel;
-    
-    trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-        clumptracktable(ismember(tablenet.track, clumplab),:)];
-    
-    ffix=mT.initialframe;
-    lfix=mT.finalframe;
-    
-    [~, interactionStats(rowix), xtras(rowix)] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
-    
-    %fprintf('Done, thetaX = %f \n ', interactionStats.thx);
-    
-    clearvars -except whichmacro allrowsix rowix xtras T stt
-    initscript;
-end
-
+TS(~contains(upper(TS.whichdataset), ['MACROS' num2str(whichmacro)]),:) = [];
 
 %%
 %figure
@@ -37,14 +14,23 @@ allrowsix = size(T,1);
 
 try
     load('angleChanges.mat');
-    indx2start = length(angleChangesWithInteraction);
+    
+    if sum(ismember(experimentInfo.whichmacro, whichmacro))==0
+        disp('adding new dataset information');
+        indx2start = length(angleChangesWithInteraction);
+        experimentInfo = [experimentInfo; table(whichmacro, size(T,1), ...
+            'VariableNames',{'whichmacro','numExperiments'})];
+    else
+        indx2start = find([angleChangesWithInteraction.datasetID]==whichmacro,1);
+    end
+    
 catch e
     fprintf('%s: no angle strcture found, creating a new one.\n', mfilename);
     indx2start = 0;
 end
 
-rowix=2;
-%for rowix=1:allrowsix
+%rowix=2;
+for rowix=1:allrowsix
 
 mT = T(rowix,:);
 mTS = TS(rowix,:);
@@ -113,89 +99,10 @@ axis([-30 25 -15 15]);
 %     [prePoints, postPoints] = getpointsforplot(postxtras, false);
 %     plotsimpledirchange(prePoints, postPoints, false);
 
-%pause;
-%end
+pause;
+end
 
 save('angleChanges.mat', 'angleChangesWithInteraction',...
-    'angleNoInteraction', 'interactionStats');
+    'angleNoInteraction', 'interactionStats', 'experimentInfo');
 fprintf('%s: Structure Saved.\n', mfilename);
-
-
-%%
-
-%%
-%figure
-allrowsix = size(T,1);
-
-try
-    load('angleChanges.mat');
-    indx2start = length(angleChangesWithInteraction);
-catch e
-    fprintf('%s: no angle strcture found, creating a new one.\n', mfilename);
-    indx2start = 0;
-end
-
-%rowix=2;
-for rowix=1:allrowsix
-    
-    mT = T(rowix,:);
-    mTS = TS(rowix,:);
-    
-    wuc= mT.whichclump;
-    clumplab = mT.whichlabel;
-    
-    trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-        clumptracktable(ismember(tablenet.track, clumplab),:)];
-    
-    ffix=mT.initialframe;
-    lfix=mT.finalframe;
-    %
-    [~, interactionStats(indx2start+rowix), xtras] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
-    [prePoints, postPoints] = getpointsforplot(xtras, true);
-    
-    figure(1)
-    %clf
-    plotsimpledirchange(prePoints, postPoints, true);
-    rmticklabels;
-    set(gcf, 'Position', [40 489 1564 459]);
-    grid on;
-    axis([-30 25 -15 15]);
-    
-    if rowix==1
-        H = gcf;
-        f = getframe(H);
-        [im,map] = rgb2ind(f.cdata,256,'nodither');
-        
-        im(1,1,1,allrowsix) = 0;
-    else
-        f = getframe(gcf);
-        im(:,:,1,rowix) = rgb2ind(f.cdata,map,'nodither');
-    end
-    
-    
-    strackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-        clumptracktable(ismember(tablenet.track, clumplab),:)];
-    pretrinf = strackinfo(ismember(strackinfo.timeframe, ...
-        (mTS.initialfr_pre):mTS.finalfr_pre),:);
-    posttrinf = strackinfo(ismember(strackinfo.timeframe, ...
-        mTS.initialfr_post:(mTS.finalfr_post)),:);
-    
-    brkidx1 = round(size(pretrinf,1)/2);
-    brkidx2 = round(size(posttrinf,1)/2);
-    %
-    prextras.preXY = [pretrinf.X(1:brkidx1) pretrinf.Y(1:brkidx1)];
-    prextras.postXY = [pretrinf.X(brkidx1:end) pretrinf.Y(brkidx1:end)];
-    [prePoints, postPoints, thnon(rowix)] = getpointsforplot(prextras, true);
-    
-    figure(2)
-    %clf
-    plotsimpledirchange(prePoints, postPoints, false);
-    rmticklabels;
-    set(gcf, 'Position', [57 42 1564 459]);
-    grid on;
-    axis([-30 25 -15 15]);
-    %
-    %pause;
-end
-
 
