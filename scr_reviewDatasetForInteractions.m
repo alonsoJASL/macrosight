@@ -10,50 +10,10 @@ S = 5;
 %%
 ix=1;
 wuc = clumpidcodes(ix);
+fulltablenet = [tablenet clumptracktable];
 
-clc;
-fprintf('Analysing clump %d\n', wuc);
+[cicltable, winsclump] = displayCellsInClump(fulltablenet, wuc, S);
 
-% get labels from the clump
-clumplab = getlabelsfromcode(wuc);
-
-if length(clumplab)==2
-    trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-        clumptracktable(ismember(tablenet.track, clumplab),:)];
-    
-    for jx=1:length(clumplab)
-        trinf{jx} = trackinfo(trackinfo.finalLabel==clumplab(jx),:);
-    end
-    
-    % frames in common
-    capt = intersect(trinf{1}.timeframe, trinf{2}.timeframe);
-    % time frames in clump
-    tfc = unique(trackinfo(trackinfo.clumpcode==wuc,1).timeframe);
-    % time frames single
-    tfs = unique(trackinfo(trackinfo.clumpcode==0,1).timeframe);
-    tfs(tfs>max(capt)) = [];
-    tfs(tfs<min(capt)) = [];
-    
-    brtfc = find(diff(tfc)>1);
-    brtfs = find(diff(tfs)>1);
-
-    winfc = [[1;brtfc+1] [brtfc;length(tfc)]];
-    winfs = [[1;brtfs+1] [brtfs;length(tfs)]];
-    
-    disp('In clump: ')
-    disp(tfc(winfc));
-    try 
-    disp('Single: ')
-    disp(tfs(winfs));
-    catch
-    end
-    
-    fprintf('Cell labels: %d and %d')
-    disp(trackinfo(ismember(trackinfo.timeframe,(max(1,tfc(1)-S)):(tfc(end)+S)),:));
-    
-else
-    disp('Only working on clumps with two cells') 
-end
 
 %% CHECK FOR SINGLE MOVEMENTS
 tidy
@@ -86,13 +46,16 @@ for ix=1:size(T,1)
     post_init = mT.clumpfin;
     post_fin = mT.finalframe + 5;
     
-    disp(mT.whichclump)
-    fprintf('\n Pre-clump: %d and %d', pre_init, pre_fin);
+   
     disp(trackinfo(ismember(trackinfo.timeframe,pre_init:pre_fin),:));
-    
-    fprintf('\n Post-clump: %d and %d', post_init, post_fin);
     disp(trackinfo(ismember(trackinfo.timeframe,post_init:post_fin),:));
     
+    disp(mT.whichclump)
+    fprintf('\n Pre-clump: %d and %d', pre_init, pre_fin);
+    fprintf('\n Post-clump: %d and %d', post_init, post_fin);
+    
+    fprintf('\n Pre-clump: %d\t%d\t%d\t%d\t%d\t%d',...
+        pre_init,pre_fin,post_init+1,post_fin,pre_fin-pre_init,post_fin-post_init);
     pause;
 end
 
