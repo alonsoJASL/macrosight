@@ -7,7 +7,7 @@ tidy;
 
 whichmacro = 1; % 1, 2 or 3
 initscript;
-
+%
 load('angleChanges');
 T = readtable('./macros123.xlsx');
 TS = readtable('./macros123singles.xlsx');
@@ -36,6 +36,56 @@ groups(:,3) = 1.1;
 groups = groups.*repmat(dsetID,1,3);
 
 clumpsizes = vertcat(interactionStats.clumpsize);
+
+%% INTERACTIONS: Fill information
+
+whichA = a.(['macros' num2str(whichmacro)]);
+whichNoa = noa.(['macros' num2str(whichmacro)]);
+
+try
+    load('MACROSinteractionExperiments.mat');
+    indx2start = length(allmacros);
+catch e
+    fprintf('%s: no angle strcture found, creating a new one.\n', mfilename);
+    indx2start = 0;
+end
+
+anglechange = vertcat(whichA.angleChange);
+preaxis = [-40 40 -40 40];
+
+for ix=1:length(whichA)
+    mT = T(ix,:);
+    wuc= mT.whichclump;
+    clumplab = mT.whichlabel;
+    ffix=mT.initialframe;
+    lfix=mT.finalframe;
+    
+    trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
+        clumptracktable(ismember(tablenet.track, clumplab),:)];
+    [~, ~, xtras] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
+    
+    [prePoints, postPoints] = getpointsforplot(xtras, true);
+    
+    mTS = TS(ix,:);
+    pretrinf = trackinfo(ismember(trackinfo.timeframe, ...
+        mTS.initialfr_pre:mTS.finalfr_pre),:);
+    brkidx1 = round(size(pretrinf,1)/2);
+    
+    prextras.preXY = [pretrinf.X(1:brkidx1) pretrinf.Y(1:brkidx1)];
+    prextras.postXY = [pretrinf.X(brkidx1:end) pretrinf.Y(brkidx1:end)];
+    
+    [preP, postP, thnon(ix)] = getpointsforplot(prextras, true);
+    
+    allmacros(ix+indx2start).whichmacro = whichmacro;
+    
+    allmacros(ix+indx2start).preinteractionpoints = prePoints;
+    allmacros(ix+indx2start).postinteractionpoints = postPoints;
+    
+    allmacros(ix+indx2start).precontrolpoints = preP;
+    allmacros(ix+indx2start).postcontrolpoints = postP;
+end
+
+save('MACROSinteractionExperiments.mat', 'allmacros');
 
 
 %% BOXPLOTS TIME IN CLUMP VS ANGLE CHANGE
@@ -111,6 +161,54 @@ for ix=1:length(ww)
     ylim([0 200])
     
 end
+%% ALL INTERACTION PLOTS
+close all;
+load('MACROSinteractionExperiments.mat');
+preaxis = [-40 40 -40 40];
+
+figure(1)
+for ix=1:3
+    whichmac = allmacros([allmacros.whichmacro]==ix);
+    for jx=1:length(whichmac)
+        prePoints = whichmac(jx).preinteractionpoints;
+        postPoints = whichmac(jx).postinteractionpoints;
+        
+        preP = whichmac(jx).precontrolpoints;
+        postP = whichmac(jx).postcontrolpoints;
+        
+        subplot(3,6,(6*(ix-1) + (1:3)))
+        plotsimpledirchange(prePoints, postPoints, true);
+        axis(preaxis)
+        yticklabels([]);
+        grid on;
+        hold on;
+        subplot(3,6,(6*(ix-1) + (4:6)))
+        plotsimpledirchange(preP, postP, false);
+        axis(preaxis)
+        yticklabels([]);
+        grid on;
+        hold on;
+    end
+end
+
+figure(2)
+for jx=1:length(allmacros)
+    prePoints = allmacros(jx).preinteractionpoints;
+    postPoints = allmacros(jx).postinteractionpoints;
+    
+    preP = allmacros(jx).precontrolpoints;
+    postP = allmacros(jx).postcontrolpoints;
+    
+    subplot(211)
+    plotsimpledirchange(prePoints, postPoints, true);
+    axis(preaxis)
+    hold on;
+    subplot(212)
+    plotsimpledirchange(preP, postP, false);
+    grid on;
+    hold on;
+end
+
 
 %% INTERACTIONS
 
@@ -152,8 +250,9 @@ for ix=1:length(whichA)
     plotsimpledirchange(preP, postP, false);
     axis(preaxis)
     hold on;
-    %pause;    
+    %pause;
 end
 %set(gcf, 'Position', [  40         319        1564         629]);
 set(gcf, 'Position', [146 62 1336 894]);
 grid on;
+

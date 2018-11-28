@@ -23,7 +23,7 @@ clear handles;
 %if strcmp(chooseplatform, 'mac')
 fprintf('%s: Changing folder names to fix OS (%s) \n',...
     mfilename, upper(chooseplatform));
-try 
+try
     foldernames = fixhandlesdir(foldernames);
 catch e
     disp('Something wrong happened. You can make the change manually.');
@@ -35,9 +35,11 @@ end
 try
     disp('Loading handles structure...');
     
-    try 
+    try
         load(fullfile(handlesdir.pathtodir, handlesdir.dataHa,'handles.mat'));
         foldernames.dataHa = fullfile(handlesdir.pathtodir, handlesdir.dataHa);
+        handles.dataRe = fullfile(handlesdir.pathtodir, handlesdir.dataRe);
+        handles.dataLa = fullfile(handlesdir.pathtodir, handlesdir.dataLa);
     catch
         load(fullfile(foldernames.dataHa, 'handles.mat'));
     end
@@ -105,4 +107,3 @@ switch whichmacro
     otherwise
         fprintf('\n')
 end
-        
