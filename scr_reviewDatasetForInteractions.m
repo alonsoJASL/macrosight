@@ -4,7 +4,7 @@
 %% INITIALISATION
 tidy
 % choose 1,2, or 3
-whichmacro=1;
+whichmacro=2;
 initscript;
 S = 5;
 %%

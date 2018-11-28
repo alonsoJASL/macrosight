@@ -5,7 +5,7 @@
 
 tidy;
 
-whichmacro = 1; % 1, 2 or 3
+whichmacro = 3; % 1, 2 or 3
 initscript;
 
 load('angleChanges');
@@ -55,7 +55,7 @@ axis square;
 subplot(133)
 hold on
 for ix=1:3
-    scatter(Tab(dsetID==ix,1), Tab(dsetID==ix,2),72,markers{ix})
+    scatter(Tab(dsetID==ix,1), abs(Tab(dsetID==ix,2)),100,markers{ix})
 end
 legend(vn,'FontSize',20);
 xlabel('Clump size');
@@ -134,7 +134,7 @@ for ix=1:length(whichA)
     [prePoints, postPoints] = getpointsforplot(xtras, true);
     
     subplot(211)
-    plotsimpledirchange(prePoints, postPoints, true);
+    plotsimpledirchange(prePoints, postPoints, false);
     axis(preaxis)
     hold on;
     
@@ -152,8 +152,52 @@ for ix=1:length(whichA)
     plotsimpledirchange(preP, postP, false);
     axis(preaxis)
     hold on;
-    %pause;    
+    title(sprintf('angle = %f', thnon(ix)));
+    %pause;
 end
 %set(gcf, 'Position', [  40         319        1564         629]);
 set(gcf, 'Position', [146 62 1336 894]);
 grid on;
+
+%% COMPARISON OF ANGLES with statistical tests
+
+%disp('Angles unchanged');
+%disp('ABS(Angle)');
+for ix=1:4
+    if ix==4
+        angleContact = vertcat(angleChangesWithInteraction.angleChange);
+        angleNoContact = vertcat(angleNoInteraction.angleChange);
+        
+        SS = 'ALL';
+    else
+        angleContact = vertcat(a.(['macros' num2str(ix)]).angleChange);
+        angleNoContact = vertcat(noa.(['macros' num2str(ix)]).angleChange);
+        SS = ['MACROS' num2str(ix)];
+    end
+    m = mean(([angleContact angleNoContact]));
+    sd = std([angleContact angleNoContact]);
+    [pwill, hwill] = signrank(angleContact, angleNoContact);
+    [httest, pttest] = ttest2(angleContact, angleNoContact);
+    
+    if hwill==1
+        rejwill = 'reject';
+    else
+        rejwill = 'nope';
+    end
+    if httest==1
+        rejttest = 'reject';
+    else
+        rejttest = 'nope';
+    end
+    if ix==1
+        fprintf('| With cell-cell  |  NO contact  |     WILLCOXON         |     T-TEST           |\n');
+        fprintf('DATASET|   mean (std)    |  mean (std)  | p-value | Can reject? | p-value | Can reject? |\n');
+    end
+    fprintf('%s| %3.2f (%2.2f) | %3.2f (%2.2f) |  %2.2f  | %s  |   %2.2f  | %s  |\n', ...
+        SS, m(1), sd(1), m(2), sd(2), pwill, rejwill, pttest, rejttest);
+end
+
+%% 
+
+
+
