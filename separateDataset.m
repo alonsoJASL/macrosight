@@ -1,5 +1,8 @@
 function [newhandles] = separateDataset(handles)
-% 
+% SEPARATE DATASET. Separates the data processed by RGBPROCESING funciton 
+% and saves it saves it in a was PhagoSight can read use it. 
+%
+% USAGE: [newhandles] = separateDataset(handles)
 % 
 if nargin < 1
     fprintf('%s: ERROR, handles structure not specified.', mfilename);

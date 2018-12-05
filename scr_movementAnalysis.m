@@ -5,7 +5,7 @@
 
 tidy;
 
-whichmacro = 1; % 1, 2 or 3
+%whichmacro = 3; % 1, 2 or 3
 initscript;
 %
 load('angleChanges');

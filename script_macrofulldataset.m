@@ -1,7 +1,8 @@
 % Script file: MACROSIGHT FULL DATASET ANALYISIS
-% This file analyses the data in its entirety. It will:
-%       -
-%
+% This file analyses the data in its entirety. It perfoms: 
+% - Segmentation of both channels
+% - Tracking of red nuclei 
+% - 
 %
 %% INITIALISATION
 tidy;

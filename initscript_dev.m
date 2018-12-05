@@ -1,21 +1,18 @@
 % Initialisation script for the Analysis of shapes
 %% INITIALISATION
 
-tidy;
-fprintf('%s. Initialisation script. Remember to name the data folders as MACROSN\n', mfilename);
-
-%selpath = uigetdir(matlabroot, 'Open directory with data.');
-selpath = uigetdir('/Volumes/DATA/MACROPHAGES', 'Open directory with data.');
-strsp = strsplit(selpath, '/');
-strsp = strsp{contains(strsp, 'MACROS')};
-if isempty(str2num(strsp(end)))
+if ~exist('whichmacro')
+    tidy;
     whichmacro = 1;
+    fprintf('%s: Macrophage dataset id not found, creating: whichmacro=%d.\n',...
+        mfilename, whichmacro);
 else
-    whichmacro = str2num(strsp(end));
+    fprintf('%s: Dataset id variable [whichmacro=%d] found.\n', ...
+        mfilename, whichmacro);
 end
-fprintf('%s. Dataset detected: whichmacro = %d\n',mfilename, whichmacro);
 
-handlesdir = getMatFolders(selpath);
+[dn,ds] = loadnames('macros', chooseplatform, whichmacro);
+handlesdir = getMatFolders(fullfile(dn,ds));
 
 fprintf('%s: Loading structure with folder names...\n',mfilename);
 load(fullfile(handlesdir.pathtodir, handlesdir.dataHa,'handlesdir.mat'));
@@ -26,7 +23,6 @@ clear handles;
 %if strcmp(chooseplatform, 'mac')
 fprintf('%s: Changing folder names to fix OS (%s) \n',...
     mfilename, upper(chooseplatform));
-
 try
     foldernames = fixhandlesdir(foldernames);
 catch e
@@ -44,10 +40,11 @@ try
         foldernames.dataHa = fullfile(handlesdir.pathtodir, handlesdir.dataHa);
         handles.dataRe = fullfile(handlesdir.pathtodir, handlesdir.dataRe);
         handles.dataLa = fullfile(handlesdir.pathtodir, handlesdir.dataLa);
-    catch e
-        fprintf('%s. %s\n', mfilename, e.message);
+    catch
         load(fullfile(foldernames.dataHa, 'handles.mat'));
     end
+    fprintf('%s: Changing folder names in HANDLES to fix OS...\n',mfilename);
+    handles = fixhandlesdir(handles);
     [~, filenames] = loadone(foldernames.dataLa, 'all');
     
 catch e
@@ -110,4 +107,3 @@ switch whichmacro
     otherwise
         fprintf('\n')
 end
-

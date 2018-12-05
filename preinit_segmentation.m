@@ -1,4 +1,4 @@
-% script file: TEST Processing
+% script file: SEGMENTATION AND DATA HANDLING
 %
 % CAUTION. Some of the (helper) functions used here are not available in
 % the package. They are specified.
