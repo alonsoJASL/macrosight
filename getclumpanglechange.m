@@ -1,5 +1,5 @@
 function [anglechange, anglestats, xtras] = getclumpanglechange(...
-    TrInfo, wuc, clumprange, prepostranges)
+    TrInfo, wuc, clumprange, controlranges)
 % GET ANGLE CHANGE AFTER CLUMP.
 % USAGE:
 %     [anglechange, anglestats, xtras] = getclumpanglechange(trackinfo, wuc, clumprange)
@@ -9,7 +9,7 @@ function [anglechange, anglestats, xtras] = getclumpanglechange(...
 %
 
 if nargin < 4
-    prepostranges = [];
+    controlranges = [];
 end
 
 ticlump = TrInfo(ismember(TrInfo.timeframe, clumprange(1):clumprange(2)),:);
@@ -79,9 +79,9 @@ if nargout > 1
         xtras.c = c;
         xtras.s = s;
         xtras.th1 = th1;
-        if ~isempty(prepostranges)
+        if ~isempty(controlranges)
             pretrinf = TrInfo(ismember(TrInfo.timeframe, ...
-                prepostranges(1):prepostranges(2)),:);
+                controlranges(1):controlranges(2)),:);
             bidx1 = round(size(pretrinf,1)/2);
             
             preXY = [pretrinf.X(1:bidx1) pretrinf.Y(1:bidx1)];
