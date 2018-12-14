@@ -1,7 +1,13 @@
-% LOOP
+% COURSE SHIFT (ANGLE CHANGE) ACQUISITION
+% Runs on a specific dataset, acquiring all direction changes from the
+% cases obtained in SCR_REVIEWDATASETFORINTERACTIONS. 
+% 
+%
+%% INITIALISATION
 tidy;
 whichmacro = 1;
-initscript;
+initscript_dev;
+% initscript; %
 T = readtable('./macros123.xlsx');
 T(~contains(upper(T.whichdataset), ['MACROS' num2str(whichmacro)]),:) = [];
 
@@ -29,8 +35,8 @@ catch e
     indx2start = 0;
 end
 
-%rowix=2;
-for rowix=1:allrowsix
+rowix=2;
+%for rowix=1:allrowsix
 
 mT = T(rowix,:);
 mTS = TS(rowix,:);
@@ -100,8 +106,9 @@ axis([-30 25 -15 15]);
 %     plotsimpledirchange(prePoints, postPoints, false);
 
 pause;
-end
+%end
 
+%%
 save('angleChanges.mat', 'angleChangesWithInteraction',...
     'angleNoInteraction', 'interactionStats', 'experimentInfo');
 fprintf('%s: Structure Saved.\n', mfilename);

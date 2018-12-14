@@ -80,13 +80,17 @@ if nargout > 1
         xtras.s = s;
         xtras.th1 = th1;
         if ~isempty(prepostranges)
-            preXY = [TrInfo(prepostranges(1,1):prepostranges(1,2),:).X ...
-                TrInfo(prepostranges(1,1):prepostranges(1,2),:).Y];
-            postXY = [TrInfo(prepostranges(2,1):prepostranges(2,2),:).X ...
-                TrInfo(prepostranges(2,1):prepostranges(2,2),:).Y];
+            pretrinf = TrInfo(ismember(TrInfo.timeframe, ...
+                prepostranges(1):prepostranges(2)),:);
+            bidx1 = round(size(pretrinf,1)/2);
             
-            xtras.preclumpXY = preXY;
-            xtras.postclumpXY = postXY;
+            preXY = [pretrinf.X(1:bidx1) pretrinf.Y(1:bidx1)];
+            postXY = [pretrinf.X(bidx1:end) pretrinf.Y(bidx1:end)];
+            
+            xtras.precontrolXY = preXY;
+            xtras.postcontrolXY = postXY;
+            
+            % START HERE
             
             preXY = preXY - repmat(preXY(1,:), size(preXY,1), 1);           
             thet = rad2deg(angle((preXY(end,2)) + (preXY(end,1)).*1i));
@@ -101,7 +105,7 @@ if nargout > 1
             postXY = postXY - repmat(postXY(fix(size(postXY,1)/2),:), size(postXY,1), 1);
             
             xtras.preclumpXYmod = preXY;
-            xtras.postclumpXYmod = postclump;
+            xtras.postclumpXYmod = postXY;
         end
     end
 end

@@ -6,7 +6,7 @@
 tidy;
 
 %whichmacro = 3; % 1, 2 or 3
-initscript;
+initscript_dev;
 %
 load('angleChanges');
 T = readtable('./macros123.xlsx');
