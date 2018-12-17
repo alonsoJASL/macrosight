@@ -1,14 +1,14 @@
 function plotsimpledirchange(prePoint, postPoint, clumpbool)
 
 if clumpbool==true
-    % lc = 'r'; % normal
-    lc = 'g';
+    lc = 'r'; % normal
+    %lc = 'g';
 else
     lc = 'k';
 end
    
 hold on; 
-if strcmp(lc, 'r')
+if strcmp(lc, 'r') || strcmp(lc, 'k')
 plot(prePoint(:,2), prePoint(:,1), ...
     '-d', 'Color', [0.5 0.5 0.5], 'LineWidt', 3, 'MarkerSize', 4);
 else
