@@ -1,11 +1,11 @@
 % COURSE SHIFT (ANGLE CHANGE) ACQUISITION
 % Runs on a specific dataset, acquiring all direction changes from the
-% cases obtained in SCR_REVIEWDATASETFORINTERACTIONS. 
-% 
+% cases obtained in SCR_REVIEWDATASETFORINTERACTIONS.
+%
 %
 %% INITIALISATION
 tidy;
-whichmacro = 1;
+whichmacro = 3;
 initscript_dev;
 % initscript; %
 T = readtable('./macros123.xlsx');
@@ -23,93 +23,65 @@ try
     
     if sum(ismember(experimentInfo.whichmacro, whichmacro))==0
         disp('adding new dataset information');
-        indx2start = length(angleChangesWithInteraction);
+        indx2start = length(clumptrackfeatures);
         experimentInfo = [experimentInfo; table(whichmacro, size(T,1), ...
             'VariableNames',{'whichmacro','numExperiments'})];
     else
-        indx2start = find([angleChangesWithInteraction.datasetID]==whichmacro,1);
+        indx2start = find([clumptrackfeatures.datasetID]==whichmacro,1);
     end
     
 catch e
     fprintf('%s: no angle strcture found, creating a new one.\n', mfilename);
+    experimentInfo = table(whichmacro, size(T,1), 'VariableNames',...
+        {'whichmacro','numExperiments'});
     indx2start = 0;
 end
-
-rowix=2;
-%for rowix=1:allrowsix
-
-mT = T(rowix,:);
-mTS = TS(rowix,:);
-
-wuc= mT.whichclump;
-clumplab = mT.whichlabel;
-
-trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-    clumptracktable(ismember(tablenet.track, clumplab),:)];
-
-ffix=mT.initialframe;
-lfix=mT.finalframe;
 %
-[~, interactionStats(indx2start+rowix), xtras] = getclumpanglechange(trackinfo, wuc, [ffix lfix]);
-[prePoints, postPoints] = getpointsforplot(xtras, true);
+%rowix=9;
+for rowix=1:allrowsix
+    
+    mT = T(rowix,:);
+    mTS = TS(rowix,:);
+    
+    wuc= mT.whichclump;
+    clumplab = mT.whichlabel;
+    
+    trackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
+        clumptracktable(ismember(tablenet.track, clumplab),:)];
+    
+    ffix=mT.initialframe;
+    lfix=mT.finalframe;
+    
+    fbnchix = mTS.initialfr_pre;
+    lbnchix = mTS.finalfr_pre;
+    
+    [clumptrackfeatures(indx2start+rowix),...
+        clumpanglechanges(indx2start+rowix),...
+        bnchmktrackfeatures(indx2start+rowix),...
+        bnchmkanglechanges(indx2start+rowix)] = ...
+        getanglechanges(trackinfo, wuc, [ffix lfix], [fbnchix lbnchix]);
+    
+    [clumpplot(indx2start+rowix).plotprepoints,...
+        clumpplot(indx2start+rowix).plotpostpoints] = ...
+        getpointsforplot(clumpanglechanges(indx2start+rowix));
+    
+    [bnchmkplot(indx2start+rowix).plotprepoints,...
+        bnchmkplot(indx2start+rowix).plotpostpoints] = ...
+        getpointsforplot(bnchmkanglechanges(indx2start+rowix));
+    
+    generalinfo(indx2start+rowix).datasetID = whichmacro;
+    generalinfo(indx2start+rowix).clumpID = wuc;
+    generalinfo(indx2start+rowix).clumplabel = clumplab;
+    generalinfo(indx2start+rowix).clumprange = [ffix lfix];
+    generalinfo(indx2start+rowix).controlrange = [fbnchix lbnchix];
+    generalinfo(indx2start+rowix).nbeforeclump = mT.clumpinit - mT.initialframe;
+    generalinfo(indx2start+rowix).nafterclump = mT.finalframe - mT.clumpfin;
+    generalinfo(indx2start+rowix).ncontrol = mTS.finalfr_pre - mTS.initialfr_pre;
+end
 
-angleChangesWithInteraction(indx2start+rowix).datasetID = whichmacro;
-angleChangesWithInteraction(indx2start+rowix).clumpID = wuc;
-angleChangesWithInteraction(indx2start+rowix).angleChange = interactionStats(rowix).thx;
-angleChangesWithInteraction(indx2start+rowix).previousLine = xtras.preline;
-angleChangesWithInteraction(indx2start+rowix).postLine = xtras.postline;
-angleChangesWithInteraction(indx2start+rowix).previousTrackPoints = xtras.preXY;
-angleChangesWithInteraction(indx2start+rowix).postTrackPoints = xtras.postXY;
-
-figure(1)
-%clf
-plotsimpledirchange(prePoints, postPoints, true);
-rmticklabels;
-set(gcf, 'Position', [40 489 1564 459]);
-grid on;
-axis([-30 25 -15 15]);
-
-strackinfo = [tablenet(ismember(tablenet.track, clumplab),[5 1 2 9 11 13 14]) ...
-    clumptracktable(ismember(tablenet.track, clumplab),:)];
-pretrinf = strackinfo(ismember(strackinfo.timeframe, ...
-    (mTS.initialfr_pre):mTS.finalfr_pre),:);
-posttrinf = strackinfo(ismember(strackinfo.timeframe, ...
-    mTS.initialfr_post:(mTS.finalfr_post)),:);
-
-brkidx1 = round(size(pretrinf,1)/2);
-brkidx2 = round(size(posttrinf,1)/2);
 %
-prextras.preXY = [pretrinf.X(1:brkidx1) pretrinf.Y(1:brkidx1)];
-prextras.postXY = [pretrinf.X(brkidx1:end) pretrinf.Y(brkidx1:end)];
-[prePoints, postPoints, thnon(rowix)] = getpointsforplot(prextras, true);
-
-angleNoInteraction(indx2start+rowix).datasetID = whichmacro;
-angleNoInteraction(indx2start+rowix).beforeClump = wuc;
-angleNoInteraction(indx2start+rowix).angleChange = thnon(rowix);
-angleNoInteraction(indx2start+rowix).previousLine = xtras.preline;
-angleNoInteraction(indx2start+rowix).postLine = xtras.postline;
-angleNoInteraction(indx2start+rowix).previousTrackPoints = prextras.preXY;
-angleNoInteraction(indx2start+rowix).postTrackPoints = prextras.postXY;
-
-figure(2)
-%clf
-plotsimpledirchange(prePoints, postPoints, false);
-rmticklabels;
-set(gcf, 'Position', [57 42 1564 459]);
-grid on;
-axis([-30 25 -15 15]);
-%
-
-%     postxtras.preXY = [posttrinf.X(1:brkidx2) posttrinf.Y(1:brkidx2)];
-%     postxtras.postXY = [posttrinf.X(brkidx2:end) posttrinf.Y(brkidx2:end)];
-%     [prePoints, postPoints] = getpointsforplot(postxtras, false);
-%     plotsimpledirchange(prePoints, postPoints, false);
-
-pause;
-%end
-
-%%
-save('angleChanges.mat', 'angleChangesWithInteraction',...
-    'angleNoInteraction', 'interactionStats', 'experimentInfo');
+save('angleChanges.mat', 'generalinfo','clumptrackfeatures', ...
+    'clumpanglechanges','bnchmktrackfeatures', 'bnchmkanglechanges', ...
+    'clumpplot', 'bnchmkplot', 'experimentInfo');
 fprintf('%s: Structure Saved.\n', mfilename);
 

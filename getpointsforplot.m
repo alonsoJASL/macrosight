@@ -1,4 +1,4 @@
-function [prePoints, postPoints, anglepos] = getpointsforplot(positionstruct, isclump)
+function [prePoints, postPoints, anglepos] = getpointsforplot(positionstruct)
 %
 
 preXY = positionstruct.preXY;
