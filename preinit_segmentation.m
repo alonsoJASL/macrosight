@@ -4,22 +4,21 @@
 % the package. They are specified.
 %
 
-tidy;
+% try
+%     % function not available in package
+%     whichmacro = 2;
+%     [dn,ds] = loadnames('macros', chooseplatform, whichmacro);
+%
+%     handlesdir = getMatFolders(fullfile(dn,ds));
+% catch e
+%     fprintf('%s: Function loadnames not supported, add your own [dn, ds] pair.\n',...
+%         mfilename);
+%
+%     dn = '/Volumes/DATA/MACROPHAGES/';
+%     ds = 'MACROS2/';
+%     dred = 'MACROS_RED/';
+% end
 
-try
-    % function not available in package
-    whichmacro = 2;
-    [dn,ds] = loadnames('macros', chooseplatform, whichmacro);
-    
-    handlesdir = getMatFolders(fullfile(dn,ds));
-catch e
-    fprintf('%s: Function loadnames not supported, add your own [dn, ds] pair.\n',...
-        mfilename);
-    
-    dn = '/Volumes/DATA/MACROPHAGES/';
-    ds = 'MACROS2/';
-    dred = 'MACROS_RED/';
-end
 
 %% SORT OUTPUT FOLDERS FROM handlesdir STRUCTURE
 
@@ -53,7 +52,7 @@ elseif isempty(handlesdir.dataRe)
     save(fullfile(handles.dataHa,'handlesdir.mat'), 'handles');
     
 elseif isempty(handlesdir.dataLa)
-    % there's a dataRe, is there a dataLa? 
+    % there's a dataRe, is there a dataLa?
     fprintf('%s: Folder dataLa not found...\n',...
         mfilename);
     options.methodUsed = 'clump';
@@ -89,45 +88,45 @@ else
     save(fullfile(handles.dataHa,'handlesdir.mat'), 'handles');
 end
 
-%% DATASET SEPARATION 
-
-handles = separateDataset(handles);
-
-%% (OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions 
-
-% overlapping dataset
-try
-    disp('Re-naming _mat_Re folder to fit overlapping naming...');
-    movefile(handles.dataRe,strcat(handles.dataOvlp(1:end-2),'Re'));
-    
-    disp('Start analysis on OVERLAPPING nuclei.');
-    h = neutrophilAnalysis(handles.dataOvlp);
-    %409210.
-    disp('Re-naming _overlap_mat_Re to original _mat_Re');
-    movefile(h.dataRe, handles.dataRe);
-    h.dataRe = handles.dataRe;
-catch err
-    disp('Error in changing the directory name.') 
-end
-
-
-
-%% (NON OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions 
-
-% Non-overlapping dataset
-try
-    disp('Re-naming _mat_Re folder to fit Non-overlapping naming...');
-    movefile(handles.dataRe,strcat(handles.dataNovlp(1:end-2),'Re'));
-    
-    disp('Start analysis on OVERLAPPING nuclei.');
-    h = neutrophilAnalysis(handles.dataNovlp);
-    
-    disp('Re-naming _overlap_mat_Re to original _mat_Re');
-    movefile(h.dataRe, handles.dataRe);
-    h.dataRe = handles.dataRe;
-catch err
-    disp('Error in changing the directory name.') 
-end
+% %% DATASET SEPARATION
+% 
+% handles = separateDataset(handles);
+% 
+% %% (OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions
+% 
+% % overlapping dataset
+% try
+%     disp('Re-naming _mat_Re folder to fit overlapping naming...');
+%     movefile(handles.dataRe,strcat(handles.dataOvlp(1:end-2),'Re'));
+%     
+%     disp('Start analysis on OVERLAPPING nuclei.');
+%     h = neutrophilAnalysis(handles.dataOvlp);
+%     %409210.
+%     disp('Re-naming _overlap_mat_Re to original _mat_Re');
+%     movefile(h.dataRe, handles.dataRe);
+%     h.dataRe = handles.dataRe;
+% catch err
+%     disp('Error in changing the directory name.')
+% end
+% 
+% 
+% 
+% %% (NON OVERLAPPING) MOVE dataRe to fit phagosight's naming conventions
+% 
+% % Non-overlapping dataset
+% try
+%     disp('Re-naming _mat_Re folder to fit Non-overlapping naming...');
+%     movefile(handles.dataRe,strcat(handles.dataNovlp(1:end-2),'Re'));
+%     
+%     disp('Start analysis on OVERLAPPING nuclei.');
+%     h = neutrophilAnalysis(handles.dataNovlp);
+%     
+%     disp('Re-naming _overlap_mat_Re to original _mat_Re');
+%     movefile(h.dataRe, handles.dataRe);
+%     h.dataRe = handles.dataRe;
+% catch err
+%     disp('Error in changing the directory name.')
+% end
 
 %%
 

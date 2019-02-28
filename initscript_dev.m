@@ -1,21 +1,21 @@
 % Initialisation script for the Analysis of shapes
 %% INITIALISATION
 
-if ~exist('whichmacro')
-    tidy;
-    whichmacro = 1;
-    fprintf('%s: Macrophage dataset id not found, creating: whichmacro=%d.\n',...
-        mfilename, whichmacro);
-else
-    fprintf('%s: Dataset id variable [whichmacro=%d] found.\n', ...
-        mfilename, whichmacro);
-end
-
-[dn,ds] = loadnames('macros', chooseplatform, whichmacro);
-handlesdir = getMatFolders(fullfile(dn,ds));
-
-fprintf('%s: Loading structure with folder names...\n',mfilename);
-load(fullfile(handlesdir.pathtodir, handlesdir.dataHa,'handlesdir.mat'));
+% if ~exist('whichmacro')
+%     tidy;
+%     whichmacro = 1;
+%     fprintf('%s: Macrophage dataset id not found, creating: whichmacro=%d.\n',...
+%         mfilename, whichmacro);
+% else
+%     fprintf('%s: Dataset id variable [whichmacro=%d] found.\n', ...
+%         mfilename, whichmacro);
+% end
+% 
+% [dn,ds] = loadnames('macros', chooseplatform, whichmacro);
+% handlesdir = getMatFolders(fullfile(dn,ds));
+% 
+% fprintf('%s: Loading structure with folder names...\n',mfilename);
+% load(fullfile(handlesdir.pathtodir, handlesdir.dataHa,'handlesdir.mat'));
 
 foldernames = handles;
 clear handles;
