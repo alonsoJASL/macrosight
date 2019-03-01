@@ -64,9 +64,7 @@ switch nargin
             filenames = {filenames.name};
             
             for ix=1:length(filenames)
-                if strcmp(foldername,'La')&&(ix==126 || ix==159)
-                    disp('oops')
-                end
+
                 [X, xatt] = readParseInput(fullfile(datainname, filenames{ix}));
                 [dataL2] = processing(X, methodUsed, parameters);
                 

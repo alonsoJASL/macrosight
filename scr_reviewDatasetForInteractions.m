@@ -2,12 +2,15 @@
 % Review a certain dataset looking for interactions.
 %
 %% INITIALISATION
-tidy
-% choose 1,2, or 3
-whichmacro=2;
-initscript;
-S = 5;
+% It is better to do the initialisation 
+% tidy
+% % choose 1,2, or 3
+% whichmacro=2;
+% initscript;
+
 %%
+S=5;
+
 ix=1;
 wuc = clumpidcodes(ix);
 fulltablenet = [tablenet clumptracktable];

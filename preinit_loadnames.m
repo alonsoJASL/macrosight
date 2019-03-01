@@ -1,7 +1,7 @@
 
+[dn,dsets] = loadnames('kclmacros', chooseplatform);
+
 for whichmacro =1:5
- 
-    [dn,dsets] = loadnames('kclmacros', chooseplatform);
     ds = dsets.control{whichmacro};
     handlesdir = getMatFolders(fullfile(dn,ds));
     
@@ -25,8 +25,15 @@ for whichmacro =6:11
     
     preinit_segmentation;
 end
+%% Try one
+[dn,dsets] = loadnames('kclmacros', chooseplatform);
+whichmacro = 1;
+ds = dsets.control{whichmacro};
 
-%% 
+handlesdir = getMatFolders(fullfile(dn,ds));
+
+
+%% Review segmentation
 % 126, 159
 
 for ix=1:handles.numFrames
