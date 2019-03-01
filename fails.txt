@@ -1,14 +1,14 @@
 
 ERRORS FOR NO OPTIONS (NOTHING)
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab12, path2, tk+1=52
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab32, path2, tk+1=114
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab44, path1, tk+1=154
 
@@ -16,23 +16,23 @@ flab44, path1, tk+1=154
 
 ERRORS FOR AC OPTIONS
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab12, path2, tk+1=52
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab32, path2, tk+1=114
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab44, path1, tk+1=154
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Index exceeds matrix dimensions.
 flab61, path1, tk+1=319
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Index exceeds matrix dimensions.
 flab89, path1, tk+1=506
 
@@ -40,22 +40,22 @@ flab89, path1, tk+1=506
 
 ERRORS FOR AC OPTIONS
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab12, path2, tk+1=52
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab32, path2, tk+1=114
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Unrecognized variable name 'clumpseglabel'.
 flab44, path1, tk+1=154
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Index exceeds matrix dimensions.
 flab61, path1, tk+1=319
 
-Ya valió barriga, Sr. V...:
+LARGE ERROR:
 err:Index exceeds matrix dimensions.
 flab89, path1, tk+1=506
