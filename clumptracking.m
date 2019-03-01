@@ -9,7 +9,9 @@ clumpcode = zeros(size(thisframetable,1),1,'uint64');
 clumpID = zeros(size(thisframetable,1),1);
 auxclumpTrack = table(clumpcode, clumpID);
 
-[~,~, clumphandles] = getdatafromhandles(handles, filenames{whichone});
+[~,~,clumphandles] = getdatafromhandles(handles, filenames{whichone});
+%[sf] = getdatafromhandles(handles, filenames{whichone});
+%clumphandles = sf.clumphandles;
 
 clumpaux = unique(clumphandles.overlappingClumps);
 clumpaux(1) = [];

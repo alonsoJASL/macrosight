@@ -64,6 +64,9 @@ switch nargin
             filenames = {filenames.name};
             
             for ix=1:length(filenames)
+                if strcmp(foldername,'La')&&(ix==126 || ix==159)
+                    disp('oops')
+                end
                 [X, xatt] = readParseInput(fullfile(datainname, filenames{ix}));
                 [dataL2] = processing(X, methodUsed, parameters);
                 
@@ -119,7 +122,7 @@ switch lower(methodused)
         dataRed = bwlabeln(dataRed);
         dataG = bwlabeln(dataG);
         
-        dataOut = cat(3, dataRed, dataG, zeros(size(dataG,1), size(dataG,2)));
+        dataOut = cat(3, dataRed, dataG, zeros(size(dataG)));
     case {'binarize', 'binarise'}
         if strcmpi(parameters, 'global') || ...
                 strcmpi(parameters, 'adaptive')
