@@ -1,5 +1,5 @@
-function [contacttrackf, contactpos, benchmrktrackf, benchmrkpos] = getanglechanges(...
-    TrInfo, wuc, clumprange, controlrange)
+function [contacttrackf, contactpos, benchmrktrackf, benchmrkpos] = ...
+    getanglechanges(TrInfo, wuc, clumprange, controlrange)
 % GET ANGLE CHANGES.
 %
 % INPUT
@@ -33,16 +33,9 @@ citab = allclumppaths{wcix};
 meanXY = [mean(citab.X,1)' mean(citab.Y,1)']; % [X Y]
 stdXY = [std(citab.X,1)' std(citab.Y,1)']; % [X Y]
 
-ctrltrinf = TrInfo(ismember(TrInfo.timeframe, controlrange(1):controlrange(2)),:);
-bidx1 = round(size(ctrltrinf,1)/2);
-refXY = [ctrltrinf.X(bidx1) ctrltrinf.Y(bidx1)];
-
 % Get the before and after reference comparison
 pretab = allpaths{clumpwendys(wcix,3)};
 posttab = allpaths{clumpwendys(wcix,4)};
-
-pretab2 = ctrltrinf(1:bidx1,:);
-posttab2 = ctrltrinf(bidx1:end,:);
 
 [contacttrackf, contactpos] = gettrackcomparison(pretab, posttab, true);
 
@@ -54,13 +47,21 @@ contactpos.ticlumps = ticlump;
 contactpos.meanXY = meanXY;
 contactpos.stdXY = stdXY;
 
-[benchmrktrackf, benchmrkpos] = gettrackcomparison(pretab2, posttab2, false);
-
-benchmrktrackf.bdist2ref = norm([pretab2.X(end) pretab2.Y(end)]-refXY(2:-1:1));
-benchmrktrackf.afdist2ref = norm([posttab2.X(1) posttab2.Y(1)]-refXY(2:-1:1));
-
-benchmrkpos.ticlumps = ctrltrinf;
-benchmrkpos.meanXY = refXY;
-benchmrkpos.stdXY = 0;
+if ~isempty(controlrange) && nargout == 4
+    ctrltrinf = TrInfo(ismember(TrInfo.timeframe, controlrange(1):controlrange(2)),:);
+    bidx1 = round(size(ctrltrinf,1)/2);
+    refXY = [ctrltrinf.X(bidx1) ctrltrinf.Y(bidx1)];
+    pretab2 = ctrltrinf(1:bidx1,:);
+    posttab2 = ctrltrinf(bidx1:end,:);
+    
+    [benchmrktrackf, benchmrkpos] = gettrackcomparison(pretab2, posttab2, false);
+    
+    benchmrktrackf.bdist2ref = norm([pretab2.X(end) pretab2.Y(end)]-refXY(2:-1:1));
+    benchmrktrackf.afdist2ref = norm([posttab2.X(1) posttab2.Y(1)]-refXY(2:-1:1));
+    
+    benchmrkpos.ticlumps = ctrltrinf;
+    benchmrkpos.meanXY = refXY;
+    benchmrkpos.stdXY = 0;
+end
 
 end
