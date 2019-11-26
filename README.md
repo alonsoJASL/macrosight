@@ -6,10 +6,20 @@ have been added.
 
 ## Quick start
 A brief summary to start the analysis as quickly as possible.
+
+### Installation
+To clone this repository **and its dependencies (phagosight)** use the following 
+command: 
+```bash
+git clone --recursive https://github.com/alonsoJASL/macrosight/ 
+```
+This will allow @phagosight and macrosight to be pulled into nested folders. To 
+configure the paths automatically, **inside Matlab** Run the command `configureMacrosight`.
+
 ### Requirements of the data
 The macrophages dataset need to be in individual files, with the following naming 
 convention: 
-```
+```Matlab
 /path/to/data/MACROSN/T000ix.tif
 ```
 where `N` corresponds to the nth experiment and  `ix` correspond to each image's 
