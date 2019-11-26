@@ -1,0 +1,6 @@
+% CONFIGURE MACROSIGHT SCRIPT
+%
+
+
+MACROHOME = pwd;
+PHAGOHOME = fullfile(MACROHOME, phagosight);
