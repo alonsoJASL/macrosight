@@ -11,11 +11,22 @@ newhandles = handles;
 fnames = fieldnames(handles);
 fnames = fnames(contains(fnames,'data'));
 
-if isdir(handles.(fnames{1}))
-    fprintf('%s: Folder names appear to be consistent. No changes done.\n',...
-        mfilename);
-    return
+testN = zeros(length(fnames), 1);
+for ix=1:length(fnames)
+if isfolder(handles.(fnames{ix}))
+    fprintf('%s: Folder [%s] appear to be consistent. No changes done.\n',...
+        mfilename, handles.(fnames{1}));
+    testN(ix) = 1;
 end
+end
+
+if sum(testN)==length(fnames)
+    fprintf('%s: All folders appear to be consistent. No changes done.\n',...
+        mfilename);
+    return;
+    
+else
+    fnames = fnames(testN==0);
 
 switch chooseplatform
     case 'win'
@@ -47,19 +58,24 @@ switch chooseplatform
         
         for jx=1:length(volumes)
             volumes{jx} = fullfile('/Volumes', volumes{jx});
-
         end
 end
 
+fixedFnames = zeros(length(fnames, 1));
 for jx=1:length(volumes)
     for kx=1:length(fnames)
         [~, splitpath] = comesfrom(handles.(fnames{kx}));
-        dirtest = joindirname({volumes{jx}, splitpath});
-        if isdir(dirtest)
-            newhandles.(fnames{ix}) = dirtest;
-            break;
+        dirtest = strjoin([volumes(jx) splitpath], filesep);
+        if isfolder(dirtest)
+            newhandles.(fnames{jx}) = dirtest;
+            fixedFnames = 1;
         end
     end
+end
+
+if sum(fixedFnames) == length(fnames)
+    disp('All names fixed')
+end
 end
 
 end
