@@ -8,7 +8,7 @@ tidy;
 %whichmacro = 3; % 1, 2 or 3
 %initscript_dev;
 %
-load('angleChanges');
+load('DATA/angleChanges');
 
 vn = {'macros1', 'macros2', 'macros3'};
 markers = {'+','*','o'};

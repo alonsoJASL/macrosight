@@ -12,6 +12,12 @@
 .DS_Store
 .DS_Store?
 *~
+CODE/.DS_Store
+CODE/.DS_Store?
+CODE/*~
+CODE/DEMOS/.DS_Store
+CODE/DEMOS/.DS_Store?
+CODE/DEMOS/*~
 
 # Compiled source #
 ###################
