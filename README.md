@@ -1,4 +1,5 @@
 # macrosight
+[![View macrosight on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://uk.mathworks.com/matlabcentral/fileexchange/75292-macrosight)
 ## A MATLAB package for the analysis of overlapping macrophages
 This code is based on the [phagosight](https://github.com/phagosight/phagosight)
 software, but modules for the analysis of overlapping cells within a video sequence
