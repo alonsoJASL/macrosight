@@ -34,31 +34,42 @@ else
         fprintf('\t%d: %s\n', ix, b_{ix});
     end
     folderchoice_ = input(sprintf(...
-        '\nChoose the folder containing PhagoSight \n%s\n%s\n%s:__', ...
-        '0 := it is not found', '1 := default', 'Your choice'));
+        '\nChoose the folder containing PhagoSight \n%s\n%s\n%s\n%s:__', ...
+        '0 := it is not found', '1 := default', 'C := not using phagosight', 'Your choice'),'s');
 end
 
 if isempty(folderchoice_)
-    folderchoice_ = 1;
+    folderchoice_ = '1';
 end
 
-if folderchoice_== 0 % not found
-    disp('Pick the location of PhagoSight');
-    pause(0.5);
-    PHAGOHOME_ = uigetdir(MACROHOME_,'Pick a directory');
-else
-    PHAGOHOME_ = b_{folderchoice_};
-end
-
-
-fprintf('Adding the following to the MATLAB path:\n%s\n%s\n%s\n', ...
-    fullfile(PHAGOHOME_, 'CODE'), ...
-    fullfile(MACROHOME_, 'CODE'), ...
-    fullfile(MACROHOME_, 'CODE', 'DEMOS'));
-
-addpath(fullfile(PHAGOHOME_, 'CODE'), ...
+if strcmpi(folderchoice_, 'c')
+    mcrsght_info('Not using PhagoSight - some features might not work.', 'ATTENTION');
+    fprintf('Adding the following to the MATLAB path:\n%s\n%s\n', ...
         fullfile(MACROHOME_, 'CODE'), ...
         fullfile(MACROHOME_, 'CODE', 'DEMOS'));
+    
+    addpath(fullfile(MACROHOME_, 'CODE'), ...
+        fullfile(MACROHOME_, 'CODE', 'DEMOS'));
+else
+    
+    if strcmpi(folderchoice_,'0') % not found
+        disp('Pick the location of PhagoSight');
+        pause(0.5);
+        PHAGOHOME_ = uigetdir(MACROHOME_,'Pick a directory');
+    else
+        PHAGOHOME_ = b_{str2num(folderchoice_)};
+    end
+    fprintf('Adding the following to the MATLAB path:\n%s\n%s\n%s\n', ...
+        fullfile(PHAGOHOME_, 'CODE'), ...
+        fullfile(MACROHOME_, 'CODE'), ...
+        fullfile(MACROHOME_, 'CODE', 'DEMOS'));
+    
+    addpath(fullfile(PHAGOHOME_, 'CODE'), ...
+        fullfile(MACROHOME_, 'CODE'), ...
+        fullfile(MACROHOME_, 'CODE', 'DEMOS'));
+end
+
+
 
 clear a_ b_ folderchoice_ ix test_;
 

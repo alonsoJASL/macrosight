@@ -12,6 +12,9 @@ disp(dataStructure);
 mcrsght_info('Loaded table (first 10 columns):');
 disp(dataTable(1:10,:));
 
+controlplot = dataStructure.controlplot;
+mutantplot  = dataStructure.mutantplot;
+
 preaxis = [-27 18 -12 13];
 figure(2)
 clf;
