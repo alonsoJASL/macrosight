@@ -3,7 +3,8 @@
 ## A MATLAB package for the analysis of overlapping macrophages
 This code is based on the [phagosight](https://github.com/phagosight/phagosight)
 software, but modules for the analysis of overlapping cells within a video sequence
-have been added.
+have been added. For more detailed explanations, developer logs and explanations of 
+routines, we are building a [wiki](https://github.com/alonsoJASL/macrosight/wiki).
 
 ## Installation
 To clone this repository use the following command:
