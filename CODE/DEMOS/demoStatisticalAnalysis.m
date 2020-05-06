@@ -44,7 +44,7 @@ xlabel('clumpsize');
 ylabel('abs(angle change)');
 title('Scatterplot example');
 
-set(gcf, 'Position', [560   579   983   369]);
+set(gcf, 'Position', [1   1   983   369]);
 
 [M, SD, H, P] = compareAngleChanges(controltrackfeatures, mutanttrackfeatures, setnames);
 mcrsght_info(sprintf('SET: [%s] MEAN(STDev) = %2.2f(%2.2f) ', ...

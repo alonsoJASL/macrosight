@@ -28,4 +28,4 @@ plotDirectionChangesComparison(mutantplot, preaxis, 'b');
 title(sprintf('Shot3 cases - %d', length(mutantplot)), 'FontSize', 20);
 set(gca, 'FontSize', 16);
 
-set(gcf, 'Position', [680 245 1074 733]);
+set(gcf, 'Position', [1 1 1074 733]);
