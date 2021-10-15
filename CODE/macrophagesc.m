@@ -66,7 +66,7 @@ XY = [[axx(2)-X-x axx(2)-X]; [axx(4)-Y axx(4)-Y]];
 line(XY(1,:), XY(2,:), 'color', lincolour, 'linestyle', ...
     linstyle,'linewidth', linwidth);
 text(XY(1,1) -5 , XY(2,1)-15, fixvalsunits(linedist, 'm'), ...
-    'color', lincolour, 'fontsize', 20);
+    'color', lincolour, 'fontsize', 21);
 
 end
 
